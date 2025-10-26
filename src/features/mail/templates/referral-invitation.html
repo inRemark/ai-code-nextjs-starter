@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AICoder 推荐邀请</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8fafc;
+        }
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+        .invitation-box {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 2px solid #0ea5e9;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        .referral-code {
+            background-color: #1e40af;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin: 15px 0;
+            display: inline-block;
+        }
+        .referral-link {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            word-break: break-all;
+            margin: 15px 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 20px 0;
+            transition: transform 0.2s;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        .features {
+            margin: 30px 0;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+        }
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+            font-weight: bold;
+        }
+        .feature-text {
+            flex: 1;
+        }
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #1f2937;
+        }
+        .feature-desc {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .reward-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        .reward-amount {
+            font-size: 32px;
+            font-weight: bold;
+            color: #d97706;
+            margin: 10px 0;
+        }
+        .footer {
+            background-color: #f8fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+        .footer p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: #3b82f6;
+            text-decoration: none;
+        }
+        .unsubscribe {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 20px;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .header, .content, .footer {
+                padding: 20px;
+            }
+            .referral-code {
+                font-size: 20px;
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>AICoder</h1>
+            <p>专业的解决方案对比平台</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="greeting">
+                您好！
+            </div>
+
+            <p>
+                您的朋友 <strong>{{referrerName}}</strong> 邀请您使用 AICoder，这是一个专业的解决方案对比平台。
+            </p>
+
+            <p>
+                通过我们的平台，您可以：
+            </p>
+
+            <div class="features">
+                <div class="feature-item">
+                    <div class="feature-icon">🔍</div>
+                    <div class="feature-text">
+                        <div class="feature-title">智能对比</div>
+                        <div class="feature-desc">快速对比不同解决方案的优劣，找到最适合的选择</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⭐</div>
+                    <div class="feature-text">
+                        <div class="feature-title">真实评价</div>
+                        <div class="feature-desc">基于真实用户评价的客观分析，避免踩坑</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🚀</div>
+                    <div class="feature-text">
+                        <div class="feature-title">高效决策</div>
+                        <div class="feature-desc">节省时间成本，快速做出最佳选择</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="invitation-box">
+                <h3 style="margin-top: 0; color: #0c4a6e;">通过推荐链接注册</h3>
+                <p style="margin-bottom: 20px; color: #0c4a6e;">
+                    使用推荐码：<span class="referral-code">{{referralCode}}</span>
+                </p>
+                <div class="referral-link">
+                    {{referralLink}}
+                </div>
+                <a href="{{referralLink}}" class="cta-button">
+                    立即注册获得奖励
+                </a>
+            </div>
+
+            <div class="reward-box">
+                <h3 style="margin-top: 0; color: #92400e;">🎁 注册奖励</h3>
+                <div class="reward-amount">+50 积分</div>
+                <p style="color: #92400e; margin-bottom: 0;">
+                    注册成功后，您和推荐人都将获得 50 积分奖励！<br>
+                    积分可用于兑换高级功能和特权服务。
+                </p>
+            </div>
+
+            <p>
+                期待与您一起在 AICoder 发现更多优质的解决方案！
+            </p>
+
+            <p>
+                如有任何问题，请随时联系我们的客服团队。
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>AICoder 团队</strong></p>
+            <div class="social-links">
+                <a href="https://AICoder.com">官网</a>
+                <a href="https://AICoder.com/about">关于我们</a>
+                <a href="https://AICoder.com/help">帮助中心</a>
+            </div>
+            <p>这是一封推荐邀请邮件，由您的朋友 {{referrerName}} 发送</p>
+            <div class="unsubscribe">
+                如果您不希望收到此类邮件，请忽略此邮件
+            </div>
+        </div>
+    </div>
+</body>
+</html>

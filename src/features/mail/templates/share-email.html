@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AICoder 内容分享</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8fafc;
+        }
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+        .share-box {
+            background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+            border: 2px solid #c084fc;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .share-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #7c3aed;
+            margin-bottom: 15px;
+        }
+        .share-description {
+            color: #581c87;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .share-preview {
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .preview-title {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 10px;
+        }
+        .preview-description {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 20px 0;
+            transition: transform 0.2s;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        .share-link {
+            background-color: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            word-break: break-all;
+            margin: 15px 0;
+        }
+        .sender-info {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border: 1px solid #0ea5e9;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        .sender-info h3 {
+            margin-top: 0;
+            color: #0c4a6e;
+        }
+        .footer {
+            background-color: #f8fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+        .footer p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .unsubscribe {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 20px;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .header, .content, .footer {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📤 AICoder</h1>
+            <p>内容分享</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="greeting">
+                您好！
+            </div>
+
+            <div class="sender-info">
+                <h3>📤 分享内容</h3>
+                <p>
+                    <strong>{{fromUserName}}</strong> 通过 AICoder 与您分享了以下内容：
+                </p>
+            </div>
+
+            <div class="share-box">
+                <div class="share-title">{{title}}</div>
+                <div class="share-description">{{description}}</div>
+                
+                <div class="share-preview">
+                    <div class="preview-title">预览内容</div>
+                    <div class="preview-description">
+                        点击下方按钮查看完整内容，或复制链接到浏览器中打开。
+                    </div>
+                </div>
+                
+                <div style="text-align: center;">
+                    <a href="{{shareUrl}}" class="cta-button">
+                        查看完整内容
+                    </a>
+                </div>
+                
+                <div class="share-link">
+                    {{shareUrl}}
+                </div>
+            </div>
+
+            <p>
+                AICoder 是一个专业的解决方案对比平台，帮助您快速找到最适合的选择。
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>AICoder 团队</strong></p>
+            <p>此分享来自 AICoder 平台</p>
+            <div class="unsubscribe">
+                如果您不希望收到此类邮件，请联系分享者
+            </div>
+        </div>
+    </div>
+</body>
+</html>

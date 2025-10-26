@@ -1,0 +1,4 @@
+/* Tailwind CSS v4 自定义变体定义 */
+/* 此文件包含Tailwind特定的at-rules，可能会触发SonarQube警告 */
+
+@custom-variant dark (&:where(.dark, .dark *));

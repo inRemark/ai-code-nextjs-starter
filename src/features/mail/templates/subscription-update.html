@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AICoder 更新通知</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8fafc;
+        }
+        .email-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 40px 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+        .update-box {
+            background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
+            border: 2px solid #fb923c;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        .update-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .update-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #c2410c;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .update-version {
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: #c2410c;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        .update-content {
+            color: #9a3412;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+            color: white;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 20px 0;
+            transition: transform 0.2s;
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .feature-item {
+            background-color: white;
+            border: 1px solid #fed7aa;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .feature-title {
+            font-weight: 600;
+            color: #c2410c;
+            margin-bottom: 5px;
+        }
+        .feature-desc {
+            font-size: 12px;
+            color: #9a3412;
+        }
+        .thank-you {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+            border: 1px solid #22c55e;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            text-align: center;
+        }
+        .thank-you h3 {
+            margin-top: 0;
+            color: #166534;
+        }
+        .footer {
+            background-color: #f8fafc;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+        }
+        .footer p {
+            margin: 5px 0;
+            font-size: 14px;
+            color: #6b7280;
+        }
+        .social-links {
+            margin: 20px 0;
+        }
+        .social-links a {
+            display: inline-block;
+            margin: 0 10px;
+            color: #ea580c;
+            text-decoration: none;
+        }
+        .unsubscribe {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 20px;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .header, .content, .footer {
+                padding: 20px;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚀 AICoder</h1>
+            <p>更新通知</p>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <div class="greeting">
+                您好{{userName}}！
+            </div>
+
+            <div class="update-box">
+                <div class="update-icon">🎉</div>
+                <div class="update-title">{{title}}</div>
+                <div style="text-align: center;">
+                    <span class="update-version">版本 {{version}}</span>
+                </div>
+                
+                <div class="update-content">
+                    {{content}}
+                </div>
+                
+                <div style="text-align: center;">
+                    <a href="{{appUrl}}" class="cta-button">
+                        立即体验新功能
+                    </a>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">✨</div>
+                    <div class="feature-title">新功能</div>
+                    <div class="feature-desc">更多实用工具</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔧</div>
+                    <div class="feature-title">性能优化</div>
+                    <div class="feature-desc">更快的响应速度</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🎨</div>
+                    <div class="feature-title">界面改进</div>
+                    <div class="feature-desc">更美观的体验</div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-title">安全增强</div>
+                    <div class="feature-desc">更可靠的保护</div>
+                </div>
+            </div>
+
+            <div class="thank-you">
+                <h3>🙏 感谢您的支持</h3>
+                <p style="color: #166534; margin-bottom: 0;">
+                    您的反馈是我们持续改进的动力，期待为您提供更好的服务！
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>AICoder 团队</strong></p>
+            <div class="social-links">
+                <a href="{{appUrl}}">官网</a>
+                <a href="{{helpUrl}}">帮助中心</a>
+                <a href="{{feedbackUrl}}">意见反馈</a>
+            </div>
+            <p>感谢您对 AICoder 的关注和支持</p>
+            <div class="unsubscribe">
+                如果您不希望收到此类邮件，可以取消订阅
+            </div>
+        </div>
+    </div>
+</body>
+</html>
