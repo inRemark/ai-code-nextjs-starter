@@ -102,16 +102,19 @@ AICoder使用cookies来：
 您可以通过浏览器设置管理cookies：
 
 #### Chrome
+
 1. 点击菜单 → 设置
 2. 隐私和安全 → Cookies和其他网站数据
 3. 选择您的偏好设置
 
 #### Firefox
+
 1. 点击菜单 → 选项
 2. 隐私与安全 → Cookies和网站数据
 3. 配置您的设置
 
 #### Safari
+
 1. Safari → 偏好设置
 2. 隐私标签
 3. 管理Cookie设置
@@ -133,14 +136,17 @@ AICoder使用cookies来：
 我们使用以下第三方服务，它们可能设置自己的cookies：
 
 ### 分析服务
+
 - **Google Analytics**：网站使用分析
 - **百度统计**：中文用户分析
 
 ### 社交媒体
+
 - **微信分享**：社交分享功能
 - **微博分享**：内容分享
 
 ### 广告服务
+
 - **Google Ads**：广告投放
 - **百度推广**：中文广告
 
@@ -191,7 +197,7 @@ AICoder使用cookies来：
 
 如果您对cookie政策有任何疑问，请通过以下方式联系我们：
 
-- 邮箱：privacy@AICoder.com
+- 邮箱：<privacy@AICoder.com>
 - 地址：北京市海淀区中关村软件园二期
 - 电话：+86 400-AICoder-01
 

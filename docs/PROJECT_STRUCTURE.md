@@ -20,37 +20,37 @@ ai-code-nextjs-starter/
 ├── .next/                    # Next.js 构建输出（忽略）
 ├── node_modules/             # 依赖包（忽略）
 ├── prisma/                   # 数据库相关
-│   ├── migrations/          # 数据库迁移文件
-│   ├── schema.prisma        # Prisma Schema 定义
-│   └── seed.cjs             # 种子数据脚本
+│   ├── migrations/           # 数据库迁移文件
+│   ├── schema.prisma         # Prisma Schema 定义
+│   └── seed.cjs              # 种子数据脚本
 ├── public/                   # 静态资源
 │   ├── favicon.ico
 │   └── robots.txt
 ├── src/                      # 源代码
-│   ├── app/                 # Next.js App Router
-│   ├── features/            # 功能模块
-│   ├── lib/                 # 核心库
-│   ├── shared/              # 共享资源
-│   ├── middleware.ts        # 中间件
-│   └── index.css            # 全局样式
+│   ├── app/                  # Next.js App Router
+│   ├── features/             # 功能模块
+│   ├── lib/                  # 核心库
+│   ├── shared/               # 共享资源
+│   ├── middleware.ts         # 中间件
+│   └── index.css             # 全局样式
 ├── docs/                     # 项目文档
-│   ├── architecture/        # 架构文档
-│   ├── deployment/          # 部署文档
+│   ├── architecture/         # 架构文档
+│   ├── deployment/           # 部署文档
 │   └── README.md
 ├── scripts/                  # 工具脚本
-├── .env.example             # 环境变量模板
-├── .env.local               # 本地环境变量（忽略）
-├── .eslintrc.json           # ESLint 配置
-├── .gitignore               # Git 忽略文件
-├── docker-compose.yml       # Docker Compose 配置
-├── Dockerfile               # Docker 镜像配置
-├── next.config.ts           # Next.js 配置
-├── package.json             # 项目依赖
-├── pnpm-lock.yaml           # 依赖锁定文件
-├── postcss.config.mjs       # PostCSS 配置
-├── tailwind.config.ts       # Tailwind CSS 配置
-├── tsconfig.json            # TypeScript 配置
-└── README.md                # 项目说明
+├── .env.example              # 环境变量模板
+├── .env.local                # 本地环境变量（忽略）
+├── .eslintrc.json            # ESLint 配置
+├── .gitignore                # Git 忽略文件
+├── docker-compose.yml        # Docker Compose 配置
+├── Dockerfile                # Docker 镜像配置
+├── next.config.ts            # Next.js 配置
+├── package.json              # 项目依赖
+├── pnpm-lock.yaml            # 依赖锁定文件
+├── postcss.config.mjs        # PostCSS 配置
+├── tailwind.config.ts        # Tailwind CSS 配置
+├── tsconfig.json             # TypeScript 配置
+└── README.md                 # 项目说明
 ```
 
 ---
@@ -67,40 +67,40 @@ src/app/
 │   ├── login/
 │   └── register/
 ├── api/                      # API 路由
-│   ├── auth/                # 认证 API
-│   │   ├── [...nextauth]/  # NextAuth 处理器
+│   ├── auth/                 # 认证 API
+│   │   ├── [...nextauth]/    # NextAuth 处理器
 │   │   ├── login/
 │   │   ├── register/
 │   │   └── logout/
-│   ├── articles/            # 文章 API
-│   │   ├── route.ts        # GET, POST /api/articles
-│   │   ├── [id]/           # 文章详情
-│   │   │   ├── route.ts    # GET, PATCH, DELETE
-│   │   │   └── view/       # 浏览统计
-│   │   └── stats/          # 文章统计
-│   ├── blog/                # 博客 API
-│   ├── user/                # 用户 API
-│   ├── console/             # 控制台 API
-│   ├── admin/               # 管理 API
-│   ├── mail/                # 邮件 API
-│   ├── help/                # 帮助 API
-│   └── health/              # 健康检查
+│   ├── articles/             # 文章 API
+│   │   ├── route.ts          # GET, POST /api/articles
+│   │   ├── [id]/             # 文章详情
+│   │   │   ├── route.ts      # GET, PATCH, DELETE
+│   │   │   └── view/         # 浏览统计
+│   │   └── stats/            # 文章统计
+│   ├── blog/                 # 博客 API
+│   ├── user/                 # 用户 API
+│   ├── console/              # 控制台 API
+│   ├── admin/                # 管理 API
+│   ├── mail/                 # 邮件 API
+│   ├── help/                 # 帮助 API
+│   └── health/               # 健康检查
 ├── about/                    # 关于页面
 │   ├── page.tsx
 │   ├── cookies/
 │   ├── privacy/
 │   └── terms/
 ├── admin/                    # 管理后台
-│   ├── page.tsx             # 后台首页
-│   ├── layout.tsx           # 后台布局
-│   ├── articles/            # 文章管理
-│   ├── mail/                # 邮件管理
-│   └── test/                # 测试页面
+│   ├── page.tsx              # 后台首页
+│   ├── layout.tsx            # 后台布局
+│   ├── articles/             # 文章管理
+│   ├── mail/                 # 邮件管理
+│   └── test/                 # 测试页面
 ├── articles/                 # 文章模块
-│   ├── page.tsx             # 文章列表
-│   ├── [slug]/              # 文章详情
+│   ├── page.tsx              # 文章列表
+│   ├── [slug]/               # 文章详情
 │   │   └── page.tsx
-│   └── loading.tsx          # 加载状态
+│   └── loading.tsx           # 加载状态
 ├── auth/                     # 认证页面
 │   ├── login/
 │   └── register/
@@ -109,11 +109,11 @@ src/app/
 │   └── [slug]/
 │       └── page.tsx
 ├── console/                  # 用户控制台
-│   ├── page.tsx             # 控制台首页
-│   ├── layout.tsx           # 控制台布局
-│   ├── articles/            # 文章管理
-│   ├── profile/             # 个人资料
-│   └── settings/            # 设置
+│   ├── page.tsx              # 控制台首页
+│   ├── layout.tsx            # 控制台布局
+│   ├── articles/             # 文章管理
+│   ├── profile/              # 个人资料
+│   └── settings/             # 设置
 ├── help/                     # 帮助中心
 │   └── page.tsx
 ├── pricing/                  # 价格页面
@@ -147,27 +147,27 @@ src/app/
 
 ```bash
 src/features/
-├── auth/                     # 认证模块
-│   ├── components/          # 认证相关组件
+├── auth/                              # 认证模块
+│   ├── components/                     # 认证相关组件
 │   │   ├── login-form.tsx
 │   │   ├── register-form.tsx
 │   │   ├── protected-route.tsx
 │   │   └── unified-auth-provider.tsx
-│   ├── hooks/               # 认证 Hooks
+│   ├── hooks/                          # 认证 Hooks
 │   │   ├── useAuth.ts
 │   │   ├── useLogin.ts
 │   │   └── useProfile.ts
-│   ├── services/            # 认证业务逻辑
+│   ├── services/                       # 认证业务逻辑
 │   │   ├── auth.service.ts
 │   │   └── session.service.ts
-│   ├── types/               # 类型定义
+│   ├── types/                          # 类型定义
 │   │   └── auth.types.ts
-│   ├── validators/          # 数据验证
+│   ├── validators/                     # 数据验证
 │   │   └── auth.validator.ts
-│   ├── utils/               # 工具函数
-│   ├── index.ts             # 统一导出
-│   └── README.md            # 模块文档
-├── articles/                 # 文章模块
+│   ├── utils/                          # 工具函数
+│   ├── index.ts                        # 统一导出
+│   └── README.md                       # 模块文档
+├── articles/                          # 文章模块
 │   ├── components/
 │   │   ├── article-card.tsx
 │   │   ├── article-editor.tsx
@@ -184,12 +184,12 @@ src/features/
 │   ├── validators/
 │   │   └── article.validator.ts
 │   └── index.ts
-├── blog/                     # 博客模块
+├── blog/                             # 博客模块
 │   ├── components/
 │   ├── services/
 │   ├── types/
 │   └── index.ts
-├── user/                     # 用户模块
+├── user/                             # 用户模块
 │   ├── components/
 │   │   ├── profile-info-content.tsx
 │   │   ├── profile-articles-content.tsx
@@ -201,24 +201,24 @@ src/features/
 │   ├── hooks/
 │   ├── services/
 │   └── index.ts
-├── console/                  # 控制台模块
+├── console/                          # 控制台模块
 │   ├── components/
 │   ├── hooks/
 │   ├── services/
 │   └── index.ts
-├── admin/                    # 管理模块
+├── admin/                            # 管理模块
 │   ├── components/
 │   ├── hooks/
 │   ├── services/
 │   └── index.ts
-├── mail/                     # 邮件模块
+├── mail/                             # 邮件模块
 │   ├── services/
 │   │   ├── email.service.ts
 │   │   ├── template.service.ts
 │   │   └── notification-service.ts
-│   ├── templates/           # 邮件模板
+│   ├── templates/                    # 邮件模板
 │   └── index.ts
-└── help/                     # 帮助模块
+└── help/                             # 帮助模块
     ├── components/
     └── index.ts
 ```
@@ -246,18 +246,18 @@ feature/
 ```bash
 src/lib/
 ├── auth/                     # 认证核心
-│   ├── jwt.ts               # JWT 工具
-│   └── session.ts           # Session 管理
+│   ├── jwt.ts                # JWT 工具
+│   └── session.ts            # Session 管理
 ├── database/                 # 数据库
-│   ├── prisma.ts            # Prisma 客户端
-│   └── connection.ts        # 数据库连接
+│   ├── prisma.ts             # Prisma 客户端
+│   └── connection.ts         # 数据库连接
 ├── logger/                   # 日志系统
-│   ├── logger.ts            # 日志记录器
-│   └── formatters.ts        # 日志格式化
+│   ├── logger.ts             # 日志记录器
+│   └── formatters.ts         # 日志格式化
 ├── errors/                   # 错误处理
-│   ├── app-error.ts         # 应用错误
-│   ├── error-handler.ts     # 错误处理器
-│   └── error-codes.ts       # 错误码
+│   ├── app-error.ts          # 应用错误
+│   ├── error-handler.ts      # 错误处理器
+│   └── error-codes.ts        # 错误码
 ├── cache/                    # 缓存（可选）
 │   └── cache.ts
 ├── validators/               # 全局验证器
@@ -283,8 +283,8 @@ src/lib/
 
 ```bash
 src/shared/
-├── components/               # 共享组件
-│   └── ui/                  # UI 组件库
+├── components/                 # 共享组件
+│   └── ui/                     # UI 组件库
 │       ├── button.tsx
 │       ├── input.tsx
 │       ├── card.tsx
@@ -301,32 +301,32 @@ src/shared/
 │       ├── skeleton.tsx
 │       ├── alert-dialog.tsx
 │       └── theme-toggle.tsx
-├── layout/                   # 布局组件
-│   ├── portal-header.tsx    # 门户页头
-│   ├── portal-footer.tsx    # 门户页脚
-│   ├── portal-layout.tsx    # 门户布局
-│   ├── console-layout.tsx   # 控制台布局
-│   ├── admin-layout.tsx     # 管理布局
-│   ├── top-header.tsx       # 顶部标题栏
-│   ├── sidebar.tsx          # 侧边栏
-│   ├── breadcrumb.tsx       # 面包屑
+├── layout/                     # 布局组件
+│   ├── portal-header.tsx       # 门户页头
+│   ├── portal-footer.tsx       # 门户页脚
+│   ├── portal-layout.tsx       # 门户布局
+│   ├── console-layout.tsx      # 控制台布局
+│   ├── admin-layout.tsx        # 管理布局
+│   ├── top-header.tsx          # 顶部标题栏
+│   ├── sidebar.tsx             # 侧边栏
+│   ├── breadcrumb.tsx          # 面包屑
 │   ├── console-menu-config.ts
 │   ├── admin-menu-config.ts
 │   └── user-menu-dropdown.tsx
-├── hooks/                    # 通用 Hooks
+├── hooks/                      # 通用 Hooks
 │   ├── useDebounce.ts
 │   ├── useLocalStorage.ts
 │   └── useMediaQuery.ts
-├── lib/                      # 工具函数
+├── lib/                        # 工具函数
 │   └── utils.ts
-├── types/                    # 全局类型
+├── types/                      # 全局类型
 │   ├── api.types.ts
 │   ├── common.types.ts
 │   └── index.ts
-└── utils/                    # 工具函数
-    ├── cn.ts                # className 合并
-    ├── format.ts            # 格式化
-    └── validation.ts        # 验证
+└── utils/                      # 工具函数
+    ├── cn.ts                   # className 合并
+    ├── format.ts               # 格式化
+    └── validation.ts           # 验证
 ```
 
 ---
