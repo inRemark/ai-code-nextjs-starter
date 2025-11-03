@@ -1,0 +1,34 @@
+{
+  "title": "Help Center",
+  "search": {
+    "title": "How can we help?",
+    "placeholder": "Search help articles...",
+    "noResults": "No help articles found"
+  },
+  "categories": {
+    "title": "Help Categories",
+    "gettingStarted": "Getting Started",
+    "accountManagement": "Account Management",
+    "features": "Features",
+    "troubleshooting": "Troubleshooting",
+    "billing": "Billing",
+    "other": "Other Questions"
+  },
+  "articles": {
+    "title": "Popular Articles",
+    "views": "Views",
+    "helpful": "Helpful",
+    "notHelpful": "Not Helpful"
+  },
+  "faq": {
+    "title": "FAQ",
+    "contactSupport": "Contact Support"
+  },
+  "contact": {
+    "title": "Contact Support Team",
+    "description": "If your question is not answered in the help center, please feel free to contact us",
+    "email": "Send Email",
+    "emailAddress": "support@vseek.com",
+    "responseTime": "Usually reply within 24 hours"
+  }
+}

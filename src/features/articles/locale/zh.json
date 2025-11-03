@@ -1,0 +1,28 @@
+{
+  "title": "文章列表",
+  "list": {
+    "title": "优质解决方案文章",
+    "description": "浏览社区分享的高质量解决方案和经验总结",
+    "readMore": "阅读全文",
+    "publishedOn": "发布于",
+    "author": "作者",
+    "upvotes": "赞同",
+    "noArticles": "暂无文章",
+    "loading": "加载中..."
+  },
+  "detail": {
+    "backToList": "返回列表",
+    "relatedSolutions": "相关解决方案",
+    "author": "作者",
+    "publishedOn": "发布时间",
+    "upvotes": "赞同数",
+    "views": "浏览次数",
+    "helpful": "有帮助",
+    "notHelpful": "没有帮助",
+    "shareArticle": "分享文章"
+  },
+  "seoTags": {
+    "title": "文章",
+    "description": "探索最新的解决方案和技术分享"
+  }
+}

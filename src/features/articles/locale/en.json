@@ -1,0 +1,28 @@
+{
+  "title": "Articles",
+  "list": {
+    "title": "Quality Solution Articles",
+    "description": "Browse high-quality solutions and experience summaries shared by the community",
+    "readMore": "Read More",
+    "publishedOn": "Published on",
+    "author": "Author",
+    "upvotes": "Upvotes",
+    "noArticles": "No articles yet",
+    "loading": "Loading..."
+  },
+  "detail": {
+    "backToList": "Back to List",
+    "relatedSolutions": "Related Solutions",
+    "author": "Author",
+    "publishedOn": "Published",
+    "upvotes": "Upvotes",
+    "views": "Views",
+    "helpful": "Helpful",
+    "notHelpful": "Not Helpful",
+    "shareArticle": "Share Article"
+  },
+  "seoTags": {
+    "title": "Articles",
+    "description": "Explore the latest solutions and technical insights"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "title": "Blog",
+  "list": {
+    "title": "Latest Articles",
+    "description": "Explore the latest industry updates, technical insights and solution perspectives",
+    "readMore": "Read More",
+    "publishedOn": "Published on",
+    "author": "Author",
+    "category": "Category",
+    "tags": "Tags",
+    "noArticles": "No articles yet",
+    "loading": "Loading..."
+  },
+  "detail": {
+    "backToList": "Back to Blog",
+    "relatedArticles": "Related Articles",
+    "author": "Author",
+    "publishedOn": "Published",
+    "updatedOn": "Updated",
+    "readTime": "Read time",
+    "shareArticle": "Share Article"
+  },
+  "categories": {
+    "all": "All",
+    "technology": "Technology",
+    "industry": "Industry",
+    "product": "Product",
+    "tutorial": "Tutorial",
+    "announcement": "Announcement"
+  }
+}

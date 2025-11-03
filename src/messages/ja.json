@@ -31,41 +31,6 @@
     "console": "コンソール",
     "admin": "管理"
   },
-  "auth": {
-    "welcomeBack": "おかえりなさい",
-    "welcomeSubtitle": "AICoder アカウントにログイン",
-    "createAccount": "アカウント作成",
-    "createAccountSubtitle": "AICoder アカウントに登録",
-    "backToHome": "ホームに戻る",
-    "copyright": "© 2024 AICoder. All rights reserved.",
-    "login": {
-      "title": "ログイン",
-      "emailLabel": "メールアドレス",
-      "emailPlaceholder": "メールアドレスを入力",
-      "passwordLabel": "パスワード",
-      "passwordPlaceholder": "パスワードを入力",
-      "rememberMe": "ログイン状態を保持",
-      "forgotPassword": "パスワードをお忘れですか？",
-      "submitButton": "ログイン",
-      "noAccount": "アカウントをお持ちでないですか？",
-      "registerLink": "今すぐ登録",
-      "emailRequired": "メールアドレスを入力してください",
-      "emailInvalid": "有効なメールアドレスを入力してください",
-      "passwordRequired": "パスワードを入力してください",
-      "passwordTooShort": "パスワードは6文字以上必要です",
-      "loginFailed": "ログインに失敗しました。メールアドレスとパスワードをご確認ください",
-      "socialLoginFailed": "{provider} ログインに失敗しました: {error}"
-    },
-    "register": {
-      "title": "登録",
-      "emailLabel": "メールアドレス",
-      "passwordLabel": "パスワード",
-      "confirmPasswordLabel": "パスワード確認",
-      "submitButton": "登録",
-      "hasAccount": "既にアカウントをお持ちですか？",
-      "loginLink": "今すぐログイン"
-    }
-  },
   "errors": {
     "notFound": "ページが見つかりません",
     "unauthorized": "アクセス権限がありません",

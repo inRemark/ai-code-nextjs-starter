@@ -1,0 +1,31 @@
+{
+  "title": "博客",
+  "list": {
+    "title": "最新文章",
+    "description": "探索最新的行业动态、技术分享和解决方案洞察",
+    "readMore": "阅读全文",
+    "publishedOn": "发布于",
+    "author": "作者",
+    "category": "分类",
+    "tags": "标签",
+    "noArticles": "暂无文章",
+    "loading": "加载中..."
+  },
+  "detail": {
+    "backToList": "返回博客列表",
+    "relatedArticles": "相关文章",
+    "author": "作者",
+    "publishedOn": "发布时间",
+    "updatedOn": "更新时间",
+    "readTime": "阅读时间",
+    "shareArticle": "分享文章"
+  },
+  "categories": {
+    "all": "全部",
+    "technology": "技术分享",
+    "industry": "行业动态",
+    "product": "产品更新",
+    "tutorial": "使用教程",
+    "announcement": "公告"
+  }
+}

@@ -31,41 +31,6 @@
     "console": "Console",
     "admin": "Admin"
   },
-  "auth": {
-    "welcomeBack": "Welcome Back",
-    "welcomeSubtitle": "Sign in to your AICoder account",
-    "createAccount": "Create Account",
-    "createAccountSubtitle": "Sign up for your AICoder account",
-    "backToHome": "Back to Home",
-    "copyright": "© 2024 AICoder. All rights reserved.",
-    "login": {
-      "title": "Login",
-      "emailLabel": "Email",
-      "emailPlaceholder": "Enter your email",
-      "passwordLabel": "Password",
-      "passwordPlaceholder": "Enter your password",
-      "rememberMe": "Remember me",
-      "forgotPassword": "Forgot password?",
-      "submitButton": "Login",
-      "noAccount": "Don't have an account?",
-      "registerLink": "Register now",
-      "emailRequired": "Please enter your email",
-      "emailInvalid": "Please enter a valid email address",
-      "passwordRequired": "Please enter your password",
-      "passwordTooShort": "Password must be at least 6 characters",
-      "loginFailed": "Login failed, please check your email and password",
-      "socialLoginFailed": "{provider} login failed: {error}"
-    },
-    "register": {
-      "title": "Register",
-      "emailLabel": "Email",
-      "passwordLabel": "Password",
-      "confirmPasswordLabel": "Confirm Password",
-      "submitButton": "Register",
-      "hasAccount": "Already have an account?",
-      "loginLink": "Login now"
-    }
-  },
   "errors": {
     "notFound": "Page Not Found",
     "unauthorized": "Unauthorized",
