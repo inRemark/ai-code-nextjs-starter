@@ -120,7 +120,7 @@ export default function FeaturesPage() {
                     <div className="flex items-center gap-3">
                       <Zap className="w-8 h-8 text-muted-foreground" />
                       <div className="text-left">
-                        <div className="text-sm text-muted-foreground">AI Token 消耗</div>
+                        <div className="text-sm text-muted-foreground">{t('costSavings.fromScratch.tokensLabel')}</div>
                         <div className="text-2xl font-bold text-foreground">8.5M</div>
                       </div>
                     </div>
@@ -131,11 +131,11 @@ export default function FeaturesPage() {
                     <div className="flex items-center gap-3">
                       <DollarSign className="w-8 h-8 text-muted-foreground" />
                       <div className="text-left">
-                        <div className="text-sm text-muted-foreground">AI 成本</div>
+                        <div className="text-sm text-muted-foreground">{t('costSavings.fromScratch.costLabel')}</div>
                         <div className="text-2xl font-bold text-foreground">$127</div>
                       </div>
                     </div>
-                    <span className="text-muted-foreground">美元</span>
+                    <span className="text-muted-foreground">{t('costSavings.fromScratch.costUnit')}</span>
                   </div>
                 </div>
                 <div className="text-center pt-4 text-sm text-muted-foreground">
@@ -159,7 +159,7 @@ export default function FeaturesPage() {
                     <div className="flex items-center gap-3">
                       <Clock className="w-8 h-8 text-green-600 dark:text-green-400" />
                       <div className="text-left">
-                        <div className="text-sm text-muted-foreground">开发时间</div>
+                        <div className="text-sm text-muted-foreground">{t('costSavings.withTemplate.timeLabel')}</div>
                         <div className="text-2xl font-bold text-green-600 dark:text-green-400">38</div>
                       </div>
                     </div>
@@ -173,7 +173,7 @@ export default function FeaturesPage() {
                     <div className="flex items-center gap-3">
                       <Zap className="w-8 h-8 text-green-600 dark:text-green-400" />
                       <div className="text-left">
-                        <div className="text-sm text-muted-foreground">AI Token 消耗</div>
+                        <div className="text-sm text-muted-foreground">{t('costSavings.withTemplate.tokensLabel')}</div>
                         <div className="text-2xl font-bold text-green-600 dark:text-green-400">2.8M</div>
                       </div>
                     </div>
@@ -187,7 +187,7 @@ export default function FeaturesPage() {
                     <div className="flex items-center gap-3">
                       <DollarSign className="w-8 h-8 text-green-600 dark:text-green-400" />
                       <div className="text-left">
-                        <div className="text-sm text-muted-foreground">AI 成本</div>
+                        <div className="text-sm text-muted-foreground">{t('costSavings.withTemplate.costLabel')}</div>
                         <div className="text-2xl font-bold text-green-600 dark:text-green-400">$42</div>
                       </div>
                     </div>
@@ -208,30 +208,30 @@ export default function FeaturesPage() {
           <Card className="bg-gradient-to-br from-primary/10 via-chart-1/5 to-primary/5 dark:from-primary/20 dark:via-chart-1/10 dark:to-primary/10 border-primary/30">
             <CardContent className="p-8">
               <div className="text-center mb-8">
-                <h3 className="text-2xl font-bold text-foreground mb-2">为开发者节省的成本</h3>
-                <p className="text-muted-foreground">每个使用本模板的项目平均节省</p>
+                <h3 className="text-2xl font-bold text-foreground mb-2">{t('costSavings.summary.title')}</h3>
+                <p className="text-muted-foreground">{t('costSavings.summary.subtitle')}</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div className="text-center">
                   <div className="text-4xl font-bold text-primary mb-2">82</div>
-                  <div className="text-muted-foreground">开发小时</div>
-                  <div className="text-sm text-primary mt-1">≈ 10 个工作日</div>
+                  <div className="text-muted-foreground">{t('costSavings.summary.hoursLabel')}</div>
+                  <div className="text-sm text-primary mt-1">{t('costSavings.summary.hoursDetail')}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-4xl font-bold text-chart-1 mb-2">5.7M</div>
-                  <div className="text-muted-foreground">Token 消耗</div>
-                  <div className="text-sm text-chart-1 mt-1">减少 67% AI 调用</div>
+                  <div className="text-muted-foreground">{t('costSavings.summary.tokensLabel')}</div>
+                  <div className="text-sm text-chart-1 mt-1">{t('costSavings.summary.tokensDetail')}</div>
                 </div>
                 <div className="text-center">
                   <div className="text-4xl font-bold text-chart-4 mb-2">$85</div>
-                  <div className="text-muted-foreground">AI 成本</div>
-                  <div className="text-sm text-chart-4 mt-1">基于 Claude 3.5 Sonnet</div>
+                  <div className="text-muted-foreground">{t('costSavings.summary.costLabel')}</div>
+                  <div className="text-sm text-chart-4 mt-1">{t('costSavings.summary.costDetail')}</div>
                 </div>
               </div>
               <div className="mt-8 text-center">
                 <div className="inline-flex items-center gap-2 bg-background/50 px-6 py-3 rounded-full">
                   <CheckCircle className="w-5 h-5 text-primary" />
-                  <span className="text-sm font-medium">免费开源 · 开箱即用 · 持续更新</span>
+                  <span className="text-sm font-medium">{t('costSavings.summary.badge')}</span>
                 </div>
               </div>
             </CardContent>
@@ -239,7 +239,7 @@ export default function FeaturesPage() {
 
           <div className="mt-8 text-center">
             <p className="text-sm text-muted-foreground">
-              * 数据基于开发一个包含认证、数据库、博客等功能的全栈项目，使用 Claude 3.5 Sonnet 模型的平均数据
+              {t('costSavings.summary.note')}
             </p>
           </div>
         </section>
