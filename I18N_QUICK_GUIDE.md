@@ -1,12 +1,14 @@
 # 多语言国际化 - 快速参考指南
 
 ## 🌍 支持的语言
+
 - **中文** (zh): `/zh/*`
 - **英文** (en): `/en/*`
 - **日文** (ja): `/ja/*`
 
 ## 📁 文件结构
-```
+
+```bash
 src/
 ├── features/{feature}/locale/
 │   ├── zh.json      ← 中文翻译
@@ -24,6 +26,7 @@ src/
 ## 🔧 在组件中使用翻译
 
 ### 基本使用
+
 ```typescript
 import { useTranslations } from 'next-intl';
 
@@ -40,6 +43,7 @@ export default function Component() {
 ```
 
 ### 使用复杂数据结构（数组/对象）
+
 ```typescript
 const t = useTranslations('home');
 
@@ -59,6 +63,7 @@ return (
 ```
 
 ### 具有参数的翻译
+
 ```typescript
 const t = useTranslations('common');
 
@@ -66,6 +71,7 @@ return <p>{t('welcome', { name: 'John' })}</p>;
 ```
 
 **对应的翻译文件**:
+
 ```json
 {
   "welcome": "Welcome, {name}!"
@@ -75,23 +81,29 @@ return <p>{t('welcome', { name: 'John' })}</p>;
 ## ➕ 添加新feature的翻译
 
 ### 步骤1：创建翻译文件
+
 在 `/src/features/{feature-name}/locale/` 创建：
+
 - `zh.json` - 中文翻译
 - `en.json` - 英文翻译
 - `ja.json` - 日文翻译
 
 ### 步骤2：注册feature
+
 在 `/src/i18n/request.ts` 中：
+
 ```typescript
 const FEATURE_MODULES = ['home', 'about', 'your-new-feature'];
 ```
 
 ### 步骤3：在组件中使用
+
 ```typescript
 const t = useTranslations('your-new-feature');
 ```
 
 ### 步骤4：验证
+
 ```bash
 npm run build
 node scripts/verify-i18n.js
@@ -100,6 +112,7 @@ node scripts/verify-i18n.js
 ## 📝 翻译文件结构示例
 
 ### 简单键值对
+
 ```json
 {
   "title": "首页",
@@ -108,6 +121,7 @@ node scripts/verify-i18n.js
 ```
 
 ### 嵌套结构
+
 ```json
 {
   "hero": {
@@ -122,6 +136,7 @@ node scripts/verify-i18n.js
 ```
 
 ### 数组结构
+
 ```json
 {
   "features": [
@@ -135,12 +150,14 @@ node scripts/verify-i18n.js
 ```
 
 ## 🔍 验证翻译完整性
+
 ```bash
 node scripts/verify-i18n.js
 ```
 
 输出示例：
-```
+
+```bash
 ✅ home: 所有语言文件齐全 (zh, en, ja)
 ✅ about: 所有语言文件齐全 (zh, en, ja)
 ...
@@ -149,7 +166,7 @@ node scripts/verify-i18n.js
 
 ## 🎯 URL路由模式
 
-```
+```bash
 默认语言（中文）:
 /zh/                   ← 首页
 /zh/about              ← 关于页
@@ -169,17 +186,21 @@ node scripts/verify-i18n.js
 ## 🌐 SEO最佳实践
 
 ### hreflang标签
+
 系统自动为每个页面生成hreflang标签，支持：
+
 - Canonical链接
 - Language alternates
 - x-default标签
 
 ### 站点地图
+
 - 自动生成：`/sitemap.xml`
 - 包含所有语言版本
 - 每条记录包含language alternates
 
 ### Robots规则
+
 - 文件：`/public/robots.txt`
 - 允许所有语言版本爬取
 - 保护敏感路由
@@ -197,6 +218,7 @@ node scripts/verify-i18n.js
 ## ⚙️ 环境变量
 
 ### NEXT_PUBLIC_BASE_URL
+
 用于生成正确的站点地图和hreflang URLs：
 
 ```bash
@@ -209,7 +231,9 @@ NEXT_PUBLIC_BASE_URL=https://example.com
 ## 📊 常见问题
 
 ### Q: 如何修改默认语言？
+
 A: 在 `/src/i18n/routing.ts` 中修改 `defaultLocale`：
+
 ```typescript
 export const routing = {
   locales: ['zh', 'en', 'ja'],
@@ -218,18 +242,24 @@ export const routing = {
 ```
 
 ### Q: 如何添加新的语言？
-A: 
+
+A:
+
 1. 在所有翻译文件中添加新语言
 2. 在 `/src/i18n/routing.ts` 的 `locales` 中添加语言代码
 3. 运行 `npm run build`
 
 ### Q: 翻译内容更新后需要重新构建吗？
-A: 
+
+A:
+
 - 开发环境（`npm run dev`）：自动刷新，无需重新构建
 - 生产环境：需要重新构建并部署
 
 ### Q: 如何获取当前语言？
-A: 
+
+A:
+
 ```typescript
 import { useLocale } from 'next-intl';
 

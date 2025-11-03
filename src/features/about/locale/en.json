@@ -1,27 +1,36 @@
 {
   "name": "AI Code Next.js Starter",
   "description": "Next.js full-stack template optimized for AI-assisted development",
+  "mission_label": "Mission",
   "mission": "Through systematic optimization of architecture and data flow, save developers time, tokens and money",
+  "vision_label": "Vision",
   "vision": "Become the first choice for developers for Next.js full-stack development templates, making AI-assisted development more efficient and economical",
+  "founded_label": "Founded",
   "founded": "2024",
   "headquarters": "Open Source Project",
   "employeeCount": "Community Driven",
+  "values_title": "Our Values",
+  "timeline_title": "Development Journey",
   "values": [
     {
       "title": "AI-Friendly Architecture",
-      "description": "Four-layer clear division of work, unified path aliases, smaller AI change scope, shorter context"
+      "description": "Four-layer clear division of work, unified path aliases, smaller AI change scope, shorter context",
+      "icon": "zap"
     },
     {
       "title": "Cost-First",
-      "description": "From architecture to data flow, systematically reduce Token/request count/context length"
+      "description": "From architecture to data flow, systematically reduce Token/request count/context length",
+      "icon": "shield"
     },
     {
       "title": "Ready to Use",
-      "description": "Core features like authentication, database, UI components are ready, focus on business logic"
+      "description": "Core features like authentication, database, UI components are ready, focus on business logic",
+      "icon": "heart"
     },
     {
       "title": "Open Source Sharing",
-      "description": "Open source under Apache 2.0 license, welcoming community contributions and feedback"
+      "description": "Open source under Apache 2.0 license, welcoming community contributions and feedback",
+      "icon": "users"
     }
   ],
   "timeline": {
@@ -88,5 +97,7 @@
     ],
     "primaryButton": "Learn More About Pro",
     "secondaryButton": "Continue with Free Version"
-  }
+  },
+  "primary_button": "Learn More About Pro",
+  "secondary_button": "Continue with Free Version"
 }

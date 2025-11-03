@@ -12,90 +12,13 @@ import {
   Target, 
   Eye, 
   Heart, 
-  Users, 
   Award, 
-  Shield, 
+  ExternalLink,
   Zap,
-  ExternalLink
+  Shield,
+  Users
 } from 'lucide-react';
-import { CompanyInfo, TimelineEvent } from '@shared/types/portal';
 
-const companyInfo: CompanyInfo = {
-  name: 'AI Code Next.js Starter',
-  description: '为 AI 辅助开发优化的 Next.js 全栈模板',
-  mission: '通过架构与数据流的系统优化，为开发者节省时间、Token 和金钱',
-  vision: '成为开发者首选的 Next.js 全栈开发模板，让 AI 辅助开发更高效、更经济',
-  founded: '2024年',
-  headquarters: '开源项目',
-  employeeCount: '社区驱动',
-  values: [
-    {
-      title: 'AI 友好架构',
-      description: '四层清晰分工，统一路径别名，AI 辅助改动面更小、上下文更短',
-      icon: 'zap',
-    },
-    {
-      title: '成本优先',
-      description: '从架构到数据流，系统性降低 Token/请求次数/上下文长度',
-      icon: 'shield',
-    },
-    {
-      title: '开箱即用',
-      description: '认证、数据库、UI 组件等核心功能已就绪，专注业务逻辑',
-      icon: 'heart',
-    },
-    {
-      title: '开源共享',
-      description: 'Apache 2.0 协议开源，欢迎社区贡献和反馈',
-      icon: 'users',
-    },
-  ],
-};
-
-const timelineEvents: TimelineEvent[] = [
-  {
-    id: '1',
-    year: '2024-10',
-    title: '项目初始化',
-    description: '基于 Next.js 15 和 React 19 搭建基础架构',
-    type: 'milestone',
-  },
-  {
-    id: '2',
-    year: '2024-11',
-    title: '核心功能开发',
-    description: '完成认证系统、数据库集成、UI 组件库',
-    type: 'product',
-  },
-  {
-    id: '3',
-    year: '2024-12',
-    title: 'AI 友好优化',
-    description: '实现四层架构分工，优化路径别名和命名规范',
-    type: 'product',
-  },
-  {
-    id: '4',
-    year: '2025-01',
-    title: 'v1.0 正式发布',
-    description: '开源发布，采用 Apache 2.0 协议',
-    type: 'milestone',
-  },
-  {
-    id: '5',
-    year: '2025-02',
-    title: '社区增长',
-    description: 'GitHub Stars 突破 1000，社区贡献者持续增加',
-    type: 'achievement',
-  },
-  {
-    id: '6',
-    year: '2025-03',
-    title: '功能完善',
-    description: '新增博客系统、用户控制台等核心功能模块',
-    type: 'product',
-  },
-];
 
 
 
@@ -116,21 +39,21 @@ export default function AboutPage() {
                   <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Target className="w-8 h-8 text-blue-600" />
                   </div>
-                  <h3 className="font-semibold mb-2">使命</h3>
+                  <h3 className="font-semibold mb-2">{t('mission_label')}</h3>
                   <p className="text-sm text-muted-foreground">{t('mission')}</p>
                 </div>
                 <div className="text-center">
                   <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Eye className="w-8 h-8 text-purple-600" />
                   </div>
-                  <h3 className="font-semibold mb-2">愿景</h3>
+                  <h3 className="font-semibold mb-2">{t('vision_label')}</h3>
                   <p className="text-sm text-muted-foreground">{t('vision')}</p>
                 </div>
                 <div className="text-center">
                   <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Award className="w-8 h-8 text-green-600" />
                   </div>
-                  <h3 className="font-semibold mb-2">成立时间</h3>
+                  <h3 className="font-semibold mb-2">{t('founded_label')}</h3>
                   <p className="text-sm text-muted-foreground">
                     {t('founded')} · {t('employeeCount')}
                   </p>
@@ -141,10 +64,16 @@ export default function AboutPage() {
 
           {/* 企业价值观 */}
           <section>
-            <h2 className="text-3xl font-bold text-center mb-12">我们的价值观</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('values_title')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {(t.raw('values') as Record<string, unknown>[]).map((value: Record<string, unknown>) => {
-                const Icon = Heart; // 简化处理，使用默认icon
+                const iconMap: Record<string, typeof Heart> = {
+                  'zap': Zap,
+                  'shield': Shield,
+                  'heart': Heart,
+                  'users': Users,
+                };
+                const Icon = iconMap[value.icon as string] || Heart;
                 return (
                   <Card key={value.title as string} className="text-center">
                     <CardHeader>
@@ -164,7 +93,7 @@ export default function AboutPage() {
 
           {/* 发展历程 */}
           <section>
-            <h2 className="text-3xl font-bold text-center mb-12">{t('timeline.title')}</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('timeline_title')}</h2>
             <div className="max-w-4xl mx-auto">
               <Timeline items={((t.raw('timeline.events') as Record<string, unknown>[]).map((event: Record<string, unknown>) => ({
                 id: event.year as string,
@@ -228,12 +157,12 @@ export default function AboutPage() {
                     <Button size="lg" className="px-8 py-4 text-lg" asChild>
                       <a href="https://github.com/inRemark/ai-code-nextjs-starter-pro" target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="w-5 h-5 mr-2" />
-                        {t('pro.primaryButton')}
+                        {t('primary_button')}
                       </a>
                     </Button>
                     <Button size="lg" variant="outline" className="px-8 py-4 text-lg" asChild>
                       <a href="https://github.com/inRemark/ai-code-nextjs-starter" target="_blank" rel="noopener noreferrer">
-                        {t('pro.secondaryButton')}
+                        {t('secondary_button')}
                       </a>
                     </Button>
                   </div>

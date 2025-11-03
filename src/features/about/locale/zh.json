@@ -1,27 +1,36 @@
 {
   "name": "AI Code Next.js Starter",
   "description": "为 AI 辅助开发优化的 Next.js 全栈模板",
+  "mission_label": "使命",
   "mission": "通过架构与数据流的系统优化，为开发者节省时间、Token 和金钱",
+  "vision_label": "愿景",
   "vision": "成为开发者首选的 Next.js 全栈开发模板，让 AI 辅助开发更高效、更经济",
+  "founded_label": "成立时间",
   "founded": "2024年",
   "headquarters": "开源项目",
   "employeeCount": "社区驱动",
+  "values_title": "我们的价值观",
+  "timeline_title": "发展历程",
   "values": [
     {
       "title": "AI 友好架构",
-      "description": "四层清晰分工，统一路径别名，AI 辅助改动面更小、上下文更短"
+      "description": "四层清晰分工，统一路径别名，AI 辅助改动面更小、上下文更短",
+      "icon": "zap"
     },
     {
       "title": "成本优先",
-      "description": "从架构到数据流，系统性降低 Token/请求次数/上下文长度"
+      "description": "从架构到数据流，系统性降低 Token/请求次数/上下文长度",
+      "icon": "shield"
     },
     {
       "title": "开箱即用",
-      "description": "认证、数据库、UI 组件等核心功能已就绪，专注业务逻辑"
+      "description": "认证、数据库、UI 组件等核心功能已就绪，专注业务逻辑",
+      "icon": "heart"
     },
     {
       "title": "开源共享",
-      "description": "Apache 2.0 协议开源，欢迎社区贡献和反馈"
+      "description": "Apache 2.0 协议开源，欢迎社区贡献和反馈",
+      "icon": "users"
     }
   ],
   "timeline": {
@@ -88,5 +97,7 @@
     ],
     "primaryButton": "了解商业版",
     "secondaryButton": "继续使用免费版"
-  }
+  },
+  "primary_button": "了解商业版",
+  "secondary_button": "继续使用免费版"
 }

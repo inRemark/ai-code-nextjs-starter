@@ -1,27 +1,36 @@
 {
   "name": "AI Code Next.js Starter",
   "description": "AI アシスト開発に最適化された Next.js フルスタック テンプレート",
+  "mission_label": "ミッション",
   "mission": "アーキテクチャとデータフローの体系的な最適化により、開発者の時間、Token、お金を節約",
+  "vision_label": "ビジョン",
   "vision": "Next.js フルスタック開発テンプレートの開発者向け第一選択肢となり、AI アシスト開発をより効率的でより経済的にする",
+  "founded_label": "設立",
   "founded": "2024",
   "headquarters": "オープン ソース プロジェクト",
   "employeeCount": "コミュニティ主導",
+  "values_title": "私たちの価値観",
+  "timeline_title": "発展歴",
   "values": [
     {
       "title": "AI フレンドリー アーキテクチャ",
-      "description": "4 層の明確な分業、統一されたパス エイリアス、AI 変更範囲が小さく、コンテキストが短い"
+      "description": "4 层の明確な分業、統一されたパス エイリアス、AI 変更範囲が小さく、コンテキストが短い",
+      "icon": "zap"
     },
     {
-      "title": "コスト優先",
-      "description": "アーキテクチャからデータフローまで、Token/リクエスト数/コンテキスト長を体系的に削減"
+      "title": "コスト儯先",
+      "description": "アーキテクチャからデータフローまで、Token/リクエスト数/コンテキスト長を体系的に削減",
+      "icon": "shield"
     },
     {
       "title": "すぐに使える",
-      "description": "認証、データベース、UI コンポーネントなどのコア機能が用意されており、ビジネス ロジックに集中"
+      "description": "認証、データベース、UI コンポーネントなどのコア機能が用意されており、ビジネス ロジックに集中",
+      "icon": "heart"
     },
     {
       "title": "オープン ソース 共有",
-      "description": "Apache 2.0 ライセンスの下でオープン ソース化、コミュニティの貢献とフィードバックを歓迎"
+      "description": "Apache 2.0 ライセンスの下でオープン ソース化、コミュニティの貢献とフィードバックを歓迎",
+      "icon": "users"
     }
   ],
   "timeline": {
@@ -88,5 +97,7 @@
     ],
     "primaryButton": "Pro について詳しく知る",
     "secondaryButton": "無料版を使い続ける"
-  }
+  },
+  "primary_button": "Pro について詳しく知る",
+  "secondary_button": "無料版を使い続ける"
 }
