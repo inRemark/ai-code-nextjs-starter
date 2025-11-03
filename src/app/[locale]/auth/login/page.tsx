@@ -1,11 +1,14 @@
+import { useTranslations } from 'next-intl';
 import LoginForm from '@features/auth/components/login-form';
 import { AuthLayout } from '@shared/layout/auth-layout';
 
 export default function LoginPage() {
+  const t = useTranslations('auth');
+  
   return (
     <AuthLayout 
-      title="欢迎回来" 
-      subtitle="登录您的 AICoder 账户"
+      title={t('welcomeBack')} 
+      subtitle={t('welcomeSubtitle')}
     >
       <LoginForm />
     </AuthLayout>

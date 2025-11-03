@@ -15,7 +15,8 @@
     "next": "下一步",
     "previous": "上一步",
     "confirm": "确认",
-    "close": "关闭"
+    "close": "关闭",
+    "or": "或"
   },
   "nav": {
     "home": "首页",
@@ -31,17 +32,29 @@
     "admin": "管理后台"
   },
   "auth": {
+    "welcomeBack": "欢迎回来",
+    "welcomeSubtitle": "登录您的 AICoder 账户",
+    "createAccount": "创建账户",
+    "createAccountSubtitle": "注册您的 AICoder 账户",
+    "backToHome": "返回首页",
+    "copyright": "© 2024 AICoder. 保留所有权利。",
     "login": {
       "title": "登录",
       "emailLabel": "邮箱地址",
-      "emailPlaceholder": "请输入邮箱",
+      "emailPlaceholder": "请输入邮箱地址",
       "passwordLabel": "密码",
       "passwordPlaceholder": "请输入密码",
       "rememberMe": "记住我",
       "forgotPassword": "忘记密码?",
       "submitButton": "登录",
       "noAccount": "还没有账号?",
-      "registerLink": "立即注册"
+      "registerLink": "立即注册",
+      "emailRequired": "请输入邮箱地址",
+      "emailInvalid": "请输入有效的邮箱地址",
+      "passwordRequired": "请输入密码",
+      "passwordTooShort": "密码至少需要6位字符",
+      "loginFailed": "登录失败，请检查邮箱和密码",
+      "socialLoginFailed": "{provider} 登录失败: {error}"
     },
     "register": {
       "title": "注册",

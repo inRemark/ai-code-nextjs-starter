@@ -15,7 +15,8 @@
     "next": "Next",
     "previous": "Previous",
     "confirm": "Confirm",
-    "close": "Close"
+    "close": "Close",
+    "or": "Or"
   },
   "nav": {
     "home": "Home",
@@ -31,6 +32,12 @@
     "admin": "Admin"
   },
   "auth": {
+    "welcomeBack": "Welcome Back",
+    "welcomeSubtitle": "Sign in to your AICoder account",
+    "createAccount": "Create Account",
+    "createAccountSubtitle": "Sign up for your AICoder account",
+    "backToHome": "Back to Home",
+    "copyright": "© 2024 AICoder. All rights reserved.",
     "login": {
       "title": "Login",
       "emailLabel": "Email",
@@ -41,7 +48,13 @@
       "forgotPassword": "Forgot password?",
       "submitButton": "Login",
       "noAccount": "Don't have an account?",
-      "registerLink": "Register now"
+      "registerLink": "Register now",
+      "emailRequired": "Please enter your email",
+      "emailInvalid": "Please enter a valid email address",
+      "passwordRequired": "Please enter your password",
+      "passwordTooShort": "Password must be at least 6 characters",
+      "loginFailed": "Login failed, please check your email and password",
+      "socialLoginFailed": "{provider} login failed: {error}"
     },
     "register": {
       "title": "Register",

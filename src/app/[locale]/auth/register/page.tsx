@@ -1,12 +1,15 @@
 import { Suspense } from 'react';
+import { useTranslations } from 'next-intl';
 import RegisterForm from '@features/auth/components/register-form';
 import { AuthLayout } from '@shared/layout/auth-layout';
 
 function RegisterFormWrapper() {
+  const t = useTranslations('auth');
+  
   return (
     <AuthLayout 
-      title="创建账户" 
-      subtitle="加入 AICoder，开始智能决策之旅"
+      title={t('createAccount')} 
+      subtitle={t('createAccountSubtitle')}
     >
       <RegisterForm />
     </AuthLayout>
@@ -14,8 +17,10 @@ function RegisterFormWrapper() {
 }
 
 export default function RegisterPage() {
+  const tCommon = useTranslations('common');
+  
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div>{tCommon('loading')}</div>}>
       <RegisterFormWrapper />
     </Suspense>
   );

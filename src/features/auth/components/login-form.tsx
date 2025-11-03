@@ -11,24 +11,16 @@ import { Button } from '@shared/ui/button';
 import { Alert, AlertDescription } from '@shared/ui/alert';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { logger } from '@logger';
+import { useTranslations } from 'next-intl';
+
 interface LoginFormProps {
   onSuccess?: () => void;
 }
 
-const validateEmail = (email: string): string | undefined => {
-  if (!email) return '请输入邮箱地址';
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) return '请输入有效的邮箱地址';
-  return undefined;
-};
-
-const validatePassword = (password: string): string | undefined => {
-  if (!password) return '请输入密码';
-  if (password.length < 6) return '密码至少需要6位字符';
-  return undefined;
-};
-
 export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
+  const t = useTranslations('auth.login');
+  const tCommon = useTranslations('common');
+  
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -38,6 +30,19 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { login: authLogin } = useAuth();
+
+  const validateEmail = (email: string): string | undefined => {
+    if (!email) return t('emailRequired');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return t('emailInvalid');
+    return undefined;
+  };
+
+  const validatePassword = (password: string): string | undefined => {
+    if (!password) return t('passwordRequired');
+    if (password.length < 6) return t('passwordTooShort');
+    return undefined;
+  };
 
   const handleFieldChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -87,7 +92,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
       }
     } catch (err: unknown) {
       // 处理来自认证提供者的错误
-      const errorMessage = err instanceof Error ? err.message : '登录失败，请检查邮箱和密码';
+      const errorMessage = err instanceof Error ? err.message : t('loginFailed');
       setServerError(errorMessage);
       logger.error('Login error:', err);
     } finally {
@@ -108,7 +113,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
   };
 
   const handleSocialError = (provider: string, error: string) => {
-    setServerError(`${provider} 登录失败: ${error}`);
+    setServerError(t('socialLoginFailed', { provider, error }));
   };
 
   return (
@@ -125,24 +130,24 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
         {/* 邮箱字段 */}
         <FormField
           name="email"
-          label="邮箱地址"
+          label={t('emailLabel')}
           type="email"
           value={formData.email}
           onChange={(value) => handleFieldChange('email', value)}
           error={errors.email}
-          placeholder="请输入邮箱地址"
+          placeholder={t('emailPlaceholder')}
           required
         />
 
         {/* 密码字段 */}
         <FormField
           name="password"
-          label="密码"
+          label={t('passwordLabel')}
           type="password"
           value={formData.password}
           onChange={(value) => handleFieldChange('password', value)}
           error={errors.password}
-          placeholder="请输入密码"
+          placeholder={t('passwordPlaceholder')}
           showPasswordToggle
           required
         />
@@ -156,16 +161,16 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              登录中...
+              {tCommon('loading')}
             </>
           ) : (
-            '登录'
+            t('submitButton')
           )}
         </Button>
       </form>
 
       {/* 分割线 */}
-      <Divider text="或" />
+      <Divider text={tCommon('or') || '或'} />
 
       {/* 第三方登录 */}
       <SocialLogin
@@ -178,12 +183,12 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
       {/* 注册链接 */}
       <div className="text-center mt-6">
         <p className="text-sm text-muted-foreground">
-          还没有账户？{' '}
+          {t('noAccount')}{' '}
           <Link
             href="/auth/register"
             className="font-medium text-primary hover:text-primary/80 transition-colors"
           >
-            立即注册
+            {t('registerLink')}
           </Link>
         </p>
       </div>
