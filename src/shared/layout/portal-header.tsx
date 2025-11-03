@@ -8,6 +8,7 @@ import { cn } from "@shared/utils";
 import { Menu, X, LogOut, Sparkles, User, Settings } from "lucide-react";
 import { useAuth } from "@features/auth/components/unified-auth-provider";
 import { ThemeToggle } from "@shared/ui/theme-toggle";
+import { LanguageSwitcher } from "@shared/components/language-switcher";
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -66,6 +67,8 @@ export const PortalHeader: React.FC = () => {
                  <div className="hidden md:flex items-center gap-4">
                    {/* 主题切换按钮 */}
                    <ThemeToggle />
+                    {/* 语言切换 */}
+                   <LanguageSwitcher />
             
             {loading ? (
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-300"></div>

@@ -1,0 +1,62 @@
+{
+  "common": {
+    "appName": "VSeek",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "submit": "Submit",
+    "search": "Search",
+    "filter": "Filter",
+    "logout": "Logout",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "confirm": "Confirm",
+    "close": "Close"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "blog": "Blog",
+    "articles": "Articles",
+    "pricing": "Pricing",
+    "help": "Help",
+    "login": "Login",
+    "register": "Register",
+    "profile": "Profile",
+    "console": "Console",
+    "admin": "Admin"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Enter your email",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter your password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "submitButton": "Login",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Register now"
+    },
+    "register": {
+      "title": "Register",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "confirmPasswordLabel": "Confirm Password",
+      "submitButton": "Register",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Login now"
+    }
+  },
+  "errors": {
+    "notFound": "Page Not Found",
+    "unauthorized": "Unauthorized",
+    "serverError": "Server Error",
+    "networkError": "Network Error"
+  }
+}

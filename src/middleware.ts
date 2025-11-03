@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-// 注意：在middleware中不能直接导入NextAuth配置，因为可能会导致Edge Runtime中的问题
-// import { getServerSession } from 'next-auth/next';
-// import { authConfig } from '@features/auth/services/next-auth.config';
-
-// 在middleware中使用简化的认证检查
+import createIntlMiddleware from 'next-intl/middleware';
 import { getToken } from 'next-auth/jwt';
 import { logger } from '@logger';
+import { routing } from './i18n/routing';
+
+// 创建 next-intl 中间件
+const intlMiddleware = createIntlMiddleware(routing);
 
 // 定义开放页面路由（无需认证即可访问）
 const publicRoutes = [
@@ -48,31 +48,42 @@ const protectedRoutes = [
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  // 跳过 API 路由
+  if (pathname.startsWith('/api')) {
+    return NextResponse.next();
+  }
+
+    // 应用国际化中间件
+  const intlResponse = intlMiddleware(request);
+
+  // 提取语言前缀后的路径
+  const pathWithoutLocale = pathname.replace(/^\/(zh|en|ja)/, '') || '/';
 
   // 检查是否为公共路由
   const isPublicRoute = publicRoutes.some(route => 
-    pathname.startsWith(route)
+    // pathname.startsWith(route)
+    pathWithoutLocale === route || pathWithoutLocale.startsWith(route)
   );
 
-  // 如果是公共路由，直接通过
+  // 如果是公共路由，直接通过, 返回国际化响应
   if (isPublicRoute) {
-    return NextResponse.next();
+    return intlResponse;
   }
 
   // 检查是否为受保护路由
   const isUserProtectedRoute = userProtectedRoutes.some(route => 
-    pathname.startsWith(route)
+    pathWithoutLocale.startsWith(route)
   );
   const isAdminProtectedRoute = adminProtectedRoutes.some(route => 
-    pathname.startsWith(route)
+    pathWithoutLocale.startsWith(route)
   );
   const isOtherProtectedRoute = protectedRoutes.some(route => 
-    pathname.startsWith(route)
+    pathWithoutLocale.startsWith(route)
   );
 
-  // 如果不是受保护的路由，直接通过
+  // 如果不是受保护的路由，直接通过，返回国际化响应
   if (!isUserProtectedRoute && !isAdminProtectedRoute && !isOtherProtectedRoute) {
-    return NextResponse.next();
+    return intlResponse;
   }
 
   try {
@@ -83,11 +94,11 @@ export async function middleware(request: NextRequest) {
     });
     
     if (process.env.NODE_ENV === 'development') {
-      logger.warn('Middleware token check:', {
+      console.warn('Middleware token check:', {
+        pathname,
         hasToken: !!token,
         userId: token?.sub,
-        userRole: token?.role,
-        pathname
+        userRole: token?.role
       });
     }
     
@@ -95,35 +106,43 @@ export async function middleware(request: NextRequest) {
       if (process.env.NODE_ENV === 'development') {
         logger.warn('No valid token found, redirecting to login');
       }
+      // 获取当前语言
+      const locale = pathname.split('/')[1] || 'zh';
+
       // 检查是否已经在登录页面，避免重定向循环
-      if (pathname === '/login') {
-        return NextResponse.next();
+      if (pathWithoutLocale === '/login') {
+        return intlResponse;
       }
-      return NextResponse.redirect(new URL('/login', request.url));
+      return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
     }
     
     // 如果用户已认证但试图访问登录页面，则重定向到profile
-    if (pathname === '/login') {
-      return NextResponse.redirect(new URL('/profile', request.url));
+    if (pathWithoutLocale === '/login') {
+      const locale = pathname.split('/')[1] || 'zh';
+      return NextResponse.redirect(new URL(`/${locale}/profile`, request.url));
     }
     
     const userRole = token.role;
     if (isAdminProtectedRoute && userRole !== 'ADMIN') {
-      return NextResponse.redirect(new URL('/unauthorized', request.url));
+      const locale = pathname.split('/')[1] || 'zh';
+      return NextResponse.redirect(new URL(`/${locale}/unauthorized`, request.url));
     }
-    if (pathname.startsWith('/console') && userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      return NextResponse.redirect(new URL('/unauthorized', request.url));
+    if (pathWithoutLocale.startsWith('/console') && userRole !== 'ADMIN' && userRole !== 'EDITOR') {
+      const locale = pathname.split('/')[1] || 'zh';
+      return NextResponse.redirect(new URL(`/${locale}/unauthorized`, request.url));
     }
-    return NextResponse.next();
+    return intlResponse;
   } catch (err) {
     if (process.env.NODE_ENV === 'development') {
       logger.error('Middleware auth error:', err);
     }
+    // 获取当前语言
+    const locale = pathname.split('/')[1] || 'zh';
     // 检查是否已经在登录页面，避免重定向循环
-    if (pathname === '/login') {
-      return NextResponse.next();
+    if (pathWithoutLocale === '/login') {
+      return intlResponse;
     }
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
   }
 }
 

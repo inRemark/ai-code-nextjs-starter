@@ -1,0 +1,62 @@
+{
+  "common": {
+    "appName": "VSeek",
+    "loading": "加载中...",
+    "save": "保存",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "create": "创建",
+    "submit": "提交",
+    "search": "搜索",
+    "filter": "筛选",
+    "logout": "退出登录",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "confirm": "确认",
+    "close": "关闭"
+  },
+  "nav": {
+    "home": "首页",
+    "about": "关于我们",
+    "blog": "博客",
+    "articles": "文章",
+    "pricing": "价格",
+    "help": "帮助中心",
+    "login": "登录",
+    "register": "注册",
+    "profile": "个人中心",
+    "console": "控制台",
+    "admin": "管理后台"
+  },
+  "auth": {
+    "login": {
+      "title": "登录",
+      "emailLabel": "邮箱地址",
+      "emailPlaceholder": "请输入邮箱",
+      "passwordLabel": "密码",
+      "passwordPlaceholder": "请输入密码",
+      "rememberMe": "记住我",
+      "forgotPassword": "忘记密码?",
+      "submitButton": "登录",
+      "noAccount": "还没有账号?",
+      "registerLink": "立即注册"
+    },
+    "register": {
+      "title": "注册",
+      "emailLabel": "邮箱地址",
+      "passwordLabel": "密码",
+      "confirmPasswordLabel": "确认密码",
+      "submitButton": "注册",
+      "hasAccount": "已有账号?",
+      "loginLink": "立即登录"
+    }
+  },
+  "errors": {
+    "notFound": "页面未找到",
+    "unauthorized": "无权限访问",
+    "serverError": "服务器错误",
+    "networkError": "网络错误"
+  }
+}
