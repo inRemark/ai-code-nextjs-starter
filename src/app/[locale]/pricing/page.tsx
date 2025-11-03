@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Button } from "@shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/card";
 import { Badge } from "@shared/ui/badge";
@@ -9,131 +10,91 @@ import { Check } from "lucide-react";
 import Link from "next/link";
 
 export default function PricingPage() {
+  const t = useTranslations("pricing");
   return (
     <PortalLayout>
       <div className="bg-gradient-to-b from-background to-muted/20 dark:from-background dark:to-muted/10">
         <PageContent maxWidth="xl">
           <section className="container mx-auto px-4 py-20">
             <div className="text-center mb-16">
-              <Badge variant="secondary" className="mb-4">价格方案</Badge>
+              <Badge variant="secondary" className="mb-4">{t("title")}</Badge>
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-                选择适合您的方案
+                {t("description")}
               </h1>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                灵活的定价方案，满足不同规模团队的需求
-              </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {/* 免费版 */}
+              {/* Free Plan */}
               <Card className="border-2">
                 <CardHeader>
-                  <CardTitle className="text-2xl">免费版</CardTitle>
-                  <CardDescription>适合个人用户</CardDescription>
+                  <CardTitle className="text-2xl">{t("plans.free.name")}</CardTitle>
+                  <CardDescription>{t("plans.free.description")}</CardDescription>
                   <div className="mt-4">
-                    <span className="text-4xl font-bold">¥0</span>
-                    <span className="text-muted-foreground">/月</span>
+                    <span className="text-4xl font-bold">{t("plans.free.price")}</span>
+                    <span className="text-muted-foreground">{t("plans.free.period")}</span>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <Button className="w-full mb-6" variant="outline" asChild>
-                    <Link href="/auth/register">开始使用</Link>
+                    <Link href="/auth/register">{t("plans.free.cta")}</Link>
                   </Button>
                   <ul className="space-y-3">
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">基础功能</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">博客阅读</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">积分系统</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">推荐奖励</span>
-                    </li>
+                    {(t.raw("plans.free.features") as string[]).map((feature, index) => (
+                      <li key={index} className="flex items-center gap-2">
+                        <Check className="w-4 h-4 text-chart-1" />
+                        <span className="text-sm">{feature}</span>
+                      </li>
+                    ))}
                   </ul>
                 </CardContent>
               </Card>
 
-              {/* 专业版 */}
+              {/* Professional Plan */}
               <Card className="border-2 border-primary shadow-lg relative">
-                <Badge className="absolute top-4 right-4">推荐</Badge>
+                <Badge className="absolute top-4 right-4">{t("plans.professional.badge")}</Badge>
                 <CardHeader>
-                  <CardTitle className="text-2xl">专业版</CardTitle>
-                  <CardDescription>适合小型团队</CardDescription>
+                  <CardTitle className="text-2xl">{t("plans.professional.name")}</CardTitle>
+                  <CardDescription>{t("plans.professional.description")}</CardDescription>
                   <div className="mt-4">
-                    <span className="text-4xl font-bold">¥99</span>
-                    <span className="text-muted-foreground">/月</span>
+                    <span className="text-4xl font-bold">{t("plans.professional.price")}</span>
+                    <span className="text-muted-foreground">{t("plans.professional.period")}</span>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <Button className="w-full mb-6" asChild>
-                    <Link href="/auth/register">开始试用</Link>
+                    <Link href="/auth/register">{t("plans.professional.cta")}</Link>
                   </Button>
                   <ul className="space-y-3">
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">免费版所有功能</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">高级分析</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">优先支持</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">自定义配置</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">API 访问</span>
-                    </li>
+                    {(t.raw("plans.professional.features") as string[]).map((feature, index) => (
+                      <li key={index} className="flex items-center gap-2">
+                        <Check className="w-4 h-4 text-chart-1" />
+                        <span className="text-sm">{feature}</span>
+                      </li>
+                    ))}
                   </ul>
                 </CardContent>
               </Card>
 
-              {/* 企业版 */}
+              {/* Enterprise Plan */}
               <Card className="border-2">
                 <CardHeader>
-                  <CardTitle className="text-2xl">企业版</CardTitle>
-                  <CardDescription>适合大型组织</CardDescription>
+                  <CardTitle className="text-2xl">{t("plans.enterprise.name")}</CardTitle>
+                  <CardDescription>{t("plans.enterprise.description")}</CardDescription>
                   <div className="mt-4">
-                    <span className="text-4xl font-bold">定制</span>
+                    <span className="text-4xl font-bold">{t("plans.enterprise.price")}</span>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <Button className="w-full mb-6" variant="outline" asChild>
-                    <Link href="/help">联系我们</Link>
+                    <Link href="/help">{t("plans.enterprise.cta")}</Link>
                   </Button>
                   <ul className="space-y-3">
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">专业版所有功能</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">私有部署</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">专属客服</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">SLA 保障</span>
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Check className="w-4 h-4 text-chart-1" />
-                      <span className="text-sm">定制开发</span>
-                    </li>
+                    {(t.raw("plans.enterprise.features") as string[]).map((feature, index) => (
+                      <li key={index} className="flex items-center gap-2">
+                        <Check className="w-4 h-4 text-chart-1" />
+                        <span className="text-sm">{feature}</span>
+                      </li>
+                    ))}
                   </ul>
                 </CardContent>
               </Card>
@@ -141,40 +102,18 @@ export default function PricingPage() {
 
             {/* FAQ */}
             <div className="mt-20 max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold text-center mb-12">常见问题</h2>
+              <h2 className="text-3xl font-bold text-center mb-12">{t("faq.title")}</h2>
               <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">可以随时取消吗？</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">
-                      是的，您可以随时取消订阅，不收取任何费用。
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">支持哪些支付方式？</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">
-                      我们支持支付宝、微信支付、信用卡等多种支付方式。
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg">是否提供发票？</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground">
-                      是的，我们为所有付费用户提供正规增值税发票。
-                    </p>
-                  </CardContent>
-                </Card>
+                {(t.raw("faq.items") as Array<{question: string; answer: string}>).map((item, index) => (
+                  <Card key={index}>
+                    <CardHeader>
+                      <CardTitle className="text-lg">{item.question}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground">{item.answer}</p>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </div>
           </section>

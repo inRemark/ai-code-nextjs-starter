@@ -2,11 +2,20 @@
   "title": "Help Center",
   "search": {
     "title": "How can we help?",
-    "placeholder": "Search help articles...",
-    "noResults": "No help articles found"
+    "placeholder": "Search help articles, tutorials or FAQs...",
+    "noResults": "No related content found",
+    "results": "Search Results",
+    "searching": "Searching...",
+    "difficulty": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "lastUpdated": "Last updated"
   },
   "categories": {
     "title": "Help Categories",
+    "viewAll": "View all {count} articles",
     "gettingStarted": "Getting Started",
     "accountManagement": "Account Management",
     "features": "Features",
@@ -14,11 +23,20 @@
     "billing": "Billing",
     "other": "Other Questions"
   },
+  "quickActions": {
+    "title": "Quick Actions"
+  },
   "articles": {
     "title": "Popular Articles",
     "views": "Views",
     "helpful": "Helpful",
-    "notHelpful": "Not Helpful"
+    "notHelpful": "Not Helpful",
+    "rank": "Rank",
+    "trend": {
+      "up": "Rising",
+      "down": "Falling",
+      "stable": "Stable"
+    }
   },
   "faq": {
     "title": "FAQ",

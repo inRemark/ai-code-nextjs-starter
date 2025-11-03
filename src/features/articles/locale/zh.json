@@ -1,14 +1,22 @@
 {
-  "title": "文章列表",
+  "title": "文章中心",
   "list": {
-    "title": "优质解决方案文章",
-    "description": "浏览社区分享的高质量解决方案和经验总结",
+    "title": "文章中心",
+    "description": "探索技术文章、开发指南和最佳实践",
     "readMore": "阅读全文",
     "publishedOn": "发布于",
     "author": "作者",
     "upvotes": "赞同",
     "noArticles": "暂无文章",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "pagination": {
+      "previous": "上一页",
+      "next": "下一页",
+      "current": "第 {page} / {totalPages} 页"
+    },
+    "cover": "封面图片",
+    "views": "浏览次数",
+    "anonymous": "匿名"
   },
   "detail": {
     "backToList": "返回列表",
@@ -23,6 +31,6 @@
   },
   "seoTags": {
     "title": "文章",
-    "description": "探索最新的解决方案和技术分享"
+    "description": "探索技术文章、开发指南和最佳实践"
   }
 }

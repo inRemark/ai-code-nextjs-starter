@@ -1,14 +1,22 @@
 {
-  "title": "Articles",
+  "title": "Articles Center",
   "list": {
-    "title": "Quality Solution Articles",
-    "description": "Browse high-quality solutions and experience summaries shared by the community",
+    "title": "Articles Center",
+    "description": "Explore technical articles, development guides and best practices",
     "readMore": "Read More",
     "publishedOn": "Published on",
     "author": "Author",
     "upvotes": "Upvotes",
     "noArticles": "No articles yet",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "current": "Page {page} / {totalPages}"
+    },
+    "cover": "Cover Image",
+    "views": "Views",
+    "anonymous": "Anonymous"
   },
   "detail": {
     "backToList": "Back to List",
@@ -23,6 +31,6 @@
   },
   "seoTags": {
     "title": "Articles",
-    "description": "Explore the latest solutions and technical insights"
+    "description": "Explore technical articles, development guides and best practices"
   }
 }

@@ -17,6 +17,7 @@ const FEATURES = [
   'auth',
   'home',
   'about',
+  'pricing',
   'blog',
   'help',
   'articles',

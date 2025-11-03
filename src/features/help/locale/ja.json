@@ -2,11 +2,20 @@
   "title": "ヘルプセンター",
   "search": {
     "title": "どうお手伝いしましょうか?",
-    "placeholder": "ヘルプ記事を検索...",
-    "noResults": "関連するヘルプ記事が見つかりません"
+    "placeholder": "ヘルプ記事、チュートリアルまたは FAQ を検索...",
+    "noResults": "関連コンテンツが見つかりません",
+    "results": "検索結果",
+    "searching": "検索中...",
+    "difficulty": {
+      "beginner": "初心者向け",
+      "intermediate": "中級者向け",
+      "advanced": "上級者向け"
+    },
+    "lastUpdated": "最終更新"
   },
   "categories": {
     "title": "ヘルプカテゴリ",
+    "viewAll": "全ての記事を閲覧 {count} 件",
     "gettingStarted": "はじめに",
     "accountManagement": "アカウント管理",
     "features": "機能",
@@ -14,14 +23,23 @@
     "billing": "請求",
     "other": "その他"
   },
+  "quickActions": {
+    "title": "クイックアクション"
+  },
   "articles": {
-    "title": "人気の記事",
-    "views": "閲覧数",
+    "title": "人気記事",
+    "views": "ビュー",
     "helpful": "役に立った",
-    "notHelpful": "役に立たなかった"
+    "notHelpful": "役に立たなかった",
+    "rank": "位麗",
+    "trend": {
+      "up": "上昇",
+      "down": "下気味",
+      "stable": "安定"
+    }
   },
   "faq": {
-    "title": "よくある質問",
+    "title": "よくある質別",
     "contactSupport": "サポートに連絡"
   },
   "contact": {
@@ -29,6 +47,6 @@
     "description": "ヘルプセンターで答えが見つからない場合は、お気軽にお問い合わせください",
     "email": "メール送信",
     "emailAddress": "support@vseek.com",
-    "responseTime": "通常24時間以内にお返事します"
+    "responseTime": "通常 24 時間以内に詳語します"
   }
 }

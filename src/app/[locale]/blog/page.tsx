@@ -1,7 +1,7 @@
 'use client'
-import { logger } from '@logger';
-
 import { useState, useEffect } from 'react'
+import { logger } from '@logger';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link'
 import { Search, Calendar, User, Tag, ChevronRight } from 'lucide-react'
 import { Input } from '@shared/ui/input'
@@ -41,6 +41,7 @@ interface BlogResponse {
 }
 
 export default function BlogPage() {
+  const t = useTranslations('blog');
   const [posts, setPosts] = useState<BlogPost[]>([])
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -49,12 +50,12 @@ export default function BlogPage() {
   const [totalPages, setTotalPages] = useState(1)
 
   const categories = [
-    { id: 'all', name: '全部' },
-    { id: 'email-marketing', name: '邮件营销' },
-    { id: 'tutorials', name: '教程指南' },
-    { id: 'updates', name: '产品更新' },
-    { id: 'best-practices', name: '最佳实践' },
-    { id: 'case-studies', name: '案例研究' }
+    { id: 'all', name: t('list.categories.all') },
+    { id: 'email-marketing', name: t('list.categories.email-marketing') },
+    { id: 'tutorials', name: t('list.categories.tutorials') },
+    { id: 'updates', name: t('list.categories.updates') },
+    { id: 'best-practices', name: t('list.categories.best-practices') },
+    { id: 'case-studies', name: t('list.categories.case-studies') }
   ]
 
   useEffect(() => {
@@ -74,7 +75,6 @@ export default function BlogPage() {
       const response = await fetch(`/api/blog?${params}`)
       const data: BlogResponse = await response.json()
       
-      // 转换 API 数据结构到组件期望的格式
       const transformedPosts = data.posts?.map((post: unknown) => {
         const typedPost = post as {
           slug: string
@@ -106,8 +106,7 @@ export default function BlogPage() {
       setPosts(transformedPosts)
       setTotalPages(data.pagination?.totalPages || 1)
     } catch (error) {
-      logger.error('获取博客文章失败:', error)
-      // 设置空数组以避免 undefined 错误
+      logger.error(t('list.error'), error)
       setPosts([])
       setTotalPages(1)
     } finally {
@@ -136,8 +135,8 @@ export default function BlogPage() {
 
   return (
     <PortalLayout 
-      title="AICoder 博客" 
-      description="邮件营销的最新趋势、最佳实践和深度洞察"
+      title={t('title')} 
+      description={t('list.description')}
     >
       <PageContent maxWidth="2xl">
       <div className="py-8">
@@ -150,7 +149,7 @@ export default function BlogPage() {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="text"
-                  placeholder="搜索文章..."
+                  placeholder={t('list.search')}
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
@@ -196,7 +195,7 @@ export default function BlogPage() {
           </div>
         ) : posts.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-muted-foreground text-lg">没有找到相关文章</p>
+            <p className="text-muted-foreground text-lg">{t('list.noArticles')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -228,7 +227,7 @@ export default function BlogPage() {
                       <User className="h-3 w-3 mr-1" />
                       <span>{post.author}</span>
                       <span className="mx-2">·</span>
-                      <span>{post.readTime} 分钟阅读</span>
+                      <span>{post.readTime} {t('list.readTime')}</span>
                     </div>
                   </div>
 
@@ -252,7 +251,7 @@ export default function BlogPage() {
                     href={`/blog/${post.slug}`}
                     className="inline-flex items-center text-primary hover:text-primary/80 text-sm font-medium mt-4 group"
                   >
-                    阅读更多
+                    {t('list.readMore')}
                     <ChevronRight className="h-3 w-3 ml-1 group-hover:translate-x-1 transition-transform" />
                   </Link>
                 </CardContent>
@@ -271,7 +270,7 @@ export default function BlogPage() {
                 onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
               >
-                上一页
+                {t('list.pagination.previous')}
               </Button>
               
               {[...Array(Math.min(5, totalPages))].map((_, i) => {
@@ -296,7 +295,7 @@ export default function BlogPage() {
                 onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
               >
-                下一页
+                {t('list.pagination.next')}
               </Button>
             </div>
           </div>

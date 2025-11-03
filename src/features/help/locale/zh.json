@@ -2,23 +2,41 @@
   "title": "帮助中心",
   "search": {
     "title": "如何帮助您？",
-    "placeholder": "搜索帮助文章...",
-    "noResults": "没有找到相关帮助文章"
+    "placeholder": "搜索帮助文章、教程或常见问题...",
+    "noResults": "未找到相关内容",
+    "results": "搜索结果",
+    "searching": "搜索中...",
+    "difficulty": {
+      "beginner": "入门",
+      "intermediate": "中级",
+      "advanced": "高级"
+    },
+    "lastUpdated": "上次更新于"
   },
   "categories": {
-    "title": "帮助类别",
+    "title": "帮助分类",
+    "viewAll": "查看全部　{count}　篇文章",
     "gettingStarted": "快速开始",
     "accountManagement": "账户管理",
     "features": "功能使用",
-    "troubleshooting": "故障排除",
+    "troubleshooting": "故障排查",
     "billing": "账单相关",
     "other": "其他问题"
+  },
+  "quickActions": {
+    "title": "快速操作"
   },
   "articles": {
     "title": "热门文章",
     "views": "浏览次数",
     "helpful": "有帮助",
-    "notHelpful": "没有帮助"
+    "notHelpful": "没有帮助",
+    "rank": "排名",
+    "trend": {
+      "up": "上升",
+      "down": "下降",
+      "stable": "稳定"
+    }
   },
   "faq": {
     "title": "常见问题",
@@ -26,7 +44,7 @@
   },
   "contact": {
     "title": "联系支持团队",
-    "description": "如果您的问题未在帮助中心找到答案，请随时联系我们",
+    "description": "有任何问题，不知道从何下手？请随时联系我们",
     "email": "发送邮件",
     "emailAddress": "support@vseek.com",
     "responseTime": "通常在 24 小时内回复"

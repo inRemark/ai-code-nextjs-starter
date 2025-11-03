@@ -1,6 +1,7 @@
 "use client";
 import { logger } from '@logger';
 import React, { useState, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 import { PortalLayout } from '@shared/layout/portal-layout';
 import { PageContent } from '@shared/layout/page-content';
 import { Button } from '@shared/ui/button';
@@ -47,6 +48,7 @@ const iconMap = {
 };
 
 export default function HelpPage() {
+  const t = useTranslations('help');
   const [helpData, setHelpData] = useState<HelpPageData | null>(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -151,14 +153,14 @@ export default function HelpPage() {
                 <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
                 <Input
                   type="text"
-                  placeholder="搜索帮助文章、教程或常见问题..."
+                  placeholder={t('search.placeholder')}
                   value={searchQuery}
                   onChange={(e) => handleSearchChange(e.target.value)}
                   className="pl-12 h-12 text-lg"
                 />
               </div>
               {isSearching && (
-                <p className="text-sm text-muted-foreground mt-2">搜索中...</p>
+                <p className="text-sm text-muted-foreground mt-2">{t('search.searching')}</p>
               )}
             </div>
           </div>
@@ -167,7 +169,7 @@ export default function HelpPage() {
           {searchQuery && (
             <div>
               <h2 className="text-xl font-semibold mb-4">
-                搜索结果 ({searchResults.length})
+                {t('search.results')} ({searchResults.length})
               </h2>
               {searchResults.length > 0 ? (
                 <div className="grid gap-4">
@@ -185,8 +187,7 @@ export default function HelpPage() {
                             article.difficulty === 'beginner' ? 'secondary' :
                             article.difficulty === 'intermediate' ? 'default' : 'destructive'
                           }>
-                            {article.difficulty === 'beginner' ? '入门' :
-                             article.difficulty === 'intermediate' ? '中级' : '高级'}
+                            {t(`search.difficulty.${article.difficulty}`)}
                           </Badge>
                         </div>
                         <div className="flex items-center gap-4 text-sm text-muted-foreground">
@@ -217,7 +218,7 @@ export default function HelpPage() {
               ) : (
                 <div className="text-center py-12">
                   <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">未找到相关内容</h3>
+                  <h3 className="text-lg font-semibold mb-2">{t('search.noResults')}</h3>
                   <p className="text-muted-foreground">尝试使用不同的关键词或浏览下面的分类</p>
                 </div>
               )}
@@ -229,7 +230,7 @@ export default function HelpPage() {
             <>
               {/* 快速操作 */}
               <div>
-                <h2 className="text-xl font-semibold mb-4">快速操作</h2>
+                <h2 className="text-xl font-semibold mb-4">{t('quickActions.title')}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {helpData.quickActions.map((action) => {
                     const Icon = iconMap[action.icon as keyof typeof iconMap] || BookOpen;
@@ -254,7 +255,7 @@ export default function HelpPage() {
 
               {/* 分类导航 */}
               <div>
-                <h2 className="text-xl font-semibold mb-4">浏览分类</h2>
+                <h2 className="text-xl font-semibold mb-4">{t('categories.title')}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {helpData.categories.map((category) => {
                     const Icon = iconMap[category.icon as keyof typeof iconMap] || BookOpen;
@@ -286,7 +287,7 @@ export default function HelpPage() {
                             ))}
                             {category.articles.length > 3 && (
                               <div className="text-sm text-primary cursor-pointer hover:underline">
-                                查看全部 {category.articles.length} 篇文章
+                                {t('categories.viewAll', { count: category.articles.length })}
                               </div>
                             )}
                           </div>
@@ -299,7 +300,7 @@ export default function HelpPage() {
 
               {/* 热门文章 */}
               <div>
-                <h2 className="text-xl font-semibold mb-4">热门文章</h2>
+                <h2 className="text-xl font-semibold mb-4">{t('articles.title')}</h2>
                 <div className="grid gap-4">
                   {helpData.popularArticles.map((item) => (
                     <Card key={item.article.id} className="hover:shadow-md transition-shadow cursor-pointer">
@@ -325,7 +326,7 @@ export default function HelpPage() {
                                 </div>
                                 <div className="flex items-center gap-1">
                                   {getTrendIcon(item.trend)}
-                                  {item.trend === 'up' ? '上升' : item.trend === 'down' ? '下降' : '稳定'}
+                                  {t(`articles.trend.${item.trend}`)}
                                 </div>
                               </div>
                             </div>
@@ -334,8 +335,7 @@ export default function HelpPage() {
                             item.article.difficulty === 'beginner' ? 'secondary' :
                             item.article.difficulty === 'intermediate' ? 'default' : 'destructive'
                           }>
-                            {item.article.difficulty === 'beginner' ? '入门' :
-                             item.article.difficulty === 'intermediate' ? '中级' : '高级'}
+                            {t(`search.difficulty.${item.article.difficulty}`)}
                           </Badge>
                         </div>
                       </CardContent>

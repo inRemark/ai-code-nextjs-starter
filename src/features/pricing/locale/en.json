@@ -1,0 +1,64 @@
+{
+  "title": "Pricing Plans",
+  "description": "Choose the plan that fits your needs",
+  "plans": {
+    "free": {
+      "name": "Free Plan",
+      "description": "Perfect for individual users",
+      "price": "$0",
+      "period": "/month",
+      "cta": "Get Started",
+      "features": [
+        "Basic Features",
+        "Blog Reading",
+        "Points System",
+        "Referral Rewards"
+      ]
+    },
+    "professional": {
+      "name": "Professional",
+      "description": "Great for small teams",
+      "price": "$15",
+      "period": "/month",
+      "cta": "Start Trial",
+      "badge": "Recommended",
+      "features": [
+        "All Free Plan features",
+        "Advanced Analytics",
+        "Priority Support",
+        "Custom Configuration",
+        "API Access"
+      ]
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "description": "For large organizations",
+      "price": "Custom",
+      "cta": "Contact Us",
+      "features": [
+        "All Pro features",
+        "Private Deployment",
+        "Dedicated Support",
+        "SLA Guarantee",
+        "Custom Development"
+      ]
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "items": [
+      {
+        "question": "Can I cancel anytime?",
+        "answer": "Yes, you can cancel your subscription at any time without any fees."
+      },
+      {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept Alipay, WeChat Pay, credit cards, and more payment methods."
+      },
+      {
+        "question": "Do you provide invoices?",
+        "answer": "Yes, we provide official VAT invoices for all paid users."
+      }
+    ]
+  }
+}
