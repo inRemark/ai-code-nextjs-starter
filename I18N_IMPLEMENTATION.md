@@ -637,7 +637,9 @@ declare interface IntlMessages extends Messages {}
 
 - [x] 创建 `LanguageSwitcher` 组件
 - [x] 改造导航栏组件 (portal-header)
-- [ ] 改造登录/注册页面
+- [x] 改造登录/注册页面
+- [x] 改造认证布局组件 (AuthLayout)
+- [x] 改造登录表单组件 (LoginForm)
 - [ ] 改造其他核心页面
 
 ### Step 6: 类型安全与优化 (1小时)
@@ -787,9 +789,10 @@ next-intl 完全兼容 Vercel，无需额外配置
 
 #### 翻译文件
 
-- ✅ 创建 `src/messages/zh.json` - 中文翻译(63 条)
-- ✅ 创建 `src/messages/en.json` - 英文翻译(63 条)
-- ✅ 创建 `src/messages/ja.json` - 日文翻译(63 条)
+- ✅ 创建 `src/messages/zh.json` - 中文翻译(扩展到85+ 条)
+- ✅ 创建 `src/messages/en.json` - 英文翻译(扩展到85+ 条)
+- ✅ 创建 `src/messages/ja.json` - 日文翻译(扩展到85+ 条)
+- ✅ 添加认证相关完整翻译(welcomeBack, createAccount, 验证错误消息等)
 
 #### 中间件集成
 
@@ -810,6 +813,14 @@ next-intl 完全兼容 Vercel，无需额外配置
 - ✅ 集成到 `src/shared/layout/portal-header.tsx`
   - 桌面端: 搜索 | 语言 | 主题 | 用户菜单
   - 移动端: 在菜单中添加语言切换
+- ✅ 改造 `src/shared/layout/auth-layout.tsx` - 使用 useTranslations
+- ✅ 改造 `src/app/[locale]/auth/login/page.tsx` - 使用翻译
+- ✅ 改造 `src/app/[locale]/auth/register/page.tsx` - 使用翻译
+- ✅ 改造 `src/features/auth/components/login-form.tsx` - 完整国际化
+  - 表单验证错误消息
+  - 按钮文本
+  - 链接文本
+  - 社交登录错误消息
 
 #### 类型安全
 
@@ -817,13 +828,17 @@ next-intl 完全兼容 Vercel，无需额外配置
 - ✅ 更新 `tsconfig.json` - 添加 @messages/* 路径别名
 - ✅ 修复 Prisma 类型导入问题
   - `protected-route.tsx`: 使用字符串字面量 'ADMIN'
-  - `auth.types.ts`: 改用 `@shared/types/user` 中的 UserRole
+  - `user-management.tsx`: 改用 `@shared/types/user`
+  - `role-guard.tsx`: 改用 `@shared/types/user`
 
 #### 构建验证
 
 - ✅ 构建成功 - 156 个静态页面(每页 × 3 语言)
 - ✅ 移除 next.config.ts 中已废弃的 api 配置
 - ✅ 修复目录名称问题(删除错误的 \[locale\] 目录)
+- ✅ 生成 Prisma Client
+- ✅ 登录页面多语言构建成功
+- ✅ 注册页面多语言构建成功
 
 ### 技术难点解决
 
