@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { userAPI } from '@/lib/api-client';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@shared/types/user';
 import { usePermission } from '@features/auth/hooks/auth.hooks';
 
 interface User {

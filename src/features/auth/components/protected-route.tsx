@@ -3,7 +3,6 @@
 import { useAuth } from '@features/auth/components/unified-auth-provider';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { UserRole } from '@prisma/client';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -17,7 +16,7 @@ export default function ProtectedRoute({ children, requireAdmin = false }: Prote
   useEffect(() => {
     if (!loading && !user) {
       router.push('/auth/login');
-    } else if (!loading && user && requireAdmin && user.role !== UserRole.ADMIN) {
+    } else if (!loading && user && requireAdmin && user.role !== 'ADMIN') {
       router.push('/unauthorized');
     }
   }, [user, loading, router, requireAdmin]);
@@ -31,12 +30,12 @@ export default function ProtectedRoute({ children, requireAdmin = false }: Prote
   }
 
   // 如果需要管理员权限但用户不是管理员
-  if (user && requireAdmin && user.role !== UserRole.ADMIN) {
+  if (user && requireAdmin && user.role !== 'ADMIN') {
     return null;
   }
 
   // 如果用户已认证（且满足管理员要求，如果有的话）
-  if (user && (!requireAdmin || user.role === UserRole.ADMIN)) {
+  if (user && (!requireAdmin || user.role === 'ADMIN')) {
     return <>{children}</>;
   }
 

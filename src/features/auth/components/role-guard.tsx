@@ -3,7 +3,7 @@
 import { useAuth } from '@features/auth/components/unified-auth-provider';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { UserRole } from '@prisma/client';
+import { UserRole } from '@shared/types/user';
 
 export default function RoleGuard({ 
   children, 
