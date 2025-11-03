@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from 'next-intl';
 import { Button } from "@shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/card";
 import { Badge } from "@shared/ui/badge";
@@ -23,6 +24,7 @@ import {
 import Link from "next/link";
 
 export default function FeaturesPage() {
+  const t = useTranslations('home');
   return (
     <PortalLayout showHero={true}>
       <div className="bg-gradient-to-b from-background to-muted/20 dark:from-background dark:to-muted/10">
@@ -30,30 +32,30 @@ export default function FeaturesPage() {
         {/* Hero Section */}
         <section className="container mx-auto px-4 py-20 text-center">
           <div className="max-w-4xl mx-auto">
-            <Badge variant="secondary" className="mb-4">AI 友好的 Next.js 模板</Badge>
+            <Badge variant="secondary" className="mb-4">{t('badge')}</Badge>
             <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
-              最大化您的
-              <span className="text-primary"> AI 预算</span>
+              {t('hero.title')}
+              <span className="text-primary"> {t('hero.titleHighlight')}</span>
             </h1>
             <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              通过架构与数据流的系统优化，既加速开发，又智能减少 Token/请求/上下文消耗，为您同时节省时间与金钱
+              {t('hero.description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="px-8 py-4 text-lg" asChild>
                 <Link href="https://github.com/inRemark/ai-code-nextjs-starter" target="_blank" rel="noopener noreferrer">
                   <Github className="w-5 h-5 mr-2" />
-                  立即开始
+                  {t('hero.primaryButton')}
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="px-8 py-4 text-lg" asChild>
                 <Link href="/blog">
-                  查看文档
+                  {t('hero.secondaryButton')}
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Link>
               </Button>
             </div>
             <p className="text-sm text-muted-foreground mt-4">
-              开箱即用 · Apache 2.0 开源 · AI 辅助开发优化
+              {t('hero.tagline')}
             </p>
           </div>
         </section>
@@ -64,59 +66,31 @@ export default function FeaturesPage() {
         {/* Core Features Section */}
         <section className="py-20">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-foreground mb-4">核心特性</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-4">{t('coreFeatures.title')}</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              从架构到数据流的系统优化，让 AI 辅助开发更高效、更经济
+              {t('coreFeatures.description')}
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <FeatureCard
-              icon={<Brain className="w-12 h-12 text-primary" />}
-              title="以成本为目标"
-              description="从架构到数据流，系统性降低 Token/请求次数/上下文长度"
-              benefits={["SSR/静态化优先", "响应体瘦身", "缓存策略内置", "减少重复生成"]}
-            />
-            <FeatureCard
-              icon={<GitCompare className="w-12 h-12 text-chart-4" />}
-              title="四层清晰分工"
-              description="app / features / shared / lib 分层架构，AI 辅助改动面更小"
-              benefits={["任务边界清晰", "上下文更短", "可复用性高", "风险隔离"]}
-            />
-            <FeatureCard
-              icon={<Search className="w-12 h-12 text-chart-1" />}
-              title="AI 友好规范"
-              description="路径别名与命名/导出规则统一，检索与补全更精准"
-              benefits={["统一路径别名", "规范命名", "清晰导出", "易于检索"]}
-            />
-            <FeatureCard
-              icon={<Users className="w-12 h-12 text-chart-2" />}
-              title="开箱即用"
-              description="认证、文章、个人中心、控制台等核心功能已就绪"
-              benefits={["NextAuth v5", "Prisma ORM", "React Query", "Radix UI"]}
-            />
-            <FeatureCard
-              icon={<BookOpen className="w-12 h-12 text-chart-3" />}
-              title="契约驱动服务"
-              description="统一 API/Service 设计，AI 输出更易复用，变更更可控"
-              benefits={["统一接口", "类型安全", "错误处理", "日志追踪"]}
-            />
-            <FeatureCard
-              icon={<Award className="w-12 h-12 text-chart-5" />}
-              title="部署即用"
-              description="Docker/Vercel 一键上云，环境变量模板简化部署对话成本"
-              benefits={["Docker支持", "Vercel部署", "环境模板", "自动迁移"]}
-            />
+            {t.raw('coreFeatures.items').map((item: Record<string, unknown>, index: number) => (
+              <FeatureCard
+                key={index}
+                title={item.title as string}
+                description={item.description as string}
+                benefits={item.benefits as string[]}
+              />
+            ))}
           </div>
         </section>
 
         {/* Cost Savings Section */}
         <section className="py-20">
           <div className="text-center mb-16">
-            <Badge variant="secondary" className="mb-4">真实数据对比</Badge>
-            <h2 className="text-3xl font-bold text-foreground mb-4">节省时间 · 节省Token · 节省金钱</h2>
+            <Badge variant="secondary" className="mb-4">{t('costSavings.subtitle')}</Badge>
+            <h2 className="text-3xl font-bold text-foreground mb-4">{t('costSavings.title')}</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              直接使用本模板，相比从零开发同类项目的成本对比
+              {t('costSavings.description')}
             </p>
           </div>
 
@@ -126,7 +100,7 @@ export default function FeaturesPage() {
               <CardHeader className="text-center pb-4">
                 <CardTitle className="text-xl flex items-center justify-center gap-2">
                   <TrendingDown className="w-5 h-5 text-muted-foreground" />
-                  从零开发同类项目
+                  {t('costSavings.fromScratch.title')}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -135,11 +109,11 @@ export default function FeaturesPage() {
                     <div className="flex items-center gap-3">
                       <Clock className="w-8 h-8 text-muted-foreground" />
                       <div className="text-left">
-                        <div className="text-sm text-muted-foreground">开发时间</div>
+                        <div className="text-sm text-muted-foreground">{t('costSavings.fromScratch.time')}</div>
                         <div className="text-2xl font-bold text-foreground">120</div>
                       </div>
                     </div>
-                    <span className="text-muted-foreground">小时</span>
+                    <span className="text-muted-foreground">{t('costSavings.fromScratch.timeUnit')}</span>
                   </div>
                   
                   <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
@@ -165,7 +139,7 @@ export default function FeaturesPage() {
                   </div>
                 </div>
                 <div className="text-center pt-4 text-sm text-muted-foreground">
-                  需要搭建认证、数据库、UI组件等
+                  {t('costSavings.fromScratch.description')}
                 </div>
               </CardContent>
             </Card>
@@ -175,8 +149,8 @@ export default function FeaturesPage() {
               <CardHeader className="text-center pb-4 bg-gradient-to-br from-primary/5 to-chart-1/5 dark:from-primary/10 dark:to-chart-1/10">
                 <CardTitle className="text-xl flex items-center justify-center gap-2">
                   <Brain className="w-5 h-5 text-primary" />
-                  使用本模板开发
-                  <Badge variant="default" className="ml-2">推荐</Badge>
+                  {t('costSavings.withTemplate.title')}
+                  <Badge variant="default" className="ml-2">{t('costSavings.withTemplate.badge')}</Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
@@ -190,8 +164,8 @@ export default function FeaturesPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-green-600 dark:text-green-400 font-semibold">节省 68%</div>
-                      <div className="text-xs text-muted-foreground">82 小时</div>
+                      <div className="text-green-600 dark:text-green-400 font-semibold">{t('costSavings.withTemplate.timeSavings')}</div>
+                      <div className="text-xs text-muted-foreground">{t('costSavings.withTemplate.timeSavingsDetail')}</div>
                     </div>
                   </div>
                   
@@ -204,8 +178,8 @@ export default function FeaturesPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-green-600 dark:text-green-400 font-semibold">节省 67%</div>
-                      <div className="text-xs text-muted-foreground">5.7M tokens</div>
+                      <div className="text-green-600 dark:text-green-400 font-semibold">{t('costSavings.withTemplate.tokensSavings')}</div>
+                      <div className="text-xs text-muted-foreground">{t('costSavings.withTemplate.tokensSavingsDetail')}</div>
                     </div>
                   </div>
                   
@@ -218,13 +192,13 @@ export default function FeaturesPage() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-green-600 dark:text-green-400 font-semibold">节省 67%</div>
-                      <div className="text-xs text-muted-foreground">$85 美元</div>
+                      <div className="text-green-600 dark:text-green-400 font-semibold">{t('costSavings.withTemplate.costSavings')}</div>
+                      <div className="text-xs text-muted-foreground">{t('costSavings.withTemplate.costSavingsDetail')}</div>
                     </div>
                   </div>
                 </div>
                 <div className="text-center pt-4 text-sm text-primary font-medium">
-                  ✅ 核心功能已就绪，专注业务逻辑
+                  {t('costSavings.withTemplate.description')}
                 </div>
               </CardContent>
             </Card>
@@ -273,12 +247,11 @@ export default function FeaturesPage() {
         {/* Statistics Section */}
         <section className="bg-muted/30 dark:bg-muted/10 py-20 rounded-lg">
           <div className="container mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-12 text-foreground">项目亮点</h2>
+            <h2 className="text-3xl font-bold mb-12 text-foreground">{t('statistics.title')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <StatisticItem number="4层" label="清晰架构" />
-              <StatisticItem number="SSR" label="服务端优先" />
-              <StatisticItem number="开箱即用" label="核心功能" />
-              <StatisticItem number="AI友好" label="开发优化" />
+              {t.raw('statistics.items').map((item: Record<string, unknown>, index: number) => (
+                <StatisticItem key={index} number={item.number as string} label={item.label as string} />
+              ))}
             </div>
           </div>
         </section>
@@ -287,9 +260,9 @@ export default function FeaturesPage() {
         {/* Advantages Section */}
         <section className="py-20 bg-gradient-to-b from-background to-muted/20 dark:to-muted/5">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-foreground mb-4">现代技术栈</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-4">{t('techStack.title')}</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              基于最新的技术构建，保证性能、安全和开发体验
+              {t('techStack.description')}
             </p>
           </div>
           
@@ -298,33 +271,25 @@ export default function FeaturesPage() {
               <div>
                 <h3 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
                   <Brain className="w-6 h-6 text-primary" />
-                  核心技术
+                  {t('techStack.coretech.title')}
                 </h3>
                 <div className="space-y-5">
-                  <ComparisonItem
-                    title="前端框架"
-                    traditional="Next.js 15"
-                    AICoder="App Router + React 19"
-                    advantage="服务端优先架构"
-                  />
-                  <ComparisonItem
-                    title="数据层"
-                    traditional="Prisma ORM"
-                    AICoder="PostgreSQL + select/include优化"
-                    advantage="响应体瘦身"
-                  />
-                  <ComparisonItem
-                    title="认证系统"
-                    traditional="NextAuth v5"
-                    AICoder="JWT + 路由保护"
-                    advantage="安全可靠"
-                  />
-                  <ComparisonItem
-                    title="状态管理"
-                    traditional="React Query"
-                    AICoder="缓存策略 + revalidate"
-                    advantage="减少重复请求"
-                  />
+                  {t.raw('techStack.coretech.items').map((item: Record<string, unknown>, index: number) => (
+                    <div key={index} className="border-l-4 border-primary pl-4">
+                      <h4 className="font-semibold text-foreground mb-2">{item.title as string}</h4>
+                      <div className="space-y-1 text-sm">
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-chart-3 rounded-full"></span>
+                          <span className="text-muted-foreground">{item.tech1 as string}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-2 h-2 bg-chart-1 rounded-full"></span>
+                          <span className="text-foreground font-medium">{item.tech2 as string}</span>
+                        </div>
+                        <div className="text-primary font-medium ml-4">✓ {item.advantage as string}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -334,29 +299,15 @@ export default function FeaturesPage() {
                 <CardContent className="p-8">
                   <h4 className="text-xl font-bold mb-6 text-foreground flex items-center gap-2">
                     <Award className="w-6 h-6 text-primary" />
-                    完整工具链
+                    {t('techStack.toolchain.title')}
                   </h4>
                   <ul className="space-y-4">
-                    <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/5 transition-colors">
-                      <CheckCircle className="w-5 h-5 text-chart-1 flex-shrink-0" />
-                      <span className="text-foreground">TypeScript 全类型安全</span>
-                    </li>
-                    <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/5 transition-colors">
-                      <CheckCircle className="w-5 h-5 text-chart-1 flex-shrink-0" />
-                      <span className="text-foreground">Tailwind CSS + Radix UI</span>
-                    </li>
-                    <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/5 transition-colors">
-                      <CheckCircle className="w-5 h-5 text-chart-1 flex-shrink-0" />
-                      <span className="text-foreground">react-hook-form + zod 表单验证</span>
-                    </li>
-                    <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/5 transition-colors">
-                      <CheckCircle className="w-5 h-5 text-chart-1 flex-shrink-0" />
-                      <span className="text-foreground">Docker + Nginx 容器化部署</span>
-                    </li>
-                    <li className="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/5 transition-colors">
-                      <CheckCircle className="w-5 h-5 text-chart-1 flex-shrink-0" />
-                      <span className="text-foreground">Apache 2.0 开源协议</span>
-                    </li>
+                    {t.raw('techStack.toolchain.items').map((item: string, index: number) => (
+                      <li key={index} className="flex items-center gap-3 p-2 rounded-lg hover:bg-primary/5 transition-colors">
+                        <CheckCircle className="w-5 h-5 text-chart-1 flex-shrink-0" />
+                        <span className="text-foreground">{item}</span>
+                      </li>
+                    ))}
                   </ul>
                 </CardContent>
               </Card>
@@ -364,9 +315,9 @@ export default function FeaturesPage() {
               <Card className="border-primary/30 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-6">
                   <div className="text-center">
-                    <p className="text-sm text-muted-foreground mb-2">开发效率提升</p>
-                    <div className="text-3xl font-bold text-primary mb-1">3x</div>
-                    <p className="text-xs text-muted-foreground">相比传统开发流程</p>
+                    <p className="text-sm text-muted-foreground mb-2">{t('techStack.efficiency.label')}</p>
+                    <div className="text-3xl font-bold text-primary mb-1">{t('techStack.efficiency.value')}</div>
+                    <p className="text-xs text-muted-foreground">{t('techStack.efficiency.detail')}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -374,34 +325,24 @@ export default function FeaturesPage() {
           </div>
         </section>
 
-      {/* How It Works Section */}
+        {/* How It Works Section */}
         <section className="bg-muted/30 dark:bg-muted/10 py-20">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-foreground mb-4">快速开始</h2>
+            <h2 className="text-3xl font-bold text-foreground mb-4">{t('quickStart.title')}</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              简单三步，启动您的 AI 友好项目
+              {t('quickStart.description')}
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <StepCard
-              step="01"
-              icon={<Search className="w-8 h-8 text-primary" />}
-              title="克隆项目"
-              description="从 GitHub 克隆模板，配置环境变量和数据库"
-            />
-            <StepCard
-              step="02"
-              icon={<Brain className="w-8 h-8 text-chart-4" />}
-              title="本地开发"
-              description="运行 pnpm dev 启动开发服务器，开始构建您的应用"
-            />
-            <StepCard
-              step="03"
-              icon={<GitCompare className="w-8 h-8 text-chart-1" />}
-              title="一键部署"
-              description="使用 Docker 或 Vercel 快速部署到生产环境"
-            />
+            {t.raw('quickStart.steps').map((step: Record<string, unknown>, index: number) => (
+              <StepCard
+                key={index}
+                step={step.step as string}
+                title={step.title as string}
+                description={step.description as string}
+              />
+            ))}
           </div>
         </section>
 
@@ -409,14 +350,14 @@ export default function FeaturesPage() {
         {/* CTA Section */}
          <section className="bg-gradient-to-br from-primary/90 via-primary to-chart-1/80 text-white py-20 rounded-lg">
           <div className="text-center">
-            <h2 className="text-4xl font-bold mb-4">开始构建您的应用</h2>
+            <h2 className="text-4xl font-bold mb-4">{t('cta.title')}</h2>
             <p className="text-xl mb-8 opacity-90">
-              最大化 AI 预算，节省时间与金钱，立即体验 AI 友好开发
+              {t('cta.description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary" className="px-8 py-4 text-lg" asChild>
                 <Link href="https://github.com/inRemark/ai-code-nextjs-starter" target="_blank" rel="noopener noreferrer">
-                  注册体验
+                  {t('hero.primaryButton')}
                   <Github className="w-5 h-5 ml-2" />
                 </Link>
               </Button>
@@ -429,16 +370,27 @@ export default function FeaturesPage() {
 }
 
 // 组件定义
-function FeatureCard({ icon, title, description, benefits }: {
-  icon: React.ReactNode;
+function FeatureCard({ title, description, benefits }: {
   title: string;
   description: string;
   benefits: string[];
 }) {
+  const iconMap: Record<string, React.ReactNode> = {
+    'cost': <Brain className="w-12 h-12 text-primary" />,
+    'architecture': <GitCompare className="w-12 h-12 text-chart-4" />,
+    'standard': <Search className="w-12 h-12 text-chart-1" />,
+    'ready': <Users className="w-12 h-12 text-chart-2" />,
+    'service': <BookOpen className="w-12 h-12 text-chart-3" />,
+    'deploy': <Award className="w-12 h-12 text-chart-5" />,
+  };
+  
+  const iconOrder = ['cost', 'architecture', 'standard', 'ready', 'service', 'deploy'];
+  const iconKey = iconOrder.find(key => title.includes(key)) || 'cost';
+
   return (
     <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader className="text-center">
-        <div className="flex justify-center mb-4">{icon}</div>
+        <div className="flex justify-center mb-4">{iconMap[iconKey]}</div>
         <CardTitle className="text-xl text-foreground">{title}</CardTitle>
         <CardDescription className="text-muted-foreground">{description}</CardDescription>
       </CardHeader>
@@ -456,17 +408,22 @@ function FeatureCard({ icon, title, description, benefits }: {
   );
 }
 
-function StepCard({ step, icon, title, description }: {
+function StepCard({ step, title, description }: {
   step: string;
-  icon: React.ReactNode;
   title: string;
   description: string;
 }) {
+  const iconMap: Record<string, React.ReactNode> = {
+    '01': <Search className="w-8 h-8 text-primary" />,
+    '02': <Brain className="w-8 h-8 text-chart-4" />,
+    '03': <GitCompare className="w-8 h-8 text-chart-1" />,
+  };
+
   return (
     <div className="text-center">
       <div className="relative mb-6">
         <div className="w-16 h-16 bg-background rounded-full shadow-lg flex items-center justify-center mx-auto mb-4">
-          {icon}
+          {iconMap[step]}
         </div>
         <div className="absolute -top-2 -right-2 w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold">
           {step}
@@ -478,29 +435,6 @@ function StepCard({ step, icon, title, description }: {
   );
 }
 
-function ComparisonItem({ title, traditional, AICoder, advantage }: {
-  title: string;
-  traditional: string;
-  AICoder: string;
-  advantage: string;
-}) {
-  return (
-    <div className="border-l-4 border-primary pl-4">
-      <h4 className="font-semibold text-foreground mb-2">{title}</h4>
-      <div className="space-y-1 text-sm">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 bg-chart-3 rounded-full"></span>
-          <span className="text-muted-foreground">传统方式：{traditional}</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 bg-chart-1 rounded-full"></span>
-          <span className="text-foreground font-medium">AICoder：{AICoder}</span>
-        </div>
-        <div className="text-primary font-medium ml-4">✓ {advantage}</div>
-      </div>
-    </div>
-  );
-}
 
 function StatisticItem({ number, label }: { number: string; label: string }) {
   return (

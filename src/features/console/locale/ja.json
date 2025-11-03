@@ -1,0 +1,56 @@
+{
+  "title": "コンソール",
+  "sidebar": {
+    "overview": "概要",
+    "articles": "マイ記事",
+    "profile": "プロフィール",
+    "settings": "設定",
+    "logout": "ログアウト"
+  },
+  "overview": {
+    "title": "おかえりなさい",
+    "subtitle": "これはあなたの個人ダッシュボードです",
+    "stats": {
+      "articles": "総記事数",
+      "views": "総ビュー数",
+      "likes": "総いいね数",
+      "followers": "フォロワー"
+    }
+  },
+  "articles": {
+    "title": "マイ記事",
+    "new": "新しい記事を公開",
+    "edit": "編集",
+    "delete": "削除",
+    "publish": "公開",
+    "draft": "ドラフト",
+    "published": "公開済み",
+    "noArticles": "まだ記事が公開されていません"
+  },
+  "profile": {
+    "title": "プロフィール",
+    "bio": "自己紹介",
+    "avatar": "アバター",
+    "email": "メール",
+    "website": "ウェブサイト",
+    "location": "位置",
+    "save": "保存",
+    "updating": "更新中...",
+    "saved": "正常に保存されました"
+  },
+  "settings": {
+    "title": "設定",
+    "account": "アカウント設定",
+    "privacy": "プライバシー設定",
+    "notifications": "通知設定",
+    "language": "言語",
+    "theme": "テーマ",
+    "twoFactor": "二段階認証",
+    "security": "セキュリティ",
+    "password": "パスワード",
+    "changePassword": "パスワードを変更",
+    "currentPassword": "現在のパスワード",
+    "newPassword": "新しいパスワード",
+    "confirmPassword": "パスワードを確認"
+  }
+}

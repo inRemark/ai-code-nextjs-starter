@@ -1,0 +1,66 @@
+{
+  "title": "管理パネル",
+  "sidebar": {
+    "dashboard": "ダッシュボード",
+    "users": "ユーザー管理",
+    "articles": "記事管理",
+    "reports": "レポート",
+    "settings": "設定",
+    "logout": "ログアウト"
+  },
+  "dashboard": {
+    "title": "ダッシュボード",
+    "stats": {
+      "totalUsers": "総ユーザー数",
+      "totalArticles": "総記事数",
+      "activeUsers": "アクティブユーザー",
+      "revenue": "収益"
+    },
+    "recentActivity": "最近のアクティビティ",
+    "topArticles": "トップ記事"
+  },
+  "users": {
+    "title": "ユーザー管理",
+    "search": "ユーザーを検索",
+    "add": "ユーザーを追加",
+    "edit": "編集",
+    "delete": "削除",
+    "ban": "禁止",
+    "unban": "禁止解除",
+    "role": "ロール",
+    "status": "ステータス",
+    "joinDate": "参加日",
+    "noUsers": "ユーザーなし",
+    "confirm": "このユーザーを削除してもよろしいですか？"
+  },
+  "articles": {
+    "title": "記事管理",
+    "search": "記事を検索",
+    "approve": "承認",
+    "reject": "却下",
+    "delete": "削除",
+    "status": "ステータス",
+    "author": "著者",
+    "date": "日付",
+    "noArticles": "記事なし"
+  },
+  "reports": {
+    "title": "レポート",
+    "users": "ユーザーレポート",
+    "articles": "記事レポート",
+    "comments": "コメントレポート",
+    "view": "表示",
+    "resolve": "解決",
+    "pending": "保留中",
+    "resolved": "解決済み"
+  },
+  "settings": {
+    "title": "システム設定",
+    "general": "一般",
+    "security": "セキュリティ",
+    "email": "メール設定",
+    "storage": "ストレージ",
+    "save": "保存",
+    "saved": "正常に保存されました"
+  }
+}

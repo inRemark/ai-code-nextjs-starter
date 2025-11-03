@@ -1,0 +1,43 @@
+{
+  "title": "Profile",
+  "profile": {
+    "title": "My Profile",
+    "name": "Name",
+    "email": "Email",
+    "bio": "Bio",
+    "avatar": "Avatar",
+    "website": "Website",
+    "location": "Location",
+    "joinDate": "Join Date",
+    "edit": "Edit Profile",
+    "save": "Save",
+    "cancel": "Cancel",
+    "updating": "Updating...",
+    "updated": "Updated successfully"
+  },
+  "settings": {
+    "title": "Account Settings",
+    "privacy": "Privacy Settings",
+    "notifications": "Notifications",
+    "security": "Security",
+    "theme": "Theme",
+    "language": "Language"
+  },
+  "activity": {
+    "title": "Activity",
+    "noActivity": "No activity yet",
+    "date": "Date",
+    "action": "Action",
+    "details": "Details"
+  },
+  "followers": {
+    "title": "My Followers",
+    "noFollowers": "No followers yet",
+    "follow": "Follow",
+    "unfollow": "Unfollow"
+  },
+  "following": {
+    "title": "Following",
+    "noFollowing": "Not following anyone yet"
+  }
+}

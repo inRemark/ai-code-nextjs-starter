@@ -1,0 +1,43 @@
+{
+  "title": "プロフィール",
+  "profile": {
+    "title": "マイプロフィール",
+    "name": "名前",
+    "email": "メール",
+    "bio": "自己紹介",
+    "avatar": "アバター",
+    "website": "ウェブサイト",
+    "location": "位置",
+    "joinDate": "参加日",
+    "edit": "プロフィール編集",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "updating": "更新中...",
+    "updated": "正常に更新されました"
+  },
+  "settings": {
+    "title": "アカウント設定",
+    "privacy": "プライバシー設定",
+    "notifications": "通知設定",
+    "security": "セキュリティ",
+    "theme": "テーマ",
+    "language": "言語"
+  },
+  "activity": {
+    "title": "アクティビティ",
+    "noActivity": "アクティビティはまだありません",
+    "date": "日付",
+    "action": "アクション",
+    "details": "詳細"
+  },
+  "followers": {
+    "title": "マイフォロワー",
+    "noFollowers": "フォロワーがまだいません",
+    "follow": "フォロー",
+    "unfollow": "フォロー解除"
+  },
+  "following": {
+    "title": "フォロー中",
+    "noFollowing": "まだ誰もフォローしていません"
+  }
+}

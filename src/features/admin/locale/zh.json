@@ -1,0 +1,66 @@
+{
+  "title": "管理后台",
+  "sidebar": {
+    "dashboard": "仪表板",
+    "users": "用户管理",
+    "articles": "文章管理",
+    "reports": "报告",
+    "settings": "设置",
+    "logout": "退出登录"
+  },
+  "dashboard": {
+    "title": "仪表板",
+    "stats": {
+      "totalUsers": "总用户数",
+      "totalArticles": "总文章数",
+      "activeUsers": "活跃用户",
+      "revenue": "收入"
+    },
+    "recentActivity": "最近活动",
+    "topArticles": "热门文章"
+  },
+  "users": {
+    "title": "用户管理",
+    "search": "搜索用户",
+    "add": "添加用户",
+    "edit": "编辑",
+    "delete": "删除",
+    "ban": "禁用",
+    "unban": "启用",
+    "role": "角色",
+    "status": "状态",
+    "joinDate": "加入时间",
+    "noUsers": "没有用户",
+    "confirm": "确认删除此用户吗？"
+  },
+  "articles": {
+    "title": "文章管理",
+    "search": "搜索文章",
+    "approve": "批准",
+    "reject": "拒绝",
+    "delete": "删除",
+    "status": "状态",
+    "author": "作者",
+    "date": "日期",
+    "noArticles": "没有文章"
+  },
+  "reports": {
+    "title": "报告",
+    "users": "用户报告",
+    "articles": "文章报告",
+    "comments": "评论报告",
+    "view": "查看",
+    "resolve": "解决",
+    "pending": "待处理",
+    "resolved": "已解决"
+  },
+  "settings": {
+    "title": "系统设置",
+    "general": "常规",
+    "security": "安全",
+    "email": "邮件配置",
+    "storage": "存储",
+    "save": "保存",
+    "saved": "保存成功"
+  }
+}

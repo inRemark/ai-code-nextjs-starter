@@ -1,0 +1,43 @@
+{
+  "title": "个人中心",
+  "profile": {
+    "title": "我的资料",
+    "name": "姓名",
+    "email": "邮箱",
+    "bio": "个人简介",
+    "avatar": "头像",
+    "website": "网站",
+    "location": "位置",
+    "joinDate": "加入时间",
+    "edit": "编辑资料",
+    "save": "保存",
+    "cancel": "取消",
+    "updating": "更新中...",
+    "updated": "更新成功"
+  },
+  "settings": {
+    "title": "账户设置",
+    "privacy": "隐私设置",
+    "notifications": "通知设置",
+    "security": "安全设置",
+    "theme": "主题设置",
+    "language": "语言"
+  },
+  "activity": {
+    "title": "活动记录",
+    "noActivity": "暂无活动记录",
+    "date": "日期",
+    "action": "操作",
+    "details": "详情"
+  },
+  "followers": {
+    "title": "我的粉丝",
+    "noFollowers": "还没有粉丝",
+    "follow": "关注",
+    "unfollow": "取消关注"
+  },
+  "following": {
+    "title": "我的关注",
+    "noFollowing": "还没有关注任何人"
+  }
+}

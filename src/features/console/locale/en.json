@@ -1,0 +1,56 @@
+{
+  "title": "Console",
+  "sidebar": {
+    "overview": "Overview",
+    "articles": "My Articles",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "overview": {
+    "title": "Welcome Back",
+    "subtitle": "This is your personal dashboard",
+    "stats": {
+      "articles": "Total Articles",
+      "views": "Total Views",
+      "likes": "Total Likes",
+      "followers": "Followers"
+    }
+  },
+  "articles": {
+    "title": "My Articles",
+    "new": "Publish New Article",
+    "edit": "Edit",
+    "delete": "Delete",
+    "publish": "Publish",
+    "draft": "Draft",
+    "published": "Published",
+    "noArticles": "No articles published yet"
+  },
+  "profile": {
+    "title": "Profile",
+    "bio": "Bio",
+    "avatar": "Avatar",
+    "email": "Email",
+    "website": "Website",
+    "location": "Location",
+    "save": "Save",
+    "updating": "Updating...",
+    "saved": "Saved successfully"
+  },
+  "settings": {
+    "title": "Settings",
+    "account": "Account Settings",
+    "privacy": "Privacy Settings",
+    "notifications": "Notifications",
+    "language": "Language",
+    "theme": "Theme",
+    "twoFactor": "Two-Factor Authentication",
+    "security": "Security",
+    "password": "Password",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password"
+  }
+}

@@ -2,6 +2,7 @@ import { Inter } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { routing } from '@/i18n/routing';
 import { AuthSessionProvider } from '@features/auth/components/session-provider';
 import { UnifiedAuthProvider } from '@features/auth/components/unified-auth-provider';
@@ -13,6 +14,32 @@ const inter = Inter({ subsets: ['latin'] });
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
+}
+
+// 为SEO添加多语言元数据
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001';
+
+  // 生成hreflang链接
+  const alternates = routing.locales.reduce(
+    (acc, lang) => {
+      acc[lang as 'zh' | 'en' | 'ja'] = `${baseUrl}/${lang}`;
+      return acc;
+    },
+    {} as Record<string, string>
+  );
+
+  return {
+    alternates: {
+      canonical: `${baseUrl}/${locale}`,
+      languages: alternates,
+    },
+  };
 }
 
 export default async function LocaleLayout({

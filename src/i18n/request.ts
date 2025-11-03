@@ -2,7 +2,7 @@ import { getRequestConfig } from 'next-intl/server';
 import { routing } from './routing';
 
 // Feature 目录列表 - 维护需要加载的 feature 翻译
-const FEATURE_MODULES = ['auth', 'home', 'about', 'blog', 'help', 'articles'];
+const FEATURE_MODULES = ['auth', 'home', 'about', 'blog', 'help', 'articles', 'console', 'user', 'admin', 'mail'];
 
 // 动态加载 feature 级翻译并合并
 async function loadFeatureMessages(locale: string) {

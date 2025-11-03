@@ -1,12 +1,13 @@
 "use client";
 
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import { PortalLayout } from '@shared/layout/portal-layout';
 import { PageContent } from '@shared/layout/page-content';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@shared/ui/card';
 import { Button } from '@shared/ui/button';
 import { Badge } from '@shared/ui/badge';
-import { Timeline, TimelineItem } from '@/shared/ui/data-components';
+import { Timeline } from '@/shared/ui/data-components';
 import { 
   Target, 
   Eye, 
@@ -97,34 +98,9 @@ const timelineEvents: TimelineEvent[] = [
 ];
 
 
-const getValueIcon = (icon: string) => {
-  const iconMap = {
-    heart: Heart,
-    zap: Zap,
-    shield: Shield,
-    users: Users,
-  };
-  return iconMap[icon as keyof typeof iconMap] || Heart;
-};
-
-const getTimelineIcon = (type: TimelineEvent['type']) => {
-  switch (type) {
-    case 'milestone': return '🏆';
-    case 'product': return '🚀';
-    case 'expansion': return '🌍';
-    case 'achievement': return '⭐';
-    default: return '📅';
-  }
-};
 
 export default function AboutPage() {
-  const timelineItems: TimelineItem[] = timelineEvents.map(event => ({
-    id: event.id,
-    title: getTimelineIcon(`${event.type}`) + `${event.year} : ${event.title}`,
-    description: event.description,
-    timestamp: new Date(`${event.year}-01`),
-    type: 'default',
-  }));
+  const t = useTranslations('about');
 
   return (
     <PortalLayout >
@@ -133,22 +109,22 @@ export default function AboutPage() {
           {/* 公司介绍 */}
           <section>
             <div className="text-center mb-12">
-              <h1 className="text-4xl font-bold mb-4">{companyInfo.name}</h1>
-              <p className="text-base text-muted-foreground mb-8">{companyInfo.description}</p>
+              <h1 className="text-4xl font-bold mb-4">{t('name')}</h1>
+              <p className="text-base text-muted-foreground mb-8">{t('description')}</p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
                 <div className="text-center">
                   <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Target className="w-8 h-8 text-blue-600" />
                   </div>
                   <h3 className="font-semibold mb-2">使命</h3>
-                  <p className="text-sm text-muted-foreground">{companyInfo.mission}</p>
+                  <p className="text-sm text-muted-foreground">{t('mission')}</p>
                 </div>
                 <div className="text-center">
                   <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Eye className="w-8 h-8 text-purple-600" />
                   </div>
                   <h3 className="font-semibold mb-2">愿景</h3>
-                  <p className="text-sm text-muted-foreground">{companyInfo.vision}</p>
+                  <p className="text-sm text-muted-foreground">{t('vision')}</p>
                 </div>
                 <div className="text-center">
                   <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -156,7 +132,7 @@ export default function AboutPage() {
                   </div>
                   <h3 className="font-semibold mb-2">成立时间</h3>
                   <p className="text-sm text-muted-foreground">
-                    {companyInfo.founded} · {companyInfo.employeeCount}
+                    {t('founded')} · {t('employeeCount')}
                   </p>
                 </div>
               </div>
@@ -167,18 +143,18 @@ export default function AboutPage() {
           <section>
             <h2 className="text-3xl font-bold text-center mb-12">我们的价值观</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {companyInfo.values.map((value) => {
-                const Icon = getValueIcon(value.icon);
+              {(t.raw('values') as Record<string, unknown>[]).map((value: Record<string, unknown>) => {
+                const Icon = Heart; // 简化处理，使用默认icon
                 return (
-                  <Card key={value.title} className="text-center">
+                  <Card key={value.title as string} className="text-center">
                     <CardHeader>
                       <div className="bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4">
                         <Icon className="w-6 h-6 text-primary" />
                       </div>
-                      <CardTitle className="text-lg">{value.title}</CardTitle>
+                      <CardTitle className="text-lg">{value.title as string}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <CardDescription>{value.description}</CardDescription>
+                      <CardDescription>{value.description as string}</CardDescription>
                     </CardContent>
                   </Card>
                 );
@@ -188,9 +164,15 @@ export default function AboutPage() {
 
           {/* 发展历程 */}
           <section>
-            <h2 className="text-3xl font-bold text-center mb-12">发展历程</h2>
+            <h2 className="text-3xl font-bold text-center mb-12">{t('timeline.title')}</h2>
             <div className="max-w-4xl mx-auto">
-              <Timeline items={timelineItems} />
+              <Timeline items={((t.raw('timeline.events') as Record<string, unknown>[]).map((event: Record<string, unknown>) => ({
+                id: event.year as string,
+                title: `${event.icon} ${event.year} : ${event.title}`,
+                description: event.description as string,
+                timestamp: new Date(`${event.year}-01`),
+                type: 'default' as const,
+              })))} />
             </div>
           </section>
 
@@ -223,40 +205,35 @@ export default function AboutPage() {
               <CardContent className="p-12">
                 <div className="text-center max-w-3xl mx-auto">
                   <div className="mb-6">
-                    <Badge variant="default" className="mb-4">商业版</Badge>
+                    <Badge variant="default" className="mb-4">{t('pro.badge')}</Badge>
                     <h2 className="text-3xl font-bold text-foreground mb-4">
-                      AI Code Next.js Starter Pro
+                      {t('pro.title')}
                     </h2>
                     <p className="text-lg text-muted-foreground mb-8">
-                      解锁更多企业级功能，加速您的商业项目开发
+                      {t('pro.description')}
                     </p>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-primary mb-2">⚡ 高级组件</div>
-                      <p className="text-sm text-muted-foreground">更多业务组件和模板</p>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-chart-1 mb-2">👨‍💻 优先支持</div>
-                      <p className="text-sm text-muted-foreground">专属技术支持服务</p>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-2xl font-bold text-chart-4 mb-2">🛡️ 企业级</div>
-                      <p className="text-sm text-muted-foreground">安全、性能、可扩展</p>
-                    </div>
+                    {(t.raw('pro.features') as Record<string, unknown>[]).map((feature: Record<string, unknown>, index: number) => (
+                      <div key={index} className="text-center">
+                        <div className="text-2xl font-bold text-primary mb-2">{feature.icon as string}</div>
+                        <div className="text-2xl font-bold text-primary mb-2">{feature.title as string}</div>
+                        <p className="text-sm text-muted-foreground">{feature.description as string}</p>
+                      </div>
+                    ))}
                   </div>
                   
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <Button size="lg" className="px-8 py-4 text-lg" asChild>
                       <a href="https://github.com/inRemark/ai-code-nextjs-starter-pro" target="_blank" rel="noopener noreferrer">
                         <ExternalLink className="w-5 h-5 mr-2" />
-                        了解商业版
+                        {t('pro.primaryButton')}
                       </a>
                     </Button>
                     <Button size="lg" variant="outline" className="px-8 py-4 text-lg" asChild>
                       <a href="https://github.com/inRemark/ai-code-nextjs-starter" target="_blank" rel="noopener noreferrer">
-                        继续使用免费版
+                        {t('pro.secondaryButton')}
                       </a>
                     </Button>
                   </div>
