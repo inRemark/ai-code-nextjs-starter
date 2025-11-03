@@ -1,126 +1,185 @@
 {
-  "badge": "スマート意思決定サポートプラットフォーム",
+  "badge": "AI フレンドリー Next.js テンプレート",
   "hero": {
-    "title": "すべての問題に",
-    "titleHighlight": "最適なソリューションを見つけよう",
-    "description": "VSeekは問題志向の意思決定支援プラットフォームで、インテリジェントな推奨と構造化比較を通じて、最適なソリューションを迅速に見つけるのに役立ちます",
-    "primaryButton": "探索を開始",
-    "secondaryButton": "問題を閲覧",
-    "tagline": "無料で使用 · 登録不要 · すぐに使える"
+    "title": "あなたの AI 予算を",
+    "titleHighlight": "最大化しましょう",
+    "description": "アーキテクチャとデータフローの体系的な最適化により、開発を加速させながら、インテリジェントに Token/リクエスト/コンテキスト消費を削減し、時間とお金の両方を節約します",
+    "primaryButton": "今すぐ始める",
+    "secondaryButton": "ドキュメントを表示",
+    "tagline": "すぐに使える · Apache 2.0 オープンソース · AI アシスト開発最適化"
   },
-  "features": {
+  "coreFeatures": {
     "title": "コア機能",
-    "description": "VSeekは問題発見からソリューション選択まで、包括的な意思決定支援ツールチェーンを提供し、ニーズをワンストップで解決します",
+    "description": "アーキテクチャからデータフロー最適化まで、AI アシスト開発をより効率的でより経済的にします",
     "items": [
       {
-        "title": "スマート検索",
-        "description": "中国語キーワード検索とリアルタイム検索候補をサポートする強力な検索機能",
-        "benefits": ["中文検索最適化", "リアルタイム検索候補", "人気検索統計", "検索結果ソート"]
+        "title": "コスト優先設計",
+        "description": "アーキテクチャからデータフローまで、Token/リクエスト数/コンテキスト長を体系的に削減",
+        "benefits": ["SSR/静的優先", "レスポンスボディ最適化", "キャッシュ戦略内蔵", "冗長生成削減"]
       },
       {
-        "title": "スマート推奨",
-        "description": "AIアルゴリズムベースの3層推奨システムで、最適なソリューションを推奨",
-        "benefits": ["カテゴリ推奨", "個人化推奨", "人気推奨", "複合スコアリングアルゴリズム"]
+        "title": "4層クリアアーキテクチャ",
+        "description": "app / features / shared / lib レイヤー構造、AI 変更範囲が小さい",
+        "benefits": ["タスク境界明確", "コンテキスト短い", "再利用性高い", "リスク隔離"]
       },
       {
-        "title": "ソリューション比較",
-        "description": "多次元比較分析で、最適な意思決定を支援",
-        "benefits": ["多次元比較", "価格比較", "機能比較", "ユーザー評価比較"]
+        "title": "AI フレンドリースタンダード",
+        "description": "統一パスエイリアスと命名/エクスポートルールで、より正確な検索と補完",
+        "benefits": ["統一パスエイリアス", "標準命名", "クリアエクスポート", "検索しやすい"]
       },
       {
-        "title": "ユーザーレビュー",
-        "description": "実際のユーザーレビューとフィードバックで、実際の使用体験を理解",
-        "benefits": ["星評価", "メリット・デメリット分析", "使用体験の共有", "レビュー統計"]
+        "title": "すぐに使える",
+        "description": "認証、データベース、UI コンポーネントなどのコア機能が用意されているため、ビジネスロジックに集中",
+        "benefits": ["NextAuth v5", "Prisma ORM", "React Query", "Radix UI"]
       },
       {
-        "title": "問題志向",
-        "description": "問題を中心としたインデックス方法で、実際の使用シーンに合致",
-        "benefits": ["問題分類", "問題詳細", "関連ソリューション", "ユースケース"]
+        "title": "契約駆動型サービス",
+        "description": "統一 API/Service 設計で、AI 出力がより再利用可能で変更がより制御可能",
+        "benefits": ["統一インターフェース", "タイプセーフ", "エラーハンドリング", "ログ追跡"]
       },
       {
-        "title": "品質保証",
-        "description": "厳密なコンテンツレビューと品質管理で、情報の正確性を確保",
-        "benefits": ["コンテンツレビュー", "品質スコア", "ユーザー検証", "継続更新"]
+        "title": "デプロイ準備完了",
+        "description": "Docker/Vercel ワンクリックデプロイ、環境テンプレートがデプロイメントを簡素化",
+        "benefits": ["Docker サポート", "Vercel デプロイメント", "環境テンプレート", "自動移行"]
       }
     ]
   },
-  "howItWorks": {
-    "title": "VSeekの使い方",
-    "description": "3つの簡単なステップで、最適なソリューションを見つけよう",
+  "costSavings": {
+    "title": "時間を節約 · Token を節約 · お金を節約",
+    "subtitle": "実際のデータ比較",
+    "description": "このテンプレートを使用することと、ゼロから同様のプロジェクトを開発することを比較",
+    "fromScratch": {
+      "title": "ゼロからの開発",
+      "time": "120",
+      "timeUnit": "時間",
+      "tokens": "8.5M",
+      "tokensUnit": "tokens",
+      "cost": "$127",
+      "costUnit": "米ドル",
+      "description": "認証、データベース、UI コンポーネントなどを構築する必要があります"
+    },
+    "withTemplate": {
+      "title": "このテンプレートを使用",
+      "badge": "推奨",
+      "time": "38",
+      "timeSavings": "68% 節約",
+      "timeSavingsDetail": "82 時間",
+      "tokens": "2.8M",
+      "tokensSavings": "67% 節約",
+      "tokensSavingsDetail": "5.7M tokens",
+      "cost": "$42",
+      "costSavings": "67% 節約",
+      "costSavingsDetail": "$85 米ドル",
+      "description": "✅ コア機能準備完了、ビジネスロジックに集中"
+    },
+    "summary": {
+      "title": "プロジェクトごとの節約コスト",
+      "subtitle": "このテンプレートを使用する各プロジェクトの平均節約",
+      "hours": "82",
+      "hoursLabel": "開発時間",
+      "hoursDetail": "≈ 10 営業日",
+      "tokens": "5.7M",
+      "tokensLabel": "Token 消費",
+      "tokensDetail": "AI 呼び出し 67% 削減",
+      "cost": "$85",
+      "costLabel": "AI コスト",
+      "costDetail": "Claude 3.5 Sonnet ベース",
+      "badge": "無料オープンソース · すぐに使える · 継続更新",
+      "note": "* データは認証、データベース、ブログなどの機能を含むフルスタック プロジェクトを開発し、Claude 3.5 Sonnet モデルを使用した平均データに基づいています"
+    }
+  },
+  "statistics": {
+    "title": "プロジェクトハイライト",
+    "items": [
+      {
+        "number": "4層",
+        "label": "クリアアーキテクチャ"
+      },
+      {
+        "number": "SSR",
+        "label": "サーバー優先"
+      },
+      {
+        "number": "すぐに使える",
+        "label": "コア機能"
+      },
+      {
+        "number": "AI フレンドリー",
+        "label": "開発最適化"
+      }
+    ]
+  },
+  "techStack": {
+    "title": "最新技術スタック",
+    "description": "最新のテクノロジーで構築されており、パフォーマンス、セキュリティ、開発者体験を保証します",
+    "coretech": {
+      "title": "コア技術",
+      "items": [
+        {
+          "title": "フロントエンド フレームワーク",
+          "tech1": "Next.js 15",
+          "tech2": "App Router + React 19",
+          "advantage": "サーバー優先アーキテクチャ"
+        },
+        {
+          "title": "データレイヤー",
+          "tech1": "Prisma ORM",
+          "tech2": "PostgreSQL + select/include 最適化",
+          "advantage": "レスポンスボディ最適化"
+        },
+        {
+          "title": "認証",
+          "tech1": "NextAuth v5",
+          "tech2": "JWT + ルート保護",
+          "advantage": "安全で信頼性がある"
+        },
+        {
+          "title": "状態管理",
+          "tech1": "React Query",
+          "tech2": "キャッシュ戦略 + revalidate",
+          "advantage": "冗長リクエスト削減"
+        }
+      ]
+    },
+    "toolchain": {
+      "title": "完全なツールチェーン",
+      "items": [
+        "TypeScript 完全型安全",
+        "Tailwind CSS + Radix UI",
+        "react-hook-form + zod フォーム検証",
+        "Docker + Nginx コンテナ化デプロイメント",
+        "Apache 2.0 オープンソース ライセンス"
+      ]
+    },
+    "efficiency": {
+      "label": "開発効率の向上",
+      "value": "3x",
+      "detail": "従来の開発プロセスと比較"
+    }
+  },
+  "quickStart": {
+    "title": "クイック スタート",
+    "description": "3 つの簡単なステップで、AI フレンドリー プロジェクトを起動",
     "steps": [
       {
         "step": "01",
-        "title": "問題検索",
-        "description": "遭遇した問題またはニーズを入力し、スマート検索候補を取得"
+        "title": "プロジェクトをクローン",
+        "description": "GitHub からテンプレートをクローンし、環境変数とデータベースを構成"
       },
       {
         "step": "02",
-        "title": "推奨獲得",
-        "description": "AIアルゴリズムに基づいて、最適なソリューションを推奨"
+        "title": "ローカル開発",
+        "description": "pnpm dev を実行して開発サーバーを起動し、アプリケーションを構築開始"
       },
       {
         "step": "03",
-        "title": "比較と選択",
-        "description": "多次元比較分析で、最適な意思決定を実施"
+        "title": "ワンクリック デプロイ",
+        "description": "Docker または Vercel を使用して本番環境にすばやくデプロイ"
       }
     ]
   },
-  "advantages": {
-    "title": "なぜVSeekを選ぶのか?",
-    "description": "従来のツール推奨と比べ、VSeekはより正確で実用的な意思決定支援を提供",
-    "comparison": "従来の方法 vs VSeek",
-    "items": [
-      {
-        "title": "検索方法",
-        "traditional": "ツール名検索",
-        "vseek": "実際の問題検索",
-        "advantage": "実際のニーズにより適合"
-      },
-      {
-        "title": "推奨ロジック",
-        "traditional": "ツール特性ベース",
-        "vseek": "問題解決策ベース",
-        "advantage": "より正確なマッチング"
-      },
-      {
-        "title": "比較次元",
-        "traditional": "機能特性比較",
-        "vseek": "多次元総合比較",
-        "advantage": "より包括的な意思決定支援"
-      },
-      {
-        "title": "ユーザーフィードバック",
-        "traditional": "実際のレビュー不足",
-        "vseek": "実ユーザーレビュー",
-        "advantage": "より信頼できる参考"
-      }
-    ],
-    "benefits": [
-      "問題志向の検索方法",
-      "AIインテリジェント推奨アルゴリズム",
-      "多次元比較分析",
-      "実ユーザーレビュー"
-    ]
-  },
-  "statistics": {
-    "title": "プラットフォームデータ",
-    "items": [
-      {
-        "number": "50+",
-        "label": "問題カテゴリ"
-      },
-      {
-        "number": "200+",
-        "label": "ソリューション"
-      },
-      {
-        "number": "95%",
-        "label": "推奨精度"
-      },
-      {
-        "number": "1000+",
-        "label": "ユーザーレビュー"
-      }
-    ]
+  "cta": {
+    "title": "アプリケーションの構築を開始",
+    "description": "AI 予算を最大化し、時間とお金を節約し、AI フレンドリー開発を今すぐ体験"
   }
 }

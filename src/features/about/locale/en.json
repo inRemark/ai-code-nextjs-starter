@@ -1,121 +1,92 @@
 {
-  "title": "About VSeek",
-  "company": {
-    "name": "VSeek",
-    "description": "A problem-driven decision support platform",
-    "mission": "Help every problem find the best solution, make every decision wiser",
-    "vision": "Become the world's leading smart decision support platform, empowering wise decisions for individuals and enterprises",
-    "founded": "2025",
-    "headquarters": "Haidian District, Beijing",
-    "employeeCount": "20-50 people"
-  },
-  "sections": {
-    "mission": {
-      "title": "Mission",
-      "icon": "target"
+  "name": "AI Code Next.js Starter",
+  "description": "Next.js full-stack template optimized for AI-assisted development",
+  "mission": "Through systematic optimization of architecture and data flow, save developers time, tokens and money",
+  "vision": "Become the first choice for developers for Next.js full-stack development templates, making AI-assisted development more efficient and economical",
+  "founded": "2024",
+  "headquarters": "Open Source Project",
+  "employeeCount": "Community Driven",
+  "values": [
+    {
+      "title": "AI-Friendly Architecture",
+      "description": "Four-layer clear division of work, unified path aliases, smaller AI change scope, shorter context"
     },
-    "vision": {
-      "title": "Vision",
-      "icon": "eye"
+    {
+      "title": "Cost-First",
+      "description": "From architecture to data flow, systematically reduce Token/request count/context length"
     },
-    "founding": {
-      "title": "Founded",
-      "icon": "award"
+    {
+      "title": "Ready to Use",
+      "description": "Core features like authentication, database, UI components are ready, focus on business logic"
+    },
+    {
+      "title": "Open Source Sharing",
+      "description": "Open source under Apache 2.0 license, welcoming community contributions and feedback"
     }
-  },
-  "values": {
-    "title": "Our Values",
-    "items": [
-      {
-        "title": "Problem-Oriented",
-        "description": "Starting from solving practical problems, providing precise and effective decision support",
-        "icon": "heart"
-      },
-      {
-        "title": "Smart Recommendation",
-        "description": "Using AI technology to provide personalized solution recommendations to users",
-        "icon": "zap"
-      },
-      {
-        "title": "Data-Driven",
-        "description": "Based on real data and user feedback, continuously optimize recommendation algorithms",
-        "icon": "shield"
-      },
-      {
-        "title": "Open Collaboration",
-        "description": "Building an open solution ecosystem to promote knowledge sharing and collaboration",
-        "icon": "users"
-      }
-    ]
-  },
+  ],
   "timeline": {
-    "title": "Timeline",
+    "title": "Development Journey",
     "events": [
       {
-        "id": "1",
-        "year": "2025-08",
-        "title": "VSeek Founded",
-        "description": "Focus on developing problem-driven decision support platform",
-        "type": "milestone"
+        "year": "2024-10",
+        "title": "Project Initialization",
+        "description": "Build basic architecture based on Next.js 15 and React 19",
+        "icon": "🏆"
       },
       {
-        "id": "2",
-        "year": "2025-09",
-        "title": "Product Beta Release",
-        "description": "Complete core function development, begin inviting users for testing",
-        "type": "product"
+        "year": "2024-11",
+        "title": "Core Features Development",
+        "description": "Complete authentication system, database integration, UI component library",
+        "icon": "🚀"
       },
       {
-        "id": "3",
-        "year": "2025-10",
-        "title": "Smart Recommendation Algorithm Launch",
-        "description": "AI-based personalized solution recommendation system officially released",
-        "type": "product"
+        "year": "2024-12",
+        "title": "AI-Friendly Optimization",
+        "description": "Implement four-layer architecture division, optimize path aliases and naming standards",
+        "icon": "🚀"
       },
       {
-        "id": "4",
-        "year": "2025-11",
-        "title": "V1.0 Official Launch",
-        "description": "VSeek platform officially launched, acquired initial registered users",
-        "type": "milestone"
+        "year": "2025-01",
+        "title": "v1.0 Official Release",
+        "description": "Open source release, adopting Apache 2.0 protocol",
+        "icon": "🏆"
       },
       {
-        "id": "5",
-        "year": "2025-12",
-        "title": "1000+ Users",
-        "description": "Registered users exceed 1000, solution library continues to enrich",
-        "type": "achievement"
+        "year": "2025-02",
+        "title": "Community Growth",
+        "description": "GitHub Stars exceeded 1000, community contributors continue to increase",
+        "icon": "⭐"
       },
       {
-        "id": "6",
-        "year": "2026-01",
-        "title": "Comparison Feature Launch",
-        "description": "Release multi-dimensional solution comparison feature, improving user decision efficiency",
-        "type": "product"
+        "year": "2025-03",
+        "title": "Feature Enhancement",
+        "description": "Added blog system, user console and other core feature modules",
+        "icon": "🚀"
       }
     ]
   },
-  "contact": {
-    "title": "Contact Us",
-    "sections": {
-      "contactInfo": {
-        "title": "Contact Information",
-        "icon": "mapPin"
+  "pro": {
+    "badge": "Commercial Edition",
+    "title": "AI Code Next.js Starter Pro",
+    "description": "Unlock more enterprise-level features to accelerate your commercial project development",
+    "features": [
+      {
+        "icon": "⚡",
+        "title": "Advanced Components",
+        "description": "More business components and templates"
       },
-      "businessHours": {
-        "title": "Business Hours",
-        "icon": "clock"
+      {
+        "icon": "👨‍💻",
+        "title": "Priority Support",
+        "description": "Exclusive technical support service"
+      },
+      {
+        "icon": "🛡️",
+        "title": "Enterprise Grade",
+        "description": "Security, performance, scalability"
       }
-    },
-    "email": "Email",
-    "emailValue": "contact@vseek.com",
-    "address": "Address",
-    "addressFormat": "{street}, {city}, {state}, {country}",
-    "weekday": "Monday to Friday",
-    "weekend": "Weekend",
-    "weekend_closed": "Closed",
-    "timezone": "Timezone",
-    "timezoneValue": "UTC+8",
-    "contactButton": "Contact Us"
+    ],
+    "primaryButton": "Learn More About Pro",
+    "secondaryButton": "Continue with Free Version"
   }
 }

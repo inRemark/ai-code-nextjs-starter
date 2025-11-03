@@ -1,121 +1,92 @@
 {
-  "title": "VSeekについて",
-  "company": {
-    "name": "VSeek",
-    "description": "問題志向の意思決定サポートプラットフォーム",
-    "mission": "すべての問題に最適なソリューションを見つけ、すべての意思決定をより賢くする",
-    "vision": "世界有数のスマート意思決定サポートプラットフォームとなり、個人や企業の賢い意思決定を支援する",
-    "founded": "2025年",
-    "headquarters": "北京市海淀区",
-    "employeeCount": "20-50人"
-  },
-  "sections": {
-    "mission": {
-      "title": "ミッション",
-      "icon": "target"
+  "name": "AI Code Next.js Starter",
+  "description": "AI アシスト開発に最適化された Next.js フルスタック テンプレート",
+  "mission": "アーキテクチャとデータフローの体系的な最適化により、開発者の時間、Token、お金を節約",
+  "vision": "Next.js フルスタック開発テンプレートの開発者向け第一選択肢となり、AI アシスト開発をより効率的でより経済的にする",
+  "founded": "2024",
+  "headquarters": "オープン ソース プロジェクト",
+  "employeeCount": "コミュニティ主導",
+  "values": [
+    {
+      "title": "AI フレンドリー アーキテクチャ",
+      "description": "4 層の明確な分業、統一されたパス エイリアス、AI 変更範囲が小さく、コンテキストが短い"
     },
-    "vision": {
-      "title": "ビジョン",
-      "icon": "eye"
+    {
+      "title": "コスト優先",
+      "description": "アーキテクチャからデータフローまで、Token/リクエスト数/コンテキスト長を体系的に削減"
     },
-    "founding": {
-      "title": "設立日",
-      "icon": "award"
+    {
+      "title": "すぐに使える",
+      "description": "認証、データベース、UI コンポーネントなどのコア機能が用意されており、ビジネス ロジックに集中"
+    },
+    {
+      "title": "オープン ソース 共有",
+      "description": "Apache 2.0 ライセンスの下でオープン ソース化、コミュニティの貢献とフィードバックを歓迎"
     }
-  },
-  "values": {
-    "title": "私たちの価値観",
-    "items": [
-      {
-        "title": "問題志向",
-        "description": "実際の問題解決を出発点として、正確で効果的な意思決定支援を提供",
-        "icon": "heart"
-      },
-      {
-        "title": "スマート推奨",
-        "description": "AI技術を活用して、ユーザーに個性化されたソリューション推奨を提供",
-        "icon": "zap"
-      },
-      {
-        "title": "データドリブン",
-        "description": "実際のデータとユーザーフィードバックに基づいて、推奨アルゴリズムを継続的に最適化",
-        "icon": "shield"
-      },
-      {
-        "title": "オープン協働",
-        "description": "オープンなソリューションエコシステムを構築し、知識共有と協働を促進",
-        "icon": "users"
-      }
-    ]
-  },
+  ],
   "timeline": {
-    "title": "タイムライン",
+    "title": "発展歴",
     "events": [
       {
-        "id": "1",
-        "year": "2025-08",
-        "title": "VSeek正式に設立",
-        "description": "問題志向の意思決定支援プラットフォーム開発に注力",
-        "type": "milestone"
+        "year": "2024-10",
+        "title": "プロジェクト初期化",
+        "description": "Next.js 15 と React 19 をベースに基本アーキテクチャを構築",
+        "icon": "🏆"
       },
       {
-        "id": "2",
-        "year": "2025-09",
-        "title": "製品ベータ版リリース",
-        "description": "コア機能開発完了、ユーザーテストの招待を開始",
-        "type": "product"
+        "year": "2024-11",
+        "title": "コア機能開発",
+        "description": "認証システム、データベース統合、UI コンポーネント ライブラリを完成",
+        "icon": "🚀"
       },
       {
-        "id": "3",
-        "year": "2025-10",
-        "title": "スマート推奨アルゴリズム上線",
-        "description": "AI技術ベースの個性化ソリューション推奨システム正式リリース",
-        "type": "product"
+        "year": "2024-12",
+        "title": "AI フレンドリー最適化",
+        "description": "4 層アーキテクチャの分業を実装し、パス エイリアスと命名標準を最適化",
+        "icon": "🚀"
       },
       {
-        "id": "4",
-        "year": "2025-11",
-        "title": "V1.0正式リリース",
-        "description": "VSeekプラットフォーム正式上線、初期登録ユーザー獲得",
-        "type": "milestone"
+        "year": "2025-01",
+        "title": "v1.0 正式リリース",
+        "description": "オープン ソース リリース、Apache 2.0 プロトコルを採用",
+        "icon": "🏆"
       },
       {
-        "id": "5",
-        "year": "2025-12",
-        "title": "ユーザー1000人超",
-        "description": "登録ユーザー数が1000人を超え、ソリューションライブラリ継続充実",
-        "type": "achievement"
+        "year": "2025-02",
+        "title": "コミュニティ成長",
+        "description": "GitHub Star が 1000 を超え、コミュニティ貢献者が増加し続ける",
+        "icon": "⭐"
       },
       {
-        "id": "6",
-        "year": "2026-01",
-        "title": "比較機能上線",
-        "description": "マルチディメンション型ソリューション比較機能リリース、ユーザー決定効率向上",
-        "type": "product"
+        "year": "2025-03",
+        "title": "機能充実",
+        "description": "ブログ システム、ユーザー コンソールなどのコア機能モジュールを追加",
+        "icon": "🚀"
       }
     ]
   },
-  "contact": {
-    "title": "お問い合わせ",
-    "sections": {
-      "contactInfo": {
-        "title": "連絡先",
-        "icon": "mapPin"
+  "pro": {
+    "badge": "商用版",
+    "title": "AI Code Next.js Starter Pro",
+    "description": "より多くのエンタープライズ レベルの機能を解放し、商用プロジェクト開発を加速",
+    "features": [
+      {
+        "icon": "⚡",
+        "title": "高度なコンポーネント",
+        "description": "より多くのビジネス コンポーネントとテンプレート"
       },
-      "businessHours": {
-        "title": "営業時間",
-        "icon": "clock"
+      {
+        "icon": "👨‍💻",
+        "title": "優先サポート",
+        "description": "専属技術サポート サービス"
+      },
+      {
+        "icon": "🛡️",
+        "title": "エンタープライズ グレード",
+        "description": "セキュリティ、パフォーマンス、スケーラビリティ"
       }
-    },
-    "email": "メール",
-    "emailValue": "contact@vseek.com",
-    "address": "住所",
-    "addressFormat": "{country} {state} {city} {street}",
-    "weekday": "月曜日～金曜日",
-    "weekend": "週末",
-    "weekend_closed": "休業",
-    "timezone": "タイムゾーン",
-    "timezoneValue": "UTC+8",
-    "contactButton": "お問い合わせ"
+    ],
+    "primaryButton": "Pro について詳しく知る",
+    "secondaryButton": "無料版を使い続ける"
   }
 }
