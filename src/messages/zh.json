@@ -58,12 +58,33 @@
     },
     "register": {
       "title": "注册",
+      "title": "注册",
       "emailLabel": "邮箱地址",
+      "emailPlaceholder": "请输入邮箱地址",
       "passwordLabel": "密码",
+      "passwordPlaceholder": "请输入密码",
       "confirmPasswordLabel": "确认密码",
-      "submitButton": "注册",
+      "confirmPasswordPlaceholder": "请再次输入密码",
+      "submitButton": "创建账户",
       "hasAccount": "已有账号?",
-      "loginLink": "立即登录"
+      "loginLink": "立即登录",
+      "emailRequired": "请输入邮箱地址",
+      "emailInvalid": "请输入有效的邮箱地址",
+      "passwordRequired": "请输入密码",
+      "passwordTooShort": "密码至少需要8位字符",
+      "passwordRequireLetters": "密码需要包含字母",
+      "passwordRequireNumbers": "密码需要包含数字",
+      "confirmPasswordRequired": "请确认密码",
+      "confirmPasswordMismatch": "两次输入的密码不一致",
+      "registering": "注册中...",
+      "registerFailed": "注册失败，请稍后再试",
+      "socialRegisterFailed": "{provider} 注册失败: {error}",
+      "referral": {
+        "friend": "好友",
+        "invited": "邀请您加入 {appName}",
+        "rewardBadge": "+50 积分",
+        "description": "注册成功后，您和推荐人都将获得积分奖励！"
+      }
     }
   },
   "errors": {

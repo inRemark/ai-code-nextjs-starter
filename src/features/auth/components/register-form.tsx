@@ -13,33 +13,38 @@ import { Alert, AlertDescription } from '@shared/ui/alert';
 import { Badge } from '@shared/ui/badge';
 import { Loader2, AlertCircle, Users, Gift } from 'lucide-react';
 import { logger } from '@logger';
+import { useTranslations } from 'next-intl';
 
 interface RegisterFormProps {
   onSuccess?: () => void;
 }
 
-const validateEmail = (email: string): string | undefined => {
-  if (!email) return '请输入邮箱地址';
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) return '请输入有效的邮箱地址';
-  return undefined;
-};
-
-const validatePassword = (password: string): string | undefined => {
-  if (!password) return '请输入密码';
-  if (password.length < 8) return '密码至少需要8位字符';
-  if (!/[a-zA-Z]/.test(password)) return '密码需要包含字母';
-  if (!/\d/.test(password)) return '密码需要包含数字';
-  return undefined;
-};
-
-const validateConfirmPassword = (password: string, confirmPassword: string): string | undefined => {
-  if (!confirmPassword) return '请确认密码';
-  if (password !== confirmPassword) return '两次输入的密码不一致';
-  return undefined;
-};
+// 验证器放入组件内部以便使用翻译
 
 export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
+  const t = useTranslations('auth.register');
+  const tCommon = useTranslations('common');
+
+  const validateEmail = (email: string): string | undefined => {
+    if (!email) return t('emailRequired');
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) return t('emailInvalid');
+    return undefined;
+  };
+
+  const validatePassword = (password: string): string | undefined => {
+    if (!password) return t('passwordRequired');
+    if (password.length < 8) return t('passwordTooShort');
+    if (!/[a-zA-Z]/.test(password)) return t('passwordRequireLetters');
+    if (!/\d/.test(password)) return t('passwordRequireNumbers');
+    return undefined;
+  };
+
+  const validateConfirmPassword = (password: string, confirmPassword: string): string | undefined => {
+    if (!confirmPassword) return t('confirmPasswordRequired');
+    if (password !== confirmPassword) return t('confirmPasswordMismatch');
+    return undefined;
+  };
   const [formData, setFormData] = useState({
     email: '',
     password: '',
