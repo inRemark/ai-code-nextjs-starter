@@ -1,32 +1,41 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
+import { useMessages } from "next-intl";
+import { useLocale } from "next-intl";
 import { Github, Twitter, Linkedin, Sparkles } from "lucide-react";
 
-const footerLinks = {
-  product: [
-    { label: "功能特性", href: "/features" },
-    { label: "探索问题", href: "/explore" },
-  ],
-  company: [
-    { label: "关于我们", href: "/about" },
-    { label: "博客", href: "/blog" },
-  ],
-  legal: [
-    { label: "隐私政策", href: "/about/privacy" },
-    { label: "服务条款", href: "/about/terms" },
-    { label: "Cookie政策", href: "/about/cookies" },
-  ]
-};
-
 const socialLinks = [
-  { icon: Github, href: "https://github.com/sendmail", label: "GitHub" },
-  { icon: Twitter, href: "https://twitter.com/sendmail", label: "Twitter" },
-  { icon: Linkedin, href: "https://linkedin.com/company/sendmail", label: "LinkedIn" }
+  { icon: Github, href: "https://github.com/sendmail", labelKey: "social.github" },
+  { icon: Twitter, href: "https://twitter.com/sendmail", labelKey: "social.twitter" },
+  { icon: Linkedin, href: "https://linkedin.com/company/sendmail", labelKey: "social.linkedin" }
 ];
 
 export const PortalFooter: React.FC = () => {
+  const locale = useLocale();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const messages = useMessages() as Record<string, any>;
+  const sharedLayoutMessages = messages['shared-layout'] || {};
+  const footerTranslations = (sharedLayoutMessages['footer'] || {}) as Record<string, string>;
+  
+  const formatLabel = (label: string): string => {
+    return locale === 'en' ? label.toUpperCase() : label;
+  };
+  
+  const footerLinks = useMemo(() => ({
+    product: [
+      { label: formatLabel(footerTranslations["product"] || "Product"), href: "/features" },
+    ],
+    company: [
+      { label: formatLabel(footerTranslations["company"] || "Company"), href: "/about" },
+    ],
+    legal: [
+      { label: formatLabel(footerTranslations["privacyPolicy"] || "Privacy Policy"), href: "/about/privacy" },
+      { label: formatLabel(footerTranslations["termsOfService"] || "Terms of Service"), href: "/about/terms" },
+      { label: formatLabel(footerTranslations["cookiePolicy"] || "Cookie Policy"), href: "/about/cookies" },
+    ]
+  }), [footerTranslations, locale]);
   return (
     <footer className="bg-muted/30 border-t">
       <div className="container mx-auto px-4 py-12">
@@ -38,19 +47,19 @@ export const PortalFooter: React.FC = () => {
               <span className="text-2xl font-bold text-foreground">AICoder</span>
             </Link>
             <p className="text-muted-foreground mb-4 max-w-md">
-            通过架构与数据流的系统优化，既加速开发，又智能减少 Token/请求/上下文消耗，为您同时节省时间与金钱
+            {footerTranslations["description"]}
             </p>
             <div className="flex items-center gap-4">
               {socialLinks.map((social) => {
                 const Icon = social.icon;
                 return (
                   <Link
-                    key={social.label}
+                    key={social.href}
                     href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-muted-foreground hover:text-primary transition-colors"
-                    aria-label={social.label}
+                    aria-label={social.labelKey}
                   >
                     <Icon className="w-5 h-5" />
                   </Link>
@@ -61,7 +70,7 @@ export const PortalFooter: React.FC = () => {
 
           {/* Product Links */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">产品</h3>
+            <h3 className="font-semibold text-foreground mb-4">{formatLabel(footerTranslations["product"] || "Product")}</h3>
             <ul className="space-y-2">
               {footerLinks.product.map((link) => (
                 <li key={link.href}>
@@ -78,7 +87,7 @@ export const PortalFooter: React.FC = () => {
 
           {/* Company Links */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">关于</h3>
+            <h3 className="font-semibold text-foreground mb-4">{formatLabel(footerTranslations["company"] || "Company")}</h3>
             <ul className="space-y-2">
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
@@ -95,7 +104,7 @@ export const PortalFooter: React.FC = () => {
 
           {/* Legal Links */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">法律</h3>
+            <h3 className="font-semibold text-foreground mb-4">{formatLabel(footerTranslations["legal"] || "Legal")}</h3>
             <ul className="space-y-2">
               {footerLinks.legal.map((link) => (
                 <li key={link.href}>
@@ -114,10 +123,10 @@ export const PortalFooter: React.FC = () => {
         {/* Bottom Section */}
         <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-muted-foreground text-sm">
-            © 2025 AICoder. 保留所有权利。
+            © 2025 AsyncBee. {footerTranslations["allRightsReserved"] || "All Rights Reserved"}。
           </p>
           <div className="flex items-center gap-6 mt-4 md:mt-0">
-            <span className="text-muted-foreground text-sm">ICP备案号：京ICP备12345678号</span>
+            <span className="text-muted-foreground text-sm">{footerTranslations["icp"] || "ICP备案号：京ICP备12345678号"}</span>
           </div>
         </div>
       </div>

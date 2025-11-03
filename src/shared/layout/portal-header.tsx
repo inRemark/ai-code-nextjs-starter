@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useMessages, useLocale } from "next-intl";
 import { Button } from "@shared/ui/button";
 import { cn } from "@shared/utils";
-import { Menu, X, LogOut, Sparkles, User, Settings } from "lucide-react";
+import { Menu, X, LogOut, Sparkles, User, Settings, Search } from "lucide-react";
 import { useAuth } from "@features/auth/components/unified-auth-provider";
 import { ThemeToggle } from "@shared/ui/theme-toggle";
 import { LanguageSwitcher } from "@shared/components/language-switcher";
@@ -18,23 +19,44 @@ import {
 } from "@shared/ui/dropdown-menu";
 
 interface NavItem {
-  label: string;
+  labelKey: string;
   href: string;
   target?: string;
 }
 
-const navItems: NavItem[] = [
-  { label: "价格", href: "/pricing" },
-  { label: "博客", href: "/blog" },
-  { label: "文章", href: "/articles" },
-  { label: "帮助", href: "/help" },
-  { label: "关于", href: "/about" },
+const navItemsConfig: NavItem[] = [
+  { labelKey: "pricing", href: "/pricing" },
+  { labelKey: "blog", href: "/blog" },
+  { labelKey: "articles", href: "/articles" },
+  { labelKey: "help", href: "/help" },
+  { labelKey: "about", href: "/about" },
 ];
 
 export const PortalHeader: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const locale = useLocale();
   const { user, loading, logout } = useAuth();
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const messages = useMessages() as Record<string, any>;
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const sharedLayoutMessages = messages['shared-layout'] || {};
+  const navTranslations: Record<string, string> = (sharedLayoutMessages['nav'] || {}) as Record<string, string>;
+  const headerTranslations: Record<string, string> = (sharedLayoutMessages['header'] || {}) as Record<string, string>;
+  
+  // 英文时转换为大写
+  const formatNavLabel = (label: string): string => {
+    return locale === 'en' ? label.toUpperCase() : label;
+  };
+  
+  const navItems = useMemo(() => {
+    return navItemsConfig.map(item => ({
+      ...item,
+      label: formatNavLabel(navTranslations[item.labelKey] || item.labelKey)
+    }));
+  }, [navTranslations, locale]);
 
   return (
     <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
@@ -65,10 +87,22 @@ export const PortalHeader: React.FC = () => {
 
                  {/* Desktop Actions */}
                  <div className="hidden md:flex items-center gap-4">
+                   {/* 全局搜索按钮 */}
+                   <Button
+                     variant="ghost"
+                     size="icon"
+                     className="w-8 h-8"
+                     title={headerTranslations["searchPlaceholder"] || "搜索 (Ctrl+K)"}
+                   >
+                     <Search className="w-4 h-4" />
+                   </Button>
+                   
                    {/* 主题切换按钮 */}
                    <ThemeToggle />
-                    {/* 语言切换 */}
+
+                   {/* 语言切换 */}
                    <LanguageSwitcher />
+                   
             
             {loading ? (
               <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-300"></div>
@@ -82,17 +116,17 @@ export const PortalHeader: React.FC = () => {
                 <DropdownMenuContent align="end" className="w-48">
                   <DropdownMenuItem>
                     <User className="mr-2 h-4 w-4" />
-                    <Link href="/profile?tab=activity">个人中心</Link>
+                    <Link href="/profile?tab=activity">{headerTranslations["profile"] || "个人中心"}</Link>
                   </DropdownMenuItem>
                   
                   <DropdownMenuItem>
                     <Settings className="mr-2 h-4 w-4" />
-                    <Link href="/profile?tab=favorites">我的收藏</Link>
+                    <Link href="/profile?tab=favorites">{headerTranslations["favorites"] || "我的收藏"}</Link>
                   </DropdownMenuItem>
  
                   <DropdownMenuItem>
                     <Settings className="mr-2 h-4 w-4" />
-                    <Link href="/profile?tab=profile">账号设置</Link>
+                    <Link href="/profile?tab=profile">{headerTranslations["settings"] || "账号设置"}</Link>
                   </DropdownMenuItem>
                   
                   <DropdownMenuSeparator />
@@ -102,13 +136,13 @@ export const PortalHeader: React.FC = () => {
                     onClick={logout}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
-                    退出登录
+                    {headerTranslations["logout"] || "退出登录"}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <Button variant="ghost" asChild>
-                <Link href="/auth/login">登录</Link>
+                <Link href="/auth/login">{navTranslations["login"] || "登录"}</Link>
               </Button>
             )}
           </div>
@@ -147,6 +181,21 @@ export const PortalHeader: React.FC = () => {
                 </Link>
               ))}
                      <div className="px-4 pt-4 border-t space-y-2">
+                       {/* 移动端搜索按锕 */}
+                       <Button
+                         variant="ghost"
+                         className="w-full justify-start"
+                         onClick={toggleSearch}
+                       >
+                         <Search className="w-4 h-4 mr-2" />
+                         {headerTranslations["search"] || "搜索"}
+                       </Button>
+                       
+                       {/* 移动端语言切换 */}
+                       <div className="flex justify-center py-2">
+                         <LanguageSwitcher />
+                       </div>
+                       
                        {/* 移动端主题切换 */}
                        <div className="flex justify-center py-2">
                          <ThemeToggle />
@@ -161,19 +210,19 @@ export const PortalHeader: React.FC = () => {
                     <Button variant="ghost" className="w-full justify-start" asChild>
                       <Link href="/profile?tab=profile">
                         <User className="w-4 h-4 mr-2" />
-                        个人中心
+                        {headerTranslations["profile"] || "个人中心"}
                       </Link>
                     </Button>
                     <Button variant="ghost" className="w-full justify-start" asChild>
                       <Link href="/profile?tab=favorites">
                         <Settings className="w-4 h-4 mr-2" />
-                        我的收藏
+                        {headerTranslations["favorites"] || "我的收藏"}
                       </Link>
                     </Button>
                     <Button variant="ghost" className="w-full justify-start" asChild>
                       <Link href="/profile?tab=settings">
                         <Settings className="w-4 h-4 mr-2" />
-                        账号设置
+                        {headerTranslations["settings"] || "账号设置"}
                       </Link>
                     </Button>
                     <div className="border-t pt-2">
@@ -183,13 +232,13 @@ export const PortalHeader: React.FC = () => {
                         onClick={logout}
                       >
                         <LogOut className="w-4 h-4 mr-2" />
-                        退出登录
+                        {headerTranslations["logout"] || "退出登录"}
                       </Button>
                     </div>
                   </div>
                 ) : (
                   <Button variant="ghost" className="w-full justify-start" asChild>
-                    <Link href="/auth/login">登录</Link>
+                    <Link href="/auth/login">{navTranslations["login"] || "登录"}</Link>
                   </Button>
                 )}
               </div>

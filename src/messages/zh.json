@@ -18,19 +18,6 @@
     "close": "关闭",
     "or": "或"
   },
-  "nav": {
-    "home": "首页",
-    "about": "关于我们",
-    "blog": "博客",
-    "articles": "文章",
-    "pricing": "价格",
-    "help": "帮助中心",
-    "login": "登录",
-    "register": "注册",
-    "profile": "个人中心",
-    "console": "控制台",
-    "admin": "管理后台"
-  },
   "errors": {
     "notFound": "页面未找到",
     "unauthorized": "无权限访问",

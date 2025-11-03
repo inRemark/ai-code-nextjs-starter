@@ -18,19 +18,6 @@
     "close": "閉じる",
     "or": "または"
   },
-  "nav": {
-    "home": "ホーム",
-    "about": "について",
-    "blog": "ブログ",
-    "articles": "記事",
-    "pricing": "料金",
-    "help": "ヘルプ",
-    "login": "ログイン",
-    "register": "登録",
-    "profile": "プロフィール",
-    "console": "コンソール",
-    "admin": "管理"
-  },
   "errors": {
     "notFound": "ページが見つかりません",
     "unauthorized": "アクセス権限がありません",

@@ -18,19 +18,6 @@
     "close": "Close",
     "or": "Or"
   },
-  "nav": {
-    "home": "Home",
-    "about": "About",
-    "blog": "Blog",
-    "articles": "Articles",
-    "pricing": "Pricing",
-    "help": "Help",
-    "login": "Login",
-    "register": "Register",
-    "profile": "Profile",
-    "console": "Console",
-    "admin": "Admin"
-  },
   "errors": {
     "notFound": "Page Not Found",
     "unauthorized": "Unauthorized",
