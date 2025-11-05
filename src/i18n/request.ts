@@ -14,12 +14,10 @@ async function loadFeatureMessages(locale: string) {
   // 动态加载每个 feature 的翻译
   for (const feature of FEATURE_MODULES) {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const featureMessages = (await import(`@/features/${feature}/locale/${locale}.json`)).default;
       mergedMessages[feature] = featureMessages;
     } catch {
       // 如果 feature 翻译不存在，跳过（可能是可选 feature）
-      // eslint-disable-next-line no-console
       console.warn(`Feature messages not found for ${feature}/${locale}`);
     }
   }

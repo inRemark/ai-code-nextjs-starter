@@ -1,7 +1,6 @@
 // next-intl 类型定义
-type Messages = typeof import('./src/messages/zh.json');
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-declare interface IntlMessages extends Messages {}
+type Messages = typeof import('./src/messages/zh.json');  
+type IntlMessages = Messages
 
 // 主题偏好类型
 interface Window {

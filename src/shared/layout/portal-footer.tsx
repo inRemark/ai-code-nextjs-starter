@@ -14,7 +14,6 @@ const socialLinks = [
 
 export const PortalFooter: React.FC = () => {
   const locale = useLocale();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const messages = useMessages() as Record<string, any>;
   const sharedLayoutMessages = messages['shared-layout'] || {};
   const footerTranslations = (sharedLayoutMessages['footer'] || {}) as Record<string, string>;

@@ -38,10 +38,8 @@ export const PortalHeader: React.FC = () => {
   const locale = useLocale();
   const { user, loading, logout } = useAuth();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const messages = useMessages() as Record<string, any>;
   
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const sharedLayoutMessages = messages['shared-layout'] || {};
   const navTranslations: Record<string, string> = (sharedLayoutMessages['nav'] || {}) as Record<string, string>;
   const headerTranslations: Record<string, string> = (sharedLayoutMessages['header'] || {}) as Record<string, string>;

@@ -36,7 +36,6 @@ export async function getArticles(params: ArticleListParams = {}) {
   const skip = (page - 1) * limit;
 
   // 构建查询条件
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const where: Record<string, any> = {};
 
   if (authorId) {
