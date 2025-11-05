@@ -2,8 +2,7 @@
 
 import React, { useMemo } from "react";
 import Link from "next/link";
-import { useMessages } from "next-intl";
-import { useLocale } from "next-intl";
+import { useLocale, useMessages } from "next-intl";
 import { Github, Twitter, Linkedin, Sparkles } from "lucide-react";
 
 const socialLinks = [
