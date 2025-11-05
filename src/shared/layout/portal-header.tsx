@@ -46,22 +46,27 @@ export const PortalHeader: React.FC = () => {
   const locale = useLocale();
   const { user, loading, logout } = useAuth();
 
-  const messages = useMessages() as Record<string, any>;
-
-  const sharedLayoutMessages = messages["shared-layout"] || {};
-  const navTranslations: Record<string, string> = (sharedLayoutMessages[
-    "nav"
-  ] || {}) as Record<string, string>;
+  const messages = useMessages();
+  const sharedLayoutMessages = useMemo(
+    () => messages["shared-layout"] || {},
+    [messages]
+  );
+  
+  const navTranslations: Record<string, string> = useMemo(
+    () => (sharedLayoutMessages["nav"] || {}) as Record<string, string>,
+    [sharedLayoutMessages]
+  );
+  
   const headerTranslations: Record<string, string> = (sharedLayoutMessages[
     "header"
   ] || {}) as Record<string, string>;
 
-  // Format navigation labels based on locale
-  const formatNavLabel = (label: string): string => {
-    return locale === "en" ? label.toUpperCase() : label;
-  };
-
   const navItems = useMemo(() => {
+    // Format navigation labels based on locale
+    const formatNavLabel = (label: string): string => {
+      return locale === "en" ? label.toUpperCase() : label;
+    };
+
     return navItemsConfig.map((item) => ({
       ...item,
       label: formatNavLabel(navTranslations[item.labelKey] || item.labelKey),

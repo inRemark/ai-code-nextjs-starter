@@ -3,19 +3,21 @@
 import React, { useMemo } from "react";
 import Link from "next/link";
 import { useLocale, useMessages } from "next-intl";
-import { Github, Twitter, Linkedin, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
 
 const socialLinks = [
-  { icon: Github, href: "https://github.com/sendmail", labelKey: "social.github" },
-  { icon: Twitter, href: "https://twitter.com/sendmail", labelKey: "social.twitter" },
-  { icon: Linkedin, href: "https://linkedin.com/company/sendmail", labelKey: "social.linkedin" }
+  { icon: FaGithub, href: "https://github.com/sendmail", labelKey: "social.github" },
+  { icon: FaTwitter, href: "https://twitter.com/sendmail", labelKey: "social.twitter" },
+  { icon: FaLinkedin, href: "https://linkedin.com/company/sendmail", labelKey: "social.linkedin" }
 ];
 
 export const PortalFooter: React.FC = () => {
   const locale = useLocale();
-  const messages = useMessages() as Record<string, any>;
-  const sharedLayoutMessages = messages['shared-layout'] || {};
-  const footerTranslations = (sharedLayoutMessages['footer'] || {}) as Record<string, string>;
+  
+  const messages = useMessages();
+  const sharedLayoutMessages = messages['shared-layout'];
+  const footerTranslations = (sharedLayoutMessages['footer']);
   
   const formatLabel = (label: string): string => {
     return locale === 'en' ? label.toUpperCase() : label;
@@ -23,17 +25,17 @@ export const PortalFooter: React.FC = () => {
   
   const footerLinks = useMemo(() => ({
     product: [
-      { label: formatLabel(footerTranslations["product"] || "Product"), href: "/features" },
+      { label: footerTranslations["product"] || "Product", href: "/features" },
     ],
     company: [
-      { label: formatLabel(footerTranslations["company"] || "Company"), href: "/about" },
+      { label: footerTranslations["company"] || "Company", href: "/about" },
     ],
     legal: [
-      { label: formatLabel(footerTranslations["privacyPolicy"] || "Privacy Policy"), href: "/about/privacy" },
-      { label: formatLabel(footerTranslations["termsOfService"] || "Terms of Service"), href: "/about/terms" },
-      { label: formatLabel(footerTranslations["cookiePolicy"] || "Cookie Policy"), href: "/about/cookies" },
+      { label: footerTranslations["privacyPolicy"] || "Privacy Policy", href: "/about/privacy" },
+      { label: footerTranslations["termsOfService"] || "Terms of Service", href: "/about/terms" },
+      { label: footerTranslations["cookiePolicy"] || "Cookie Policy", href: "/about/cookies" },
     ]
-  }), [footerTranslations, locale]);
+  }), [footerTranslations]);
   return (
     <footer className="bg-muted/30 border-t">
       <div className="container mx-auto px-4 py-12">
@@ -42,7 +44,7 @@ export const PortalFooter: React.FC = () => {
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-2 mb-4">
               <Sparkles className="w-8 h-8 text-primary" />
-              <span className="text-2xl font-bold text-foreground">AICoder</span>
+              <span className="text-2xl font-bold text-foreground">VSeek</span>
             </Link>
             <p className="text-muted-foreground mb-4 max-w-md">
             {footerTranslations["description"]}
@@ -121,7 +123,7 @@ export const PortalFooter: React.FC = () => {
         {/* Bottom Section */}
         <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-muted-foreground text-sm">
-            © 2025 AsyncBee. {footerTranslations["allRightsReserved"] || "All Rights Reserved"}。
+            © 2025 AiCoder. {footerTranslations["allRightsReserved"] || "All Rights Reserved"}。
           </p>
           <div className="flex items-center gap-6 mt-4 md:mt-0">
             <span className="text-muted-foreground text-sm">{footerTranslations["icp"] || "ICP备案号：京ICP备12345678号"}</span>
