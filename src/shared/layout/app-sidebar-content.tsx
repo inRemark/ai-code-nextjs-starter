@@ -2,15 +2,9 @@
 
 import React from "react";
 import { cn } from "@shared/utils";
-import { Button } from "@shared/ui/button";
 import { NavigationMenu } from "./navigation-menu";
 import { UserSection } from "./user-section";
-import { ThemeToggle } from "@shared/ui/theme-toggle";
-import { 
-  PanelLeftClose,
-  PanelLeftOpen
-} from "lucide-react";
-import { LayoutConfig } from "./layout-config";
+import { LayoutConfig } from "./app-layout-config";
 
 interface ConfigurableSidebarContentProps {
   collapsed: boolean;
@@ -45,43 +39,39 @@ export const ConfigurableSidebarContent: React.FC<ConfigurableSidebarContentProp
           <brand.icon className="w-5 h-5 text-primary-foreground" />
         </div>
         {(!collapsed || isMobile) && (
-          <>
-            <div className="flex-1 min-w-0">
-              <h1 className={cn(
-                "text-lg font-semibold",
-                "text-foreground"
-              )}>
-                {brand.name}
-              </h1>
-              <p className={cn(
-                "text-xs",
-                "text-muted-foreground"
-              )}>
-                {brand.description}
-              </p>
-            </div>
-          </>
+          <div className="flex-1 min-w-0">
+            <h1 className={cn(
+              "text-lg font-semibold",
+              "text-foreground"
+            )}>
+            {brand.name}
+            </h1>
+            <p className={cn(
+              "text-xs",
+              "text-muted-foreground"
+            )}>
+              {brand.description}
+            </p>
+          </div>
         )}
       </div>
 
-      {/* 导航菜单 */}
+      {/* Navigation Menu */}
       <div className="flex-1 overflow-y-auto">
         <NavigationMenu 
           collapsed={collapsed && !isMobile} 
           menuConfig={menuConfig}
-          theme={config.theme}
         />
       </div>
 
 
-      {/* 用户区域 */}
+      {/* User Section */}
       <div className={cn(
         "border-t",
         "border-border/50"
       )}>
         <UserSection 
           collapsed={collapsed && !isMobile} 
-          theme={config.theme}
           showThemeToggle={true}
           showCollapseButton={!isMobile}
           onCollapse={onCollapse}

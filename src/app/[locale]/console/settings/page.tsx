@@ -4,7 +4,7 @@ import { logger } from '@logger';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@features/auth/components/unified-auth-provider';
 import { ConsoleLayout } from '@shared/layout/console-layout';
-import { EnhancedPageContainer } from '@shared/layout/enhanced-page-container';
+import { EnhancedPageContainer } from '@/shared/layout/app-page-container';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@shared/ui/card';
 import { Button } from '@shared/ui/button';
 import { Switch } from '@shared/ui/switch';

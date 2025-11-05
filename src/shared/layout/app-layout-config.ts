@@ -15,43 +15,57 @@ export interface LayoutHeader {
   customActions?: React.ReactNode;
 }
 
+export interface HeaderConfig {
+  notificationsPath: string;
+  profilePath: string;
+  settingsPath: string;
+}
+
 export interface LayoutConfig {
   brand: LayoutBrand;
-  theme: 'console' | 'admin';
   menuConfig: typeof consoleMenuConfig;
   header?: LayoutHeader;
+  headerConfig?: HeaderConfig;
   className?: string;
 }
 
-// console 布局配置
+// console layout config
 export const consoleLayoutConfig: LayoutConfig = {
   brand: {
     name: "AICoder",
     icon: Search,
-    description: "企业控制台",
+    description: "App Console",
     href: "/console"
   },
-  theme: 'console',
   menuConfig: consoleMenuConfig,
   header: {
     showTitle: true,
     showBreadcrumb: true
+  },
+  headerConfig: {
+    notificationsPath: '/console/notifications',
+    profilePath: '/console/profile',
+    settingsPath: '/console/settings'
   }
 };
 
-// Admin 布局配置
+// Admin layout config
 export const adminLayoutConfig: LayoutConfig = {
   brand: {
-    name: "管理后台",
+    name: "AICoder",
     icon: Settings,
-    description: "系统管理",
+    description: "Admin Console",
     href: "/admin"
   },
-  theme: 'admin',
   menuConfig: adminMenuConfig,
   header: {
     showTitle: true,
     showBreadcrumb: false
+  },
+  headerConfig: {
+    notificationsPath: '/admin/notifications',
+    profilePath: '/admin/profile',
+    settingsPath: '/admin/settings'
   },
   className: ""
 };

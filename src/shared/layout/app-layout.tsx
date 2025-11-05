@@ -4,10 +4,10 @@ import React, { useState, useCallback } from "react";
 import { useBreakpointContext } from "@shared/theme/breakpoint-provider";
 import { cn } from "@shared/utils";
 import { TooltipProvider } from "@shared/ui/tooltip";
-import { Sidebar } from "./sidebar";
-import { MainLayout } from "./main-layout";
-import { ConfigurableSidebarContent } from "@shared/layout/configurable-sidebar-content";
-import { LayoutConfig } from "./layout-config";
+import { Sidebar } from "./app-sidebar";
+import { MainLayout } from "./app-main-layout";
+import { ConfigurableSidebarContent } from "@/shared/layout/app-sidebar-content";
+import { LayoutConfig } from "./app-layout-config";
 
 interface UnifiedLayoutProps {
   children: React.ReactNode;
@@ -32,18 +32,23 @@ export const UnifiedLayout: React.FC<UnifiedLayoutProps> = ({
     setSidebarCollapsed(collapsed);
   }, []);
 
-  // 在桌面端，如果侧边栏关闭，则自动设置为折叠模式
-  const effectiveCollapsed = isDesktop ? (sidebarOpen ? sidebarCollapsed : true) : false;
-
+  // On desktop, if the sidebar is closed, then automatically set to collapsed mode
+  let effectiveCollapsed: boolean;
+  if (isDesktop) {
+    effectiveCollapsed = sidebarOpen ? sidebarCollapsed : true;
+  } else {
+    effectiveCollapsed = false;
+  }
+  
   return (
     <TooltipProvider>
       <div className={cn("h-screen w-full flex overflow-hidden", config.className, className)}>
-        {/* 侧边栏 */}
+        {/* sidebar */}
         <Sidebar 
           isOpen={sidebarOpen}
           collapsed={effectiveCollapsed}
           onToggle={handleSidebarToggle}
-          onCollapse={handleSidebarCollapse}
+          // onCollapse={handleSidebarCollapse}
           isMobile={isMobile}
         >
           <ConfigurableSidebarContent
@@ -54,12 +59,12 @@ export const UnifiedLayout: React.FC<UnifiedLayoutProps> = ({
           />
         </Sidebar>
         
-        {/* 主内容区域 */}
+        {/* main content area */}
         <MainLayout 
           onMenuToggle={handleSidebarToggle}
           showMenuButton={isMobile}
           sidebarOpen={sidebarOpen}
-          theme={config.theme}
+          headerConfig={config.headerConfig}
         >
           {children}
         </MainLayout>

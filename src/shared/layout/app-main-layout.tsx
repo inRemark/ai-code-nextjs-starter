@@ -3,13 +3,15 @@
 import React from "react";
 import { cn } from "@shared/utils";
 import { TopHeader } from "./top-header";
+import { HeaderConfig } from "./app-layout-config";
 
 interface MainLayoutProps {
   children: React.ReactNode;
   onMenuToggle: () => void;
   showMenuButton: boolean;
   sidebarOpen: boolean;
-  theme?: 'console' | 'admin';
+  // theme?: 'console' | 'admin';
+  headerConfig?: HeaderConfig;
   className?: string;
 }
 
@@ -18,7 +20,8 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   onMenuToggle,
   showMenuButton,
   sidebarOpen,
-  theme = 'console',
+  // theme = 'console',
+  headerConfig,
   className
 }) => {
   return (
@@ -27,20 +30,16 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
       "bg-background",
       className
     )}>
-      {/* 顶部标题栏 */}
+      
       <TopHeader 
         onMenuToggle={onMenuToggle}
         showMenuButton={showMenuButton}
         sidebarOpen={sidebarOpen}
-        theme={theme}
+        headerConfig={headerConfig}
       />
       
-      {/* 页面内容容器 */}
       <div className={cn(
-        "flex-1 min-h-0 overflow-y-auto",
-        theme === 'admin' 
-          ? "p-6" 
-          : "p-4 md:p-6"
+        "flex-1 min-h-0 overflow-y-auto"
       )}>
         {children}
       </div>

@@ -4,8 +4,9 @@ import React from "react";
 import Link from "next/link";
 import { cn } from "@shared/utils";
 import { Button } from "@shared/ui/button";
-import { Menu, Settings, User, HelpCircle, LogOut } from "lucide-react";
+import { Menu, Settings, User, HelpCircle, LogOut, Bell } from "lucide-react";
 import { Breadcrumb } from "./breadcrumb";
+import { HeaderConfig } from "./app-layout-config";
 import { ThemeToggle } from "@shared/ui/theme-toggle";
 import { useAuth } from "@features/auth/components/unified-auth-provider";
 import { logger } from '@logger';
@@ -21,22 +22,26 @@ interface TopHeaderProps {
   onMenuToggle: () => void;
   showMenuButton: boolean;
   sidebarOpen: boolean;
-  theme?: 'console' | 'admin';
+  headerConfig?: HeaderConfig;
   className?: string;
 }
 
 export const TopHeader: React.FC<TopHeaderProps> = ({
   onMenuToggle,
   showMenuButton,
+    headerConfig,
   className
 }) => {
   const { logout } = useAuth();
+  const notificationsPath = headerConfig?.notificationsPath || '/console/notifications';
+  const profilePath = headerConfig?.profilePath || '/console/profile';
+  const settingsPath = headerConfig?.settingsPath || '/console/settings';
 
   const handleLogout = async () => {
     try {
       await logout();
     } catch (error) {
-      logger.error('退出登录失败:', error);
+      logger.error('Logout failed:', error);
     }
   };
   return (
@@ -45,7 +50,7 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
       "border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80",
       className
     )}>
-      {/* 菜单按钮（移动端） */}
+      {/* menu button (mobile) */}
       {showMenuButton && (
         <Button
           variant="ghost"
@@ -57,17 +62,28 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
         </Button>
       )}
 
-      {/* 面包屑导航 */}
+      {/* Breadcrumb */}
       <div className="flex-1 min-w-0">
         <Breadcrumb />
       </div>
 
-      {/* 右侧操作区域 */}
+      {/* Action area */}
       <div className="flex items-center gap-2 shrink-0">
-        {/* 主题切换按钮 */}
         <ThemeToggle />
 
-        {/* 设置下拉菜单 */}
+        {/* Notification button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="w-8 h-8 text-muted-foreground hover:text-foreground relative"
+          asChild
+        >
+          <Link href={notificationsPath}>
+            <Bell className="w-4 h-4" />
+            <span className="absolute top-1 right-1 w-2 h-2 bg-destructive rounded-full"></span>
+          </Link>
+        </Button>
+    
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -81,12 +97,12 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuItem>
               <User className="mr-2 h-4 w-4" />
-              <Link href="/profile">个人资料</Link>
+              <Link href={profilePath}>个人资料</Link>
             </DropdownMenuItem>
             
             <DropdownMenuItem>
               <Settings className="mr-2 h-4 w-4" />
-              <Link href="/profile/settings">设置</Link>
+              <Link href={settingsPath}>设置</Link>
             </DropdownMenuItem>
             
             <DropdownMenuItem>

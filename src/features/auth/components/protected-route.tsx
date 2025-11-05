@@ -36,7 +36,7 @@ export default function ProtectedRoute({ children, requireAdmin = false }: Prote
 
   // 如果用户已认证（且满足管理员要求，如果有的话）
   if (user && (!requireAdmin || user.role === 'ADMIN')) {
-    return <>{children}</>;
+    return children;
   }
 
   return null;

@@ -1,7 +1,7 @@
 "use client";
 
 import { AdminLayout } from "@shared/layout/admin-layout";
-import { EnhancedPageContainer } from "@shared/layout/enhanced-page-container";
+import { EnhancedPageContainer } from "@/shared/layout/app-page-container";
 import { Button } from "@shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/card";
 import { Badge } from "@shared/ui/badge";

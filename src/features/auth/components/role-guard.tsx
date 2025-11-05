@@ -40,5 +40,5 @@ export default function RoleGuard({
     return null;
   }
 
-  return <>{children}</>;
+  return children;
 }

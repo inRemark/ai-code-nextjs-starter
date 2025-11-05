@@ -23,8 +23,8 @@ export default function PermissionGuard({
   }
 
   if (!hasPerm) {
-    return <>{fallback}</>;
+    return fallback;
   }
 
-  return <>{children}</>;
+  return children;
 }

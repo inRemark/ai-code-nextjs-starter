@@ -6,21 +6,21 @@ import { Search, Plus, Filter, Grid, List } from "lucide-react";
 import { useBreakpointContext } from "@shared/theme/breakpoint-provider";
 
 export interface PageContainerProps {
-  // 页面标题
+  // Page title
   title: string;
   
-  // 页面描述
+  // Page description
   description?: string;
   
-  // 搜索相关
+  // Search related
   searchPlaceholder?: string;
   searchValue?: string;
   onSearchChange?: (value: string) => void;
   
-  // 操作按钮
+  // Action buttons
   actions?: React.ReactNode;
   
-  // 主要操作按钮
+  // Primary action button
   primaryAction?: {
     label: string;
     icon?: React.ReactNode;
@@ -28,36 +28,36 @@ export interface PageContainerProps {
     disabled?: boolean;
   };
   
-  // 筛选器
+  // Filters
   filters?: React.ReactNode;
   
-  // 视图切换
+  // View mode
   viewMode?: "grid" | "list";
   onViewModeChange?: (mode: "grid" | "list") => void;
   
-  // 侧边栏
+  // Sidebar
   sidebar?: React.ReactNode;
   
-  // 主内容
+  // Main content
   children: React.ReactNode;
   
-  // 样式
+  // Styles
   className?: string;
   
-  // 是否显示搜索栏
+  // Whether to show the search bar
   showSearch?: boolean;
   
-  // 是否显示筛选器
+  // Whether to show the filters
   showFilters?: boolean;
   
-  // 是否显示视图切换
+  // Whether to show the view toggle
   showViewToggle?: boolean;
 }
 
 export const PageContainer: React.FC<PageContainerProps> = ({
   title,
   description,
-  searchPlaceholder = "搜索...",
+  searchPlaceholder = "Search...",
   searchValue = "",
   onSearchChange,
   actions,
@@ -76,10 +76,10 @@ export const PageContainer: React.FC<PageContainerProps> = ({
 
   return (
     <div className={cn("h-full flex flex-col flex-grow-1", className)}>
-      {/* 页面头部 */}
+      {/* Page head */}
       <div className="flex-none border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="p-4 lg:p-6">
-          {/* 标题区域 */}
+          {/* Title area */}
           <div className="flex items-start justify-between gap-4 mb-4">
             <div className="flex-1 min-w-0">
               <h1 className="text-2xl lg:text-3xl font-bold tracking-tight">{title}</h1>
@@ -90,7 +90,7 @@ export const PageContainer: React.FC<PageContainerProps> = ({
               )}
             </div>
             
-            {/* 操作按钮区域 */}
+            {/* Action button area */}
             <div className="flex items-center gap-2 flex-shrink-0">
               {actions}
               {primaryAction && (
@@ -106,9 +106,9 @@ export const PageContainer: React.FC<PageContainerProps> = ({
             </div>
           </div>
 
-          {/* 搜索和筛选区域 */}
+          {/* Search and filter area */}
           <div className="flex items-center gap-3">
-            {/* 搜索框 */}
+            {/* Search bar */}
             {showSearch && (
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -121,15 +121,15 @@ export const PageContainer: React.FC<PageContainerProps> = ({
               </div>
             )}
 
-            {/* 筛选器 */}
+            {/* Filter button */}
             {showFilters && (
               <Button variant="outline" size="sm" className="gap-2">
                 <Filter className="w-4 h-4" />
-                {!isMobile && "筛选"}
+                {!isMobile && "Filters"}
               </Button>
             )}
 
-            {/* 视图切换 */}
+            {/* View toggle */}
             {showViewToggle && onViewModeChange && (
               <div className="flex items-center border rounded-md">
                 <Button
@@ -152,7 +152,7 @@ export const PageContainer: React.FC<PageContainerProps> = ({
             )}
           </div>
 
-          {/* 筛选器内容 */}
+          {/* Filters content */}
           {filters && (
             <div className="mt-4 pt-4 border-t">
               {filters}
@@ -161,16 +161,16 @@ export const PageContainer: React.FC<PageContainerProps> = ({
         </div>
       </div>
 
-      {/* 页面主体 */}
+      {/* Page body */}
       <div className="flex-1 min-h-0 flex w-full">
-        {/* 侧边栏 */}
+        {/* Sidebar */}
         {sidebar && (
           <div className="w-80 flex-none border-r bg-muted/20">
             {sidebar}
           </div>
         )}
         
-        {/* 主内容区域 */}
+        {/* Main content area */}
         <div className="flex-1 min-w-0 w-full overflow-auto">
           {children}
         </div>
