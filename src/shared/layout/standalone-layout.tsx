@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { SimpleHeader } from "./simple-header";
-import { SimpleFooter } from "./simple-footer";
+import { SimpleHeader } from "./standalone-header";
+import { SimpleFooter } from "./standalone-footer";
 
 interface StandaloneLayoutProps {
   title?: string;

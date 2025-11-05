@@ -14,33 +14,31 @@ import { Avatar, AvatarImage, AvatarFallback } from "@shared/ui/avatar";
 import { 
   User, 
   Settings, 
-  HelpCircle, 
-  Bell, 
+  HelpCircle,
   LogOut,
   ChevronDown
 } from "lucide-react";
 
-// 模拟用户数据，实际应从认证状态获取
 const mockUser = {
-  name: "张三",
-  email: "zhangsan@example.com",
+  name: "userName",
+  email: "userName@example.com",
   avatar: "",
-  initials: "张三"
+  initials: "userName"
 };
 
 const userMenuItems = [
   {
-    label: "个人资料",
+    label: "Profile",
     href: "/profile",
     icon: User
   },
   {
-    label: "个人设置", 
+    label: "Settings", 
     href: "/profile/settings",
     icon: Settings
   },
   {
-    label: "帮助",
+    label: "Help",
     href: "/help",
     icon: HelpCircle
   }
@@ -48,7 +46,6 @@ const userMenuItems = [
 
 export const UserMenuDropdown: React.FC = () => {
   const handleLogout = () => {
-    // 实际应调用登出逻辑
     logger.info("Logout");
   };
 
@@ -99,7 +96,7 @@ export const UserMenuDropdown: React.FC = () => {
           className="text-red-600 focus:text-red-600"
         >
           <LogOut className="mr-2 h-4 w-4" />
-          退出登录
+          Log Out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

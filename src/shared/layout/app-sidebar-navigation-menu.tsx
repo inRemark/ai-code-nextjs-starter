@@ -9,14 +9,12 @@ import { MenuConfig } from "./console-menu-config";
 interface NavigationMenuProps {
   collapsed: boolean;
   menuConfig: MenuConfig;
-  theme?: 'console' | 'admin';
   className?: string;
 }
 
 export const NavigationMenu: React.FC<NavigationMenuProps> = ({
   collapsed,
   menuConfig,
-  theme = 'console',
   className
 }) => {
   const pathname = usePathname();
@@ -34,7 +32,6 @@ export const NavigationMenu: React.FC<NavigationMenuProps> = ({
           collapsed={collapsed}
           currentPath={pathname}
           showSeparator={groupIndex < menuConfig.groups.length - 1}
-          theme={theme}
         />
       ))}
     </nav>

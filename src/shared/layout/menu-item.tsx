@@ -15,7 +15,6 @@ interface MenuItemProps {
   item: MenuItemType;
   collapsed: boolean;
   isActive: boolean;
-  theme?: 'console' | 'admin';
   className?: string;
 }
 
@@ -23,7 +22,6 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   item,
   collapsed,
   isActive,
-  theme = 'console',
   className
 }) => {
   const Icon = item.icon;
@@ -43,7 +41,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
         className
       )}
     >
-      {/* 图标 */}
+      {/* Icon */}
       <Icon className={cn(
         "h-4 w-4 flex-shrink-0",
         isActive 
@@ -51,14 +49,14 @@ export const MenuItem: React.FC<MenuItemProps> = ({
           : "text-muted-foreground group-hover:text-accent-foreground"
       )} />
       
-      {/* 标签和徽章 */}
+      {/* Label and Badge */}
       {!collapsed && (
         <>
           <span className="flex-1 font-medium">
             {item.label}
           </span>
           
-          {/* 徽章 */}
+          {/* Badge */}
           {item.badge && (
             <Badge 
               variant={isActive ? "secondary" : "default"} 
@@ -75,7 +73,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
     </Link>
   );
 
-  // 在折叠模式下使用Tooltip
+  // Tooltip
   if (collapsed) {
     return (
       <Tooltip>

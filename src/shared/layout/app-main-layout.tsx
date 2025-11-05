@@ -2,7 +2,7 @@
 
 import React from "react";
 import { cn } from "@shared/utils";
-import { TopHeader } from "./top-header";
+import { TopHeader } from "./app-header";
 import { HeaderConfig } from "./app-layout-config";
 
 interface MainLayoutProps {

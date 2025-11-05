@@ -3,7 +3,6 @@
 import React from "react";
 import { cn } from "@shared/utils";
 import { Button } from "@shared/ui/button";
-import { ThemeToggle } from "@shared/ui/theme-toggle";
 import { 
   PanelLeftClose,
   PanelLeftOpen
@@ -11,37 +10,23 @@ import {
 
 interface UserSectionProps {
   collapsed: boolean;
-  theme?: 'console' | 'admin';
   className?: string;
-  showThemeToggle?: boolean;
   showCollapseButton?: boolean;
   onCollapse?: (collapsed: boolean) => void;
 }
 
 export const UserSection: React.FC<UserSectionProps> = ({
   collapsed,
-  theme = 'console',
   className,
-  showThemeToggle = false,
   showCollapseButton = false,
   onCollapse
 }) => {
 
-
-  // 主题切换和折叠按钮
+  // Sidebar user actions
   const controlButtons = (
     <div className="space-y-3">
-      {/* 主题切换按钮
-      {showThemeToggle && (
-        <div className="flex flex-col items-center gap-2">
-          {!collapsed && (
-            <span className="text-sm font-medium text-muted-foreground">主题</span>
-          )}
-          <ThemeToggle />
-        </div>
-      )} */}
       
-      {/* 折叠按钮 */}
+      {/* Collapse Button */}
       {showCollapseButton && onCollapse && (
         <div className="flex flex-col items-center gap-2">
           <Button
@@ -65,7 +50,6 @@ export const UserSection: React.FC<UserSectionProps> = ({
     </div>
   );
 
-  // 只显示控制按钮
   return (
     <div className={cn(
       "space-y-3",

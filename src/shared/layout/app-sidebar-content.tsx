@@ -2,8 +2,8 @@
 
 import React from "react";
 import { cn } from "@shared/utils";
-import { NavigationMenu } from "./navigation-menu";
-import { UserSection } from "./user-section";
+import { NavigationMenu } from "./app-sidebar-navigation-menu";
+import { UserSection } from "./app-sidebar-user-section";
 import { LayoutConfig } from "./app-layout-config";
 
 interface ConfigurableSidebarContentProps {
@@ -72,7 +72,6 @@ export const ConfigurableSidebarContent: React.FC<ConfigurableSidebarContentProp
       )}>
         <UserSection 
           collapsed={collapsed && !isMobile} 
-          showThemeToggle={true}
           showCollapseButton={!isMobile}
           onCollapse={onCollapse}
         />

@@ -2,14 +2,14 @@
 
 import React from "react";
 import Link from "next/link";
-import { Mail, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 const quickLinks = [
-  { label: "首页", href: "/" },
-  { label: "定价", href: "/pricing" },
-  { label: "关于", href: "/about" },
-  { label: "帮助", href: "/help" },
-  { label: "博客", href: "/blog" }
+  { label: "Home", href: "/" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "About", href: "/about" },
+  { label: "Help", href: "/help" },
+  { label: "Blog", href: "/blog" }
 ];
 
 export const SimpleFooter: React.FC = () => {
@@ -38,7 +38,7 @@ export const SimpleFooter: React.FC = () => {
 
           {/* Copyright */}
           <p className="text-sm text-gray-500">
-            © 2024 AICoder. 保留所有权利。
+            © 2024 AICoder. All rights reserved.
           </p>
         </div>
       </div>
