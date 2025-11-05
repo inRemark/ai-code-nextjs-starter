@@ -4,7 +4,7 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Card, CardContent } from '@shared/ui/card';
 import { PortalLayout } from '@shared/layout/portal-layout';
-import { PageContent } from '@shared/layout/page-content';
+import { PageContent } from '@/shared/layout/portal-page-content';
 import remarkGfm from 'remark-gfm';
 import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github.css';

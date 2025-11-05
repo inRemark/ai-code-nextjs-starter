@@ -1,7 +1,7 @@
 export { ConsoleLayout } from "./console-layout";
 export { AdminLayout } from "./admin-layout";
 export { PortalLayout } from "./portal-layout";
-export { PageContent } from "./page-content";
+export { PageContent } from "./portal-page-content";
 export { StandaloneLayout } from "./standalone-layout";
 export { SimpleHeader } from "./standalone-header";
 export { SimpleFooter } from "./standalone-footer";

@@ -5,7 +5,7 @@ import { Button } from "@shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/card";
 import { Badge } from "@shared/ui/badge";
 import { PortalLayout } from "@shared/layout/portal-layout";
-import { PageContent } from "@shared/layout/page-content";
+import { PageContent } from "@/shared/layout/portal-page-content";
 import { 
   Search, 
   Users, 

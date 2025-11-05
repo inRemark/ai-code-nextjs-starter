@@ -3,7 +3,7 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { PortalLayout } from '@shared/layout/portal-layout';
-import { PageContent } from '@shared/layout/page-content';
+import { PageContent } from '@/shared/layout/portal-page-content';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@shared/ui/card';
 import { Button } from '@shared/ui/button';
 import { Badge } from '@shared/ui/badge';

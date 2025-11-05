@@ -10,7 +10,7 @@ import { Badge } from '@shared/ui/badge'
 import { Card, CardContent, CardHeader } from '@shared/ui/card'
 // import { StandaloneLayout } from '@/common/components/layout/standalone-layout'
 import { PortalLayout } from '@shared/layout/portal-layout'
-import { PageContent } from '@shared/layout/page-content'
+import { PageContent } from '@/shared/layout/portal-page-content'
 
 interface BlogPost {
   id: string
