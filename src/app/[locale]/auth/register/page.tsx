@@ -4,12 +4,12 @@ import RegisterForm from '@features/auth/components/register-form';
 import { AuthLayout } from '@shared/layout/auth-layout';
 
 function RegisterFormWrapper() {
-  const t = useTranslations('auth');
+  const t = useTranslations('auth.register');
   
   return (
     <AuthLayout 
-      title={t('createAccount')} 
-      subtitle={t('createAccountSubtitle')}
+      title={t('title')} 
+      subtitle={t('subtitle')}
     >
       <RegisterForm />
     </AuthLayout>

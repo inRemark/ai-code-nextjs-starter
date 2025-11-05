@@ -1,14 +1,14 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import LoginForm from '@features/auth/components/login-form';
 import { AuthLayout } from '@shared/layout/auth-layout';
 
-export default function LoginPage() {
-  const t = useTranslations('auth');
+export default async function LoginPage() {
+  const t = await getTranslations('auth.login');
   
   return (
     <AuthLayout 
-      title={t('welcomeBack')} 
-      subtitle={t('welcomeSubtitle')}
+      title={t('title')} 
+      subtitle={t('subtitle')}
     >
       <LoginForm />
     </AuthLayout>
