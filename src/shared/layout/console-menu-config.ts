@@ -1,13 +1,12 @@
 import { 
   Activity,
-  User,
-  Bell,
   Home,
   Gift,
   Users,
   FileText,
   Inbox,
-  LucideIcon
+  LucideIcon,
+  Settings
 } from "lucide-react";
 
 export interface MenuItem {
@@ -38,7 +37,7 @@ export const consoleMenuConfig: MenuConfig = {
       items: [
         {
           id: "dashboard-overview",
-          label: "控制台概览",
+          label: "仪表盘",
           icon: Home,
           href: "/console",
           description: "个人数据概览"
@@ -56,20 +55,6 @@ export const consoleMenuConfig: MenuConfig = {
           href: "/console/articles",
           description: "查看和管理文章"
         },
-        {
-          id: "notifications",
-          label: "我的通知",
-          icon: Inbox,
-          href: "/console/notifications",
-          description: "查看系统通知"
-        },
-        {
-          id: "activity",
-          label: "活动记录",
-          icon: Activity,
-          href: "/console/activity",
-          description: "查看活动历史"
-        }
       ]
     },
     {
@@ -80,37 +65,31 @@ export const consoleMenuConfig: MenuConfig = {
           id: "referral-center",
           label: "推荐中心",
           icon: Users,
-          href: "/console/referral",
+          href: "/console",
           description: "邀请好友获得奖励"
         },
         {
           id: "points",
           label: "我的积分",
           icon: Gift,
-          href: "/console/points",
+          href: "/console",
           description: "积分余额和交易记录"
         }
       ]
     },
     {
-      id: "system",
-      title: "个人设置",
+      id: "systems",
+      title: "系统设置",
       items: [
         {
-          id: "profile",
-          label: "个人资料",
-          icon: User,
-          href: "/console/profile",
-          description: "管理个人资料"
+          id: "system-settings",
+          label: "系统设置",
+          icon: Settings,
+          href: "/console",
+          description: "系统相关设置"
         },
-        {
-          id: "notifications",
-          label: "通知设置",
-          icon: Bell,
-          href: "/console/settings",
-          description: "管理通知偏好"
-        }
       ]
     }
+
   ]
 };
