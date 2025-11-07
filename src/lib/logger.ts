@@ -11,7 +11,7 @@ interface LogOptions {
 }
 
 class Logger {
-  private isDevelopment = process.env.NODE_ENV === 'development';
+  private readonly isDevelopment = process.env.NODE_ENV === 'development';
   
   /**
    * 格式化日志消息
@@ -34,7 +34,7 @@ class Logger {
   /**
    * 信息日志
    */
-  info(message: string, options?: LogOptions) {
+  info(message: string, data?: unknown, options?: LogOptions) {
     const formatted = this.formatMessage('info', message, {
       emoji: options?.emoji || 'ℹ️',
       ...options,
@@ -42,13 +42,16 @@ class Logger {
     
     if (this.isDevelopment) {
       console.warn(formatted); // 使用 warn 以符合 ESLint 规则
+      if (data !== undefined) {
+        console.warn(data);
+      }
     }
   }
 
   /**
    * 成功日志
    */
-  success(message: string, options?: LogOptions) {
+  success(message: string, data?: unknown, options?: LogOptions) {
     const formatted = this.formatMessage('success', message, {
       emoji: options?.emoji || '✅',
       ...options,
@@ -56,19 +59,25 @@ class Logger {
     
     if (this.isDevelopment) {
       console.warn(formatted);
+      if (data !== undefined) {
+        console.warn(data);
+      }
     }
   }
 
   /**
    * 警告日志
    */
-  warn(message: string, options?: LogOptions) {
+  warn(message: string, data?: unknown, options?: LogOptions) {
     const formatted = this.formatMessage('warn', message, {
       emoji: options?.emoji || '⚠️',
       ...options,
     });
     
     console.warn(formatted);
+    if (data !== undefined) {
+      console.warn(data);
+    }
   }
 
   /**

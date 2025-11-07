@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Progress } from "@shared/ui/progress";
 import { Check, X, AlertCircle } from "lucide-react";
 
 interface PasswordStrengthProps {
