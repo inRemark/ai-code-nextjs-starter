@@ -23,5 +23,12 @@
     "unauthorized": "Unauthorized",
     "serverError": "Server Error",
     "networkError": "Network Error"
+  },
+  "seo": {
+    "about": {
+      "title": "About Us - AiCoder AI Programming Assistant",
+      "description": "Learn about AiCoder's mission, vision, and team. We are committed to providing developers with the smartest AI programming assistant to improve code quality and development efficiency.",
+      "keywords": "About Us, AiCoder, AI Programming Assistant, Development Team, Company Introduction, Technology Vision"
+    }
   }
 }

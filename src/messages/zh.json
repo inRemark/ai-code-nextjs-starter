@@ -23,5 +23,12 @@
     "unauthorized": "无权限访问",
     "serverError": "服务器错误",
     "networkError": "网络错误"
+  },
+  "seo": {
+    "about": {
+      "title": "关于我们 - AiCoder AI 编程助手",
+      "description": "了解 AiCoder 的使命、愿景和团队。我们致力于为开发者提供最智能的 AI 编程助手，提升代码质量和开发效率。",
+      "keywords": "关于我们,AiCoder,AI编程助手,开发团队,公司介绍,技术愿景"
+    }
   }
 }
