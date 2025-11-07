@@ -1,10 +1,8 @@
-import { 
-  Activity,
+import {
   Home,
   Gift,
   Users,
   FileText,
-  Inbox,
   LucideIcon,
   Settings
 } from "lucide-react";
