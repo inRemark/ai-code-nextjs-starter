@@ -46,103 +46,129 @@ const protectedRoutes = [
   '/reports',
 ];
 
+// 提取辅助函数以降低认知复杂度
+
+function extractLocale(pathname: string): string {
+  return pathname.split('/')[1] || 'zh';
+}
+
+function getPathWithoutLocale(pathname: string): string {
+  return pathname.replace(/^\/(zh|en|ja)/, '') || '/';
+}
+
+function isPublicPath(pathWithoutLocale: string): boolean {
+  return publicRoutes.some(route => 
+    pathWithoutLocale === route || pathWithoutLocale.startsWith(route)
+  );
+}
+
+function isProtectedPath(pathWithoutLocale: string): boolean {
+  const isUserProtected = userProtectedRoutes.some(route => 
+    pathWithoutLocale.startsWith(route)
+  );
+  const isAdminProtected = adminProtectedRoutes.some(route => 
+    pathWithoutLocale.startsWith(route)
+  );
+  const isOtherProtected = protectedRoutes.some(route => 
+    pathWithoutLocale.startsWith(route)
+  );
+  
+  return isUserProtected || isAdminProtected || isOtherProtected;
+}
+
+function createRedirect(locale: string, path: string, requestUrl: string): NextResponse {
+  return NextResponse.redirect(new URL(`/${locale}${path}`, requestUrl));
+}
+
+function handleUnauthenticated(
+  pathWithoutLocale: string,
+  locale: string,
+  requestUrl: string,
+  intlResponse: NextResponse
+): NextResponse {
+  if (pathWithoutLocale === '/login') {
+    return intlResponse;
+  }
+  return createRedirect(locale, '/login', requestUrl);
+}
+
+function checkAuthorization(
+  pathWithoutLocale: string,
+  userRole: string,
+  locale: string,
+  requestUrl: string
+): NextResponse | null {
+  const isAdminRoute = adminProtectedRoutes.some(route => 
+    pathWithoutLocale.startsWith(route)
+  );
+  
+  if (isAdminRoute && userRole !== 'ADMIN') {
+    return createRedirect(locale, '/unauthorized', requestUrl);
+  }
+  
+  const isConsoleRoute = pathWithoutLocale.startsWith('/console');
+  const hasConsoleAccess = userRole === 'ADMIN' || userRole === 'EDITOR';
+  
+  if (isConsoleRoute && !hasConsoleAccess) {
+    return createRedirect(locale, '/unauthorized', requestUrl);
+  }
+  
+  return null;
+}
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  // 跳过 API 路由
+  
   if (pathname.startsWith('/api')) {
     return NextResponse.next();
   }
 
-    // 应用国际化中间件
   const intlResponse = intlMiddleware(request);
+  const pathWithoutLocale = getPathWithoutLocale(pathname);
 
-  // 提取语言前缀后的路径
-  const pathWithoutLocale = pathname.replace(/^\/(zh|en|ja)/, '') || '/';
-
-  // 检查是否为公共路由
-  const isPublicRoute = publicRoutes.some(route => 
-    // pathname.startsWith(route)
-    pathWithoutLocale === route || pathWithoutLocale.startsWith(route)
-  );
-
-  // 如果是公共路由，直接通过, 返回国际化响应
-  if (isPublicRoute) {
+  if (isPublicPath(pathWithoutLocale)) {
     return intlResponse;
   }
 
-  // 检查是否为受保护路由
-  const isUserProtectedRoute = userProtectedRoutes.some(route => 
-    pathWithoutLocale.startsWith(route)
-  );
-  const isAdminProtectedRoute = adminProtectedRoutes.some(route => 
-    pathWithoutLocale.startsWith(route)
-  );
-  const isOtherProtectedRoute = protectedRoutes.some(route => 
-    pathWithoutLocale.startsWith(route)
-  );
-
-  // 如果不是受保护的路由，直接通过，返回国际化响应
-  if (!isUserProtectedRoute && !isAdminProtectedRoute && !isOtherProtectedRoute) {
+  if (!isProtectedPath(pathWithoutLocale)) {
     return intlResponse;
   }
 
   try {
-    // 使用简化的认证检查避免Edge Runtime问题
     const token = await getToken({ 
       req: request,
       secret: process.env.NEXTAUTH_SECRET
     });
     
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('Middleware token check:', {
-        pathname,
-        hasToken: !!token,
-        userId: token?.sub,
-        userRole: token?.role
-      });
-    }
+    logger.warn('Middleware token check:', {
+      pathname,
+      hasToken: !!token,
+      userId: token?.sub,
+      userRole: token?.role
+    });
+    
+    const locale = extractLocale(pathname);
     
     if (!token?.sub) {
-      if (process.env.NODE_ENV === 'development') {
-        logger.warn('No valid token found, redirecting to login');
-      }
-      // 获取当前语言
-      const locale = pathname.split('/')[1] || 'zh';
-
-      // 检查是否已经在登录页面，避免重定向循环
-      if (pathWithoutLocale === '/login') {
-        return intlResponse;
-      }
-      return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
+      logger.warn('No valid token found, redirecting to login');
+      return handleUnauthenticated(pathWithoutLocale, locale, request.url, intlResponse);
     }
     
-    // 如果用户已认证但试图访问登录页面，则重定向到profile
     if (pathWithoutLocale === '/login') {
-      const locale = pathname.split('/')[1] || 'zh';
-      return NextResponse.redirect(new URL(`/${locale}/profile`, request.url));
+      return createRedirect(locale, '/profile', request.url);
     }
     
-    const userRole = token.role;
-    if (isAdminProtectedRoute && userRole !== 'ADMIN') {
-      const locale = pathname.split('/')[1] || 'zh';
-      return NextResponse.redirect(new URL(`/${locale}/unauthorized`, request.url));
+    const userRole = (token.role as string) || '';
+    const authResponse = checkAuthorization(pathWithoutLocale, userRole, locale, request.url);
+    if (authResponse) {
+      return authResponse;
     }
-    if (pathWithoutLocale.startsWith('/console') && userRole !== 'ADMIN' && userRole !== 'EDITOR') {
-      const locale = pathname.split('/')[1] || 'zh';
-      return NextResponse.redirect(new URL(`/${locale}/unauthorized`, request.url));
-    }
+    
     return intlResponse;
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      logger.error('Middleware auth error:', err);
-    }
-    // 获取当前语言
-    const locale = pathname.split('/')[1] || 'zh';
-    // 检查是否已经在登录页面，避免重定向循环
-    if (pathWithoutLocale === '/login') {
-      return intlResponse;
-    }
-    return NextResponse.redirect(new URL(`/${locale}/login`, request.url));
+    logger.warn('Middleware auth error:', err);
+    const locale = extractLocale(pathname);
+    return handleUnauthenticated(pathWithoutLocale, locale, request.url, intlResponse);
   }
 }
 
