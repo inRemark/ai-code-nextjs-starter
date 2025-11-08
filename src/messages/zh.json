@@ -25,10 +25,20 @@
     "networkError": "网络错误"
   },
   "seo": {
+    "home": {
+      "title": "AiCoder - 专业的 AI 编程助手平台",
+      "description": "AiCoder 为开发者提供智能代码生成、代码审查、自动化测试等全方位 AI 编程辅助服务。提升开发效率，降低成本，快速构建高质量应用。",
+      "keywords": "AI编程助手,代码生成,智能开发,自动化测试,开发效率,Next.js模板,全栈开发"
+    },
     "about": {
       "title": "关于我们 - AiCoder AI 编程助手",
       "description": "了解 AiCoder 的使命、愿景和团队。我们致力于为开发者提供最智能的 AI 编程助手，提升代码质量和开发效率。",
       "keywords": "关于我们,AiCoder,AI编程助手,开发团队,公司介绍,技术愿景"
+    },
+    "pricing": {
+      "title": "定价方案 - AiCoder 灵活的订阅计划",
+      "description": "查看 AiCoder 的定价方案，包括免费版、专业版和企业版。选择最适合您团队的 AI 编程助手订阅计划，提升开发效率。",
+      "keywords": "定价,订阅计划,免费版,专业版,企业版,价格,费用"
     }
   }
 }

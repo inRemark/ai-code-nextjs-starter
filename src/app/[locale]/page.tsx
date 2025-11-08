@@ -1,4 +1,7 @@
-import { getTranslations } from 'next-intl/server';
+import type { Metadata } from 'next';
+import { getTranslations, getMessages } from 'next-intl/server';
+import { generateLocalizedMetadata } from '@/lib/seo';
+import type { Locale } from '@/i18n/config';
 import { Button } from "@shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/card";
 import { Badge } from "@shared/ui/badge";
@@ -20,6 +23,24 @@ import {
   TrendingDown,
 } from "lucide-react";
 import Link from "next/link";
+
+// 生成多语言 SEO metadata
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const messages = await getMessages();
+
+  return generateLocalizedMetadata({
+    locale: locale as Locale,
+    page: 'home',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    messages: messages as any,
+    path: '',
+  });
+}
 
 export default async function FeaturesPage() {
   const t = await getTranslations('home');

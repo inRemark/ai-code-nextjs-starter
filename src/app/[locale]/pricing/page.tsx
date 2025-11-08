@@ -1,4 +1,7 @@
-import { getTranslations } from "next-intl/server";
+import type { Metadata } from 'next';
+import { getTranslations, getMessages } from "next-intl/server";
+import { generateLocalizedMetadata } from '@/lib/seo';
+import type { Locale } from '@/i18n/config';
 import { Button } from "@shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/card";
 import { Badge } from "@shared/ui/badge";
@@ -6,6 +9,24 @@ import { PortalLayout } from "@shared/layout/portal-layout";
 import { PageContent } from "@/shared/layout/portal-page-content";
 import { Check } from "lucide-react";
 import Link from "next/link";
+
+// 生成多语言 SEO metadata
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const messages = await getMessages();
+
+  return generateLocalizedMetadata({
+    locale: locale as Locale,
+    page: 'pricing',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    messages: messages as any,
+    path: '/pricing',
+  });
+}
 
 export default async function PricingPage() {
   const t = await getTranslations("pricing");
