@@ -125,3 +125,57 @@ export function generateSimpleMetadata(
     },
   };
 }
+
+/**
+ * 页面路径配置映射
+ * 用于自动推断页面路径
+ */
+const PAGE_PATHS: Record<string, string> = {
+  home: '',
+  about: '/about',
+  pricing: '/pricing',
+  articles: '/articles',
+  blog: '/blog',
+  help: '/help',
+};
+
+/**
+ * 创建页面 metadata 生成器（工厂函数）
+ * 用于减少重复代码，统一 SEO metadata 生成逻辑
+ * 
+ * @param pageName - 页面名称，需要与翻译文件中的 seo[pageName] 对应
+ * @param customPath - 自定义路径（可选），如果不提供则自动从 PAGE_PATHS 推断
+ * @returns generateMetadata 函数
+ * 
+ * @example
+ * // 使用自动推断路径
+ * export const generateMetadata = createPageMetadataGenerator('articles');
+ * 
+ * @example
+ * // 使用自定义路径
+ * export const generateMetadata = createPageMetadataGenerator('articles', '/articles');
+ */
+export function createPageMetadataGenerator(
+  pageName: string,
+  customPath?: string
+) {
+  const path = customPath ?? PAGE_PATHS[pageName] ?? `/${pageName}`;
+
+  return async function generateMetadata({
+    params,
+  }: {
+    params: Promise<{ locale: string }>;
+  }): Promise<Metadata> {
+    const { locale } = await params;
+    const { getMessages } = await import('next-intl/server');
+    const messages = await getMessages();
+
+    return generateLocalizedMetadata({
+      locale: locale as Locale,
+      page: pageName,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      messages: messages as any,
+      path,
+    });
+  };
+}
