@@ -27,29 +27,8 @@ export const authConfig: NextAuthOptions = {
     maxAge: 7 * 24 * 60 * 60, // 7天
   },
   providers: [
-    // 暂时禁用OAuth提供商以避免初始化错误
-    // // 只在环境变量存在时才启用Google OAuth
-    // ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
-    //   ? [GoogleProvider({
-    //       clientId: process.env.GOOGLE_CLIENT_ID,
-    //       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    //       authorization: {
-    //         params: {
-    //           prompt: "consent",
-    //           access_type: "offline",
-    //           response_type: "code"
-    //         }
-    //       }
-    //     })]
-    //   : []),
-    // // 只在环境变量存在时才启用GitHub OAuth
-    // ...(process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
-    //   ? [GitHubProvider({
-    //       clientId: process.env.GITHUB_CLIENT_ID,
-    //       clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    //     })]
-    //   : []),
-    // 微信登录暂时禁用，自定义Provider配置需要调试
+    // OAuth提供商：需要时在环境变量中配置并取消注释
+    // 参考文档 Phase 6 了解如何启用OAuth
     CredentialsProvider({
       name: 'Credentials',
       credentials: {

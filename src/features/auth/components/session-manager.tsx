@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { authAPI } from '@/lib/api-client';
+import { signOut } from 'next-auth/react';
 
 interface Session {
   id: string;
@@ -19,33 +19,15 @@ export default function SessionManager() {
   const fetchSessions = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        throw new Error('No access token found');
+    
+      const response = await fetch('/api/auth/mobile/sessions');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch sessions');
       }
-
-      // 这里应该调用获取会话的API，暂时用模拟数据
-      // const response = await authAPI.getSessions(token);
       
-      // 模拟数据
-      const mockSessions: Session[] = [
-        {
-          id: '1',
-          userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
-          ipAddress: '192.168.1.1',
-          createdAt: new Date().toISOString(),
-          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-        },
-        {
-          id: '2',
-          userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)',
-          ipAddress: '192.168.1.2',
-          createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-          expiresAt: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toISOString(),
-        },
-      ];
-      
-      setSessions(mockSessions);
+      const data = await response.json();
+      setSessions(data.sessions || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
     } finally {
@@ -55,21 +37,7 @@ export default function SessionManager() {
 
   const logoutAllSessions = async () => {
     try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        throw new Error('No access token found');
-      }
-
-      const response = await authAPI.logoutAll(token);
-      
-      if (response.success) {
-        // 清除本地存储并重定向到登录页面
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        window.location.href = '/auth/login';
-      } else {
-        throw new Error(response.error || 'Failed to logout all sessions');
-      }
+      await signOut({ redirect: true, callbackUrl: '/auth/login' });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
     }

@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { userAPI } from '@/lib/api-client';
 import { UserRole } from '@shared/types/user';
 import { usePermission } from '@features/auth/hooks/auth.hooks';
 
@@ -14,6 +13,11 @@ interface User {
   createdAt: string;
 }
 
+/**
+ * 用户管理组件
+ * 使用NextAuth session，通过API中间件自动处理认证
+ * 不再需要手动传递token
+ */
 export default function UserManagement() {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,18 +31,22 @@ export default function UserManagement() {
     
     try {
       setLoading(true);
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        throw new Error('No access token found');
-      }
-
-      const response = await userAPI.getUsers(token, page, 10);
       
-      if (response.success) {
-        setUsers(response.data.users);
-        setTotalPages(response.data.pagination.pages);
+      // NextAuth自动处理认证，不需要手动传token
+      // API路由使用requireAdmin中间件验证
+      const response = await fetch(`/api/admin/users?page=${page}&limit=10`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch users');
+      }
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        setUsers(data.data.users);
+        setTotalPages(data.data.pagination.pages);
       } else {
-        throw new Error(response.error || 'Failed to fetch users');
+        throw new Error(data.error || 'Failed to fetch users');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
@@ -48,25 +56,36 @@ export default function UserManagement() {
   };
 
   useEffect(() => {
-    fetchUsers();
+    if (hasPerm) {
+      fetchUsers();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page, hasPerm]);
 
   const handleRoleChange = async (userId: string, newRole: UserRole) => {
     try {
-      const token = localStorage.getItem('accessToken');
-      if (!token) {
-        throw new Error('No access token found');
-      }
-
-      const response = await userAPI.updateUserRole(token, userId, newRole);
+      // NextAuth自动处理认证
+      const response = await fetch('/api/admin/users', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, role: newRole }),
+      });
       
-      if (response.success) {
+      if (!response.ok) {
+        throw new Error('Failed to update user role');
+      }
+      
+      const data = await response.json();
+      
+      if (data.success) {
         // 更新本地状态
         setUsers(users.map(user => 
           user.id === userId ? { ...user, role: newRole } : user
         ));
       } else {
-        throw new Error(response.error || 'Failed to update user role');
+        throw new Error(data.error || 'Failed to update user role');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');

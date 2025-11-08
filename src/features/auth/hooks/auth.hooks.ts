@@ -1,79 +1,51 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { MeResponse } from './auth.types';
-import { hasPermission, Permission } from './rbac.service';
+import { useSession } from 'next-auth/react';
+import { MeResponse } from '../types/auth.types';
+import { hasPermission, Permission } from '../services/rbac.service';
 import { logger } from '@logger';
-// 自定义Hook用于获取当前用户信息
+
+/**
+ * 自定义Hook用于获取当前用户信息
+ * 使用NextAuth session替代localStorage
+ */
 export function useCurrentUser() {
-  const [user, setUser] = useState<MeResponse | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: session, status } = useSession();
+  const [loading, setLoading] = useState(status === 'loading');
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch('/api/auth/me', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch user');
-        }
-
-        const data = await response.json();
-        setUser(data.data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unknown error occurred');
-        // 如果认证失败，重定向到登录页
-        if (err instanceof Error && err.message.includes('Failed to fetch user')) {
-          router.push('/login');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (typeof window !== 'undefined' && localStorage.getItem('accessToken')) {
-      fetchUser();
-    } else {
-      setLoading(false);
+    setLoading(status === 'loading');
+    
+    if (status === 'unauthenticated') {
+      setError('User is not authenticated');
+    } else if (status === 'authenticated') {
+      setError(null);
     }
-  }, [router]);
+  }, [status]);
+
+  const user: MeResponse | null = session?.user ? {
+    id: session.user.id,
+    email: session.user.email,
+    name: session.user.name || null,
+    avatar: null, // NextAuth session不包含avatar
+    role: session.user.role,
+    createdAt: new Date(), // Session中没有createdAt，使用当前时间
+  } : null;
 
   return { user, loading, error };
 }
 
-// 自定义Hook用于处理认证状态
+/**
+ * 自定义Hook用于处理认证状态
+ * 使用NextAuth session替代localStorage token检查
+ */
 export function useAuth() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { status } = useSession();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      const token = localStorage.getItem('accessToken');
-      if (token) {
-        try {
-          const response = await fetch('/api/auth/me', {
-            headers: {
-              'Authorization': `Bearer ${token}`,
-            },
-          });
-
-          setIsAuthenticated(response.ok);
-        } catch (error) {
-          setIsAuthenticated(false);
-        }
-      }
-      setLoading(false);
-    };
-
-    checkAuth();
-  }, []);
-
-  return { isAuthenticated, loading };
+  return {
+    isAuthenticated: status === 'authenticated',
+    loading: status === 'loading',
+  };
 }
 
 // 自定义Hook用于检查用户权限

@@ -23,7 +23,6 @@ interface RegisterFormProps {
 
 export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
   const t = useTranslations('auth.register');
-  const tCommon = useTranslations('common');
 
   const validateEmail = (email: string): string | undefined => {
     if (!email) return t('emailRequired');
@@ -136,38 +135,49 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
     setLoading(true);
 
     try {
+      // 调用注册API
       const response = await authAPI.register(formData.email, formData.password, '');
       
       if (response.success) {
-        // 保存令牌到localStorage
-        localStorage.setItem('accessToken', response.data.accessToken);
-        localStorage.setItem('refreshToken', response.data.refreshToken);
+        // 注册成功后，使用NextAuth登录
+        // 不再使用localStorage存储token
+        const { signIn } = await import('next-auth/react');
         
-        // 如果有推荐码，记录推荐转化
-        if (referralCode) {
-          try {
-            await fetch('/api/referral/track', {
-              method: 'PUT',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                referralCodeId: referralCode,
-                stepType: 'REGISTER',
-                userId: response.data.user.id
-              })
-            });
-          } catch (error) {
-            logger.error('Failed to track referral conversion:', error);
+        const signInResult = await signIn('credentials', {
+          email: formData.email,
+          password: formData.password,
+          redirect: false,
+        });
+        
+        if (signInResult?.ok) {
+          // 如果有推荐码，记录推荐转化
+          if (referralCode) {
+            try {
+              await fetch('/api/referral/track', {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  referralCodeId: referralCode,
+                  stepType: 'REGISTER',
+                  userId: response.data.user.id
+                })
+              });
+            } catch (error) {
+              logger.error('Failed to track referral conversion:', error);
+            }
           }
-        }
-        
-        // 调用成功回调或重定向
-        if (onSuccess) {
-          onSuccess();
+          
+          // 调用成功回调或重定向
+          if (onSuccess) {
+            onSuccess();
+          } else {
+            router.push('/profile');
+            router.refresh();
+          }
         } else {
-          router.push('/profile');
-          router.refresh();
+          setServerError(signInResult?.error || '注册后登录失败');
         }
       } else {
         setServerError(response.error || '注册失败，请稍后再试');
