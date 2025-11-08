@@ -3,15 +3,17 @@
 import { usePermission } from '@features/auth/hooks/auth.hooks';
 import { Permission } from '@features/auth/services/rbac.service';
 
+interface PermissionGuardProps {
+  readonly children: React.ReactNode;
+  readonly permission: Permission;
+  readonly fallback?: React.ReactNode;
+}
+
 export default function PermissionGuard({ 
   children, 
   permission,
   fallback = null
-}: { 
-  children: React.ReactNode; 
-  permission: Permission;
-  fallback?: React.ReactNode;
-}) {
+}: PermissionGuardProps) {
   const { hasPerm, loading } = usePermission(permission);
 
   if (loading) {

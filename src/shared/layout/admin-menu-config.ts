@@ -70,11 +70,11 @@ export const adminMenuConfig: MenuConfig = {
       title: "数据管理",
       items: [
         {
-          id: "referral-monitoring",
-          label: "用户推荐",
+          id: "user-management",
+          label: "用户管理",
           icon: Users,
-          href: "/admin/referral",
-          description: "推荐系统数据监控"
+          href: "/admin/users",
+          description: "管理用户账户和角色"
         },
         {
           id: "system-settings",
