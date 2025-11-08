@@ -21,12 +21,13 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': [
         'warn',
-        { allowConstantExport: true },
+        { 
+          allowConstantExport: true,
+          // 允许在 app 目录下导出 generateMetadata 等 Next.js 特殊导出
+          allowExportNames: ['generateMetadata', 'generateStaticParams', 'generateViewport'],
+        },
       ],
-      // 自动检测和移除console语句
       'no-console': ['error', { allow: ['warn', 'error'] }],
-      // 或者使用warn级别，不强制移除
-      // 'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
   },
 )
