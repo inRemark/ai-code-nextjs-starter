@@ -39,3 +39,21 @@ export interface MeResponse {
 export interface UpdateMeRequest {
   name: string;
 }
+
+/**
+ * 统一的认证用户类型
+ * 用于中间件和API路由中的用户信息传递
+ * 适用于Web端（NextAuth）和移动端（Session Token）
+ */
+export interface AuthUser {
+  id: string;
+  email: string;
+  name?: string;
+  role: UserRole;
+}
+
+/**
+ * @deprecated 使用 AuthUser 替代
+ * 为保持向后兼容暂时保留
+ */
+export type AuthenticatedUser = AuthUser;

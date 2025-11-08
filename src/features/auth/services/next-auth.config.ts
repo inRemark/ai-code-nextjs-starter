@@ -1,19 +1,7 @@
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import { UserRole } from '@shared/types/user';
 import { logger } from '@logger';
-// 扩展 NextAuth Session 类型，支持 role 字段
-declare module 'next-auth' {
-  interface Session {
-    user: {
-      // JWT 策略下必须返回完整用户对象
-      id: string;
-      email: string;
-      name: string;
-      role: UserRole;
-    }
-  }
-}
-// NextAuth v4 JWT 策略认证配置
+// NextAuth 类型扩展已移至 @features/auth/types/next-auth.d.ts
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { verifyPassword } from './auth.service';

@@ -2,7 +2,7 @@ import { logger } from '@logger';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/database/prisma';
 import { hashPassword } from '@features/auth/services/auth.service';
-import { RegisterRequest, AuthResponse } from '@features/auth/services/auth.types';
+import { RegisterRequest, AuthResponse } from '@features/auth/types/auth.types';
 import { validateRegisterRequest } from '@/features/auth/validators';
 
 // 用户注册接口 - POST /api/auth/register

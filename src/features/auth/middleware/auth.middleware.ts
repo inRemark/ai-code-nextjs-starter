@@ -4,6 +4,7 @@ import { hasPermission, type Permission } from '@features/auth/services/rbac.ser
 import { Session } from 'next-auth';
 import { UserRole } from '@shared/types/user';
 import { logger } from '@logger';
+import { AuthUser } from '@features/auth/types/auth.types';
 async function getServerSession() {
   try {
     const { authConfig } = await import('../services/next-auth.config');
@@ -32,7 +33,7 @@ function extractUserRole(session: Session | null): UserRole {
  * 从请求中提取已验证用户，优先NextAuth Session，其次移动端Session Token
  * 返回AuthUser和可选的原始session对象
  */
-async function getUserFromRequest(request: NextRequest): Promise<{ user: AuthenticatedUser | null; session?: Session | null }> {
+async function getUserFromRequest(request: NextRequest): Promise<{ user: AuthUser | null; session?: Session | null }> {
   // 1. NextAuth Session (Web)
   const session = await getServerSession();
   if (session?.user?.id) {
@@ -104,7 +105,8 @@ export async function getCurrentSession() {
 
 /**
  * 验证用户是否有指定权限
- * 结合NextAuth session和RBAC系统
+ * 使用统一的getUserFromRequest，结合RBAC系统
+ * 支持双模式验证：NextAuth Session (Web端) + Session Token (Mobile端)
  */
 export async function requirePermission(permission: Permission) {
   return async (
@@ -112,53 +114,36 @@ export async function requirePermission(permission: Permission) {
   ) => {
     return async (request: NextRequest) => {
       try {
-        // 优先使用NextAuth Session（Web端）
-        const session = await getServerSession();
+        // 使用统一的用户获取函数
+        const { user, session } = await getUserFromRequest(request);
 
-        if (session?.user?.id) {
-          const userId = session.user.id;
-          const ok = await hasPermission(userId, permission);
-          if (!ok) {
-            return NextResponse.json(
-              { message: 'Insufficient permissions', error: 'INSUFFICIENT_PERMISSIONS' },
-              { status: 403 }
-            );
-          }
-
-          return await handler(request, session);
+        if (!user) {
+          return NextResponse.json(
+            { message: 'Unauthorized', error: 'NO_SESSION' },
+            { status: 401 }
+          );
         }
 
-        // 回退到Mobile端的Session Token验证
-        const authHeader = request.headers.get('authorization');
-        if (authHeader?.startsWith('Bearer ')) {
-          const sessionToken = authHeader.substring(7);
-          const dbUser = await validateSessionToken(sessionToken);
-
-          if (!dbUser) {
-            return NextResponse.json(
-              { message: 'Unauthorized', error: 'NO_SESSION' },
-              { status: 401 }
-            );
-          }
-
-          const ok = await hasPermission(dbUser.id, permission);
-          if (!ok) {
-            return NextResponse.json(
-              { message: 'Insufficient permissions', error: 'INSUFFICIENT_PERMISSIONS' },
-              { status: 403 }
-            );
-          }
-
-          // 构造与NextAuth session兼容的简易对象传递给handler
-          const pseudoSession = { user: { id: dbUser.id, email: dbUser.email, name: dbUser.name || '', role: dbUser.role } } as unknown as Session;
-          return await handler(request, pseudoSession);
+        // 检查权限
+        const ok = await hasPermission(user.id, permission);
+        if (!ok) {
+          return NextResponse.json(
+            { message: 'Insufficient permissions', error: 'INSUFFICIENT_PERMISSIONS' },
+            { status: 403 }
+          );
         }
 
-        // 都没有认证信息
-        return NextResponse.json(
-          { message: 'Unauthorized', error: 'NO_SESSION' },
-          { status: 401 }
-        );
+        // 如果有NextAuth session，直接传递；否则构造伪session对象
+        const sessionToPass = session || { 
+          user: { 
+            id: user.id, 
+            email: user.email, 
+            name: user.name || '', 
+            role: user.role 
+          } 
+        } as Session;
+
+        return await handler(request, sessionToPass);
       } catch (error) {
         logger.error('Permission middleware error:', error);
         return NextResponse.json(
@@ -176,7 +161,7 @@ export async function requirePermission(permission: Permission) {
  */
 export async function requireRole(roles: string[]) {
   return async (
-    handler: (request: NextRequest, user: AuthenticatedUser) => Promise<NextResponse>
+    handler: (request: NextRequest, user: AuthUser) => Promise<NextResponse>
   ) => {
     return async (request: NextRequest) => {
       try {
@@ -206,7 +191,7 @@ export async function requireRole(roles: string[]) {
  * 支持双模式验证：NextAuth Session (Web端) + Session Token (Mobile端)
  */
 export function requireAdmin<T extends unknown[]>(
-  handler: (request: NextRequest, user: AuthenticatedUser, ...args: T) => Promise<NextResponse>
+  handler: (request: NextRequest, user: AuthUser, ...args: T) => Promise<NextResponse>
 ) {
   return async (request: NextRequest, ...args: T): Promise<NextResponse> => {
     try {
@@ -235,7 +220,7 @@ export function requireAdmin<T extends unknown[]>(
  * 支持双模式验证：NextAuth Session (Web端) + Session Token (Mobile端)
  */
 export function requireAuth<T extends unknown[]>(
-  handler: (user: AuthenticatedUser, request: NextRequest, ...args: T) => Promise<NextResponse>
+  handler: (user: AuthUser, request: NextRequest, ...args: T) => Promise<NextResponse>
 ) {
   return async (request: NextRequest, ...args: T): Promise<NextResponse> => {
     try {
@@ -263,7 +248,7 @@ export function requireAuth<T extends unknown[]>(
  * 获取用户信息 - 兼容现有API
  * 支持双模式验证：NextAuth Session (Web端) + Session Token (Mobile端)
  */
-export async function getAuthUserFromRequest(request: NextRequest): Promise<AuthenticatedUser> {
+export async function getAuthUserFromRequest(request: NextRequest): Promise<AuthUser> {
   // 方式1: NextAuth Session (Web端)
   const session = await getServerSession();
   if (session?.user?.id) {
@@ -296,21 +281,17 @@ export async function getAuthUserFromRequest(request: NextRequest): Promise<Auth
 }
 
 /**
- * 统一的用户信息类型 - 兼容现有API
+ * @deprecated 使用 @features/auth/types/auth.types 中的 AuthUser 替代
+ * 为保持向后兼容暂时保留此类型别名
  */
-export interface AuthenticatedUser {
-  id: string;
-  email: string;
-  name?: string;
-  role: UserRole;
-}
+export type AuthenticatedUser = AuthUser;
 
 /**
  * 扩展的认证请求类型
  */
 export interface AuthenticatedRequest extends NextRequest {
   session: {
-    user: AuthenticatedUser;
+    user: AuthUser;
   };
 }
 

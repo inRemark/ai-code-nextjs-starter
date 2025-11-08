@@ -2,7 +2,7 @@ import { logger } from '@logger';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/database/prisma';
 import { requireAuth } from '@features/auth/middleware/auth.middleware';
-import { MeResponse, UpdateMeRequest } from '@features/auth/services/auth.types';
+import { MeResponse, UpdateMeRequest } from '@features/auth/types/auth.types';
 
 // 获取当前用户信息
 export const GET = requireAuth(async (user) => {
