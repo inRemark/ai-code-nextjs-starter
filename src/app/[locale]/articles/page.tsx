@@ -2,8 +2,12 @@
  * Articles Page - 文章列表页面
  */
 
+import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import Link from 'next/link';
+import { getMessages } from 'next-intl/server';
+import { generateLocalizedMetadata } from '@/lib/seo';
+import type { Locale } from '@/i18n/config';
 import { getArticles } from '@/features/articles/services/article.service';
 import type { Article } from '@/features/articles/types/article.types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -13,6 +17,14 @@ import { PortalLayout } from '@/shared/layout/portal-layout';
 import { formatDistance } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 
+interface ArticlesListProps {
+  searchParams: Promise<{
+    page?: string;
+    search?: string;
+    tag?: string;
+  }>;
+}
+
 interface PageProps {
   searchParams: Promise<{
     page?: string;
@@ -21,7 +33,25 @@ interface PageProps {
   }>;
 }
 
-async function ArticlesList({ searchParams }: PageProps) {
+// 生成多语言 SEO metadata
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const messages = await getMessages();
+
+  return generateLocalizedMetadata({
+    locale: locale as Locale,
+    page: 'articles',
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    messages: messages as any,
+    path: '/articles',
+  });
+}
+
+async function ArticlesList({ searchParams }: ArticlesListProps) {
   const params = await searchParams;
   const page = Number(params.page) || 1;
   const search = params.search;
@@ -168,8 +198,3 @@ export default async function ArticlesPage(props: PageProps) {
     </PortalLayout>
   );
 }
-
-export const metadata = {
-  title: '文章中心',
-  description: '探索技术文章、开发指南和最佳实践',
-};

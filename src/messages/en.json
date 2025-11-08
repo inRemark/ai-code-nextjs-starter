@@ -39,6 +39,11 @@
       "title": "Pricing Plans - Flexible AiCoder Subscription Options",
       "description": "Explore AiCoder's pricing plans including Free, Professional, and Enterprise editions. Choose the best AI programming assistant subscription plan for your team to enhance development efficiency.",
       "keywords": "Pricing, Subscription Plans, Free Edition, Professional Edition, Enterprise Edition, Price, Cost"
+    },
+    "articles": {
+      "title": "Technical Articles - AiCoder Development Knowledge Base",
+      "description": "Explore AiCoder's technical article library covering AI programming, full-stack development, best practices, tutorials, and more. Learn the latest development technologies and experience sharing.",
+      "keywords": "Technical Articles, Development Tutorials, AI Programming, Full Stack Development, Best Practices, Tech Blog, Programming Knowledge"
     }
   }
 }
