@@ -5,7 +5,6 @@
 
 // NextAuth相关
 export { authConfig } from './next-auth.config';
-export { oauthAccountService } from './oauth.service';
 
 // 统一认证中间件（推荐使用）
 export {
@@ -18,7 +17,7 @@ export {
   auth,
   type AuthenticatedUser,
   type AuthenticatedRequest
-} from './auth.middleware';
+} from '../middleware/auth.middleware';
 
 // Session Token工具函数
 export {
@@ -48,14 +47,14 @@ export {
 } from './rbac.service';
 
 // 认证类型和错误
-export { AuthError } from './auth.error';
-export type { MeResponse } from './auth.types';
+export { AuthError } from '../types/auth.error';
+export type { MeResponse } from '../types/auth.types';
 
 // 认证Hooks（前端）
 export {
   useAuth,
   usePermission
-} from './auth.hooks';
+} from '../hooks/auth.hooks';
 
 /**
  * 使用建议：

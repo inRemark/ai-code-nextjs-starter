@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { validateSessionToken } from '@features/auth/services/session-token';
+import { hasPermission, type Permission } from '@features/auth/services/rbac.service';
 import { Session } from 'next-auth';
 import { UserRole } from '@shared/types/user';
 import { logger } from '@logger';
@@ -25,6 +26,36 @@ function extractUserRole(session: Session | null): UserRole {
     }
   }
   return 'USER';
+}
+
+/**
+ * 从请求中提取已验证用户，优先NextAuth Session，其次移动端Session Token
+ * 返回AuthUser和可选的原始session对象
+ */
+async function getUserFromRequest(request: NextRequest): Promise<{ user: AuthenticatedUser | null; session?: Session | null }> {
+  // 1. NextAuth Session (Web)
+  const session = await getServerSession();
+  if (session?.user?.id) {
+    const userRole = extractUserRole(session);
+    return {
+      user: { id: session.user.id, email: session.user.email || '', name: session.user.name || undefined, role: userRole },
+      session,
+    };
+  }
+
+  // 2. Session Token (Mobile)
+  const authHeader = request.headers.get('authorization');
+  if (authHeader?.startsWith('Bearer ')) {
+    const sessionToken = authHeader.substring(7);
+    const dbUser = await validateSessionToken(sessionToken);
+    if (dbUser) {
+      return {
+        user: { id: dbUser.id, email: dbUser.email, name: dbUser.name || undefined, role: dbUser.role as UserRole },
+      };
+    }
+  }
+
+  return { user: null };
 }
 
 /**
@@ -75,30 +106,59 @@ export async function getCurrentSession() {
  * 验证用户是否有指定权限
  * 结合NextAuth session和RBAC系统
  */
-export async function requirePermission(permission: string) {
+export async function requirePermission(permission: Permission) {
   return async (
     handler: (request: NextRequest, session: { user: { id: string; email: string; name: string; role: string } }) => Promise<NextResponse>
   ) => {
     return async (request: NextRequest) => {
       try {
+        // 优先使用NextAuth Session（Web端）
         const session = await getServerSession();
-        
-        if (!session?.user?.id) {
-          return NextResponse.json(
-            { message: 'Unauthorized', error: 'NO_SESSION' },
-            { status: 401 }
-          );
+
+        if (session?.user?.id) {
+          const userId = session.user.id;
+          const ok = await hasPermission(userId, permission);
+          if (!ok) {
+            return NextResponse.json(
+              { message: 'Insufficient permissions', error: 'INSUFFICIENT_PERMISSIONS' },
+              { status: 403 }
+            );
+          }
+
+          return await handler(request, session);
         }
 
-        // 这里应该实现权限检查逻辑，但现在只是基础实现
-        // TODO: 实际的权限验证逻辑应该在这里实现
-        // 为了满足ESLint要求，我们至少要引用这个参数一次
-        if (permission) {
-          // 实际的权限检查逻辑应该在这里实现
-          // 暂时只是占位符
+        // 回退到Mobile端的Session Token验证
+        const authHeader = request.headers.get('authorization');
+        if (authHeader?.startsWith('Bearer ')) {
+          const sessionToken = authHeader.substring(7);
+          const dbUser = await validateSessionToken(sessionToken);
+
+          if (!dbUser) {
+            return NextResponse.json(
+              { message: 'Unauthorized', error: 'NO_SESSION' },
+              { status: 401 }
+            );
+          }
+
+          const ok = await hasPermission(dbUser.id, permission);
+          if (!ok) {
+            return NextResponse.json(
+              { message: 'Insufficient permissions', error: 'INSUFFICIENT_PERMISSIONS' },
+              { status: 403 }
+            );
+          }
+
+          // 构造与NextAuth session兼容的简易对象传递给handler
+          const pseudoSession = { user: { id: dbUser.id, email: dbUser.email, name: dbUser.name || '', role: dbUser.role } } as unknown as Session;
+          return await handler(request, pseudoSession);
         }
 
-        return await handler(request, session);
+        // 都没有认证信息
+        return NextResponse.json(
+          { message: 'Unauthorized', error: 'NO_SESSION' },
+          { status: 401 }
+        );
       } catch (error) {
         logger.error('Permission middleware error:', error);
         return NextResponse.json(
@@ -120,42 +180,9 @@ export async function requireRole(roles: string[]) {
   ) => {
     return async (request: NextRequest) => {
       try {
-        let user: AuthenticatedUser | null = null;
-        
-        // 方式1: NextAuth Session (Web端)
-        const session = await getServerSession();
-        if (session?.user?.id) {
-          const userRole = extractUserRole(session);
-          if (userRole && roles.includes(userRole)) {
-            user = {
-              id: session.user.id,
-              email: session.user.email || '',
-              name: session.user.name || undefined,
-              role: userRole,
-            };
-          }
-        }
-        
-        // 方式2: Session Token (Mobile端)
-        if (!user) {
-          const authHeader = request.headers.get('authorization');
-          if (authHeader?.startsWith('Bearer ')) {
-            const sessionToken = authHeader.substring(7);
-            const dbUser = await validateSessionToken(sessionToken);
-            
-            if (dbUser && roles.includes(dbUser.role)) {
-              user = {
-                id: dbUser.id,
-                email: dbUser.email,
-                name: dbUser.name || undefined,
-                role: dbUser.role as UserRole,
-              };
-            }
-          }
-        }
-        
-        // 验证失败
-        if (!user) {
+        const { user } = await getUserFromRequest(request);
+
+        if (!user || !roles.includes(user.role)) {
           return NextResponse.json(
             { message: 'Insufficient role', error: 'INSUFFICIENT_ROLE' },
             { status: 403 }
@@ -183,42 +210,9 @@ export function requireAdmin<T extends unknown[]>(
 ) {
   return async (request: NextRequest, ...args: T): Promise<NextResponse> => {
     try {
-      let user: AuthenticatedUser | null = null;
-      
-      // 方式1: NextAuth Session (Web端)
-      const session = await getServerSession();
-      if (session?.user?.id) {
-        const userRole = extractUserRole(session);
-        if (userRole === 'ADMIN') {
-          user = {
-            id: session.user.id,
-            email: session.user.email || '',
-            name: session.user.name || undefined,
-            role: 'ADMIN',
-          };
-        }
-      }
-      
-      // 方式2: Session Token (Mobile端)
-      if (!user) {
-        const authHeader = request.headers.get('authorization');
-        if (authHeader?.startsWith('Bearer ')) {
-          const sessionToken = authHeader.substring(7);
-          const dbUser = await validateSessionToken(sessionToken);
-          
-          if (dbUser && dbUser.role === 'ADMIN') {
-            user = {
-              id: dbUser.id,
-              email: dbUser.email,
-              name: dbUser.name || undefined,
-              role: 'ADMIN',
-            };
-          }
-        }
-      }
-      
-      // 验证失败
-      if (!user) {
+      const { user } = await getUserFromRequest(request);
+
+      if (user?.role !== 'ADMIN') {
         return NextResponse.json(
           { message: 'Admin privileges required', error: 'INSUFFICIENT_PERMISSIONS' },
           { status: 403 }
@@ -245,39 +239,8 @@ export function requireAuth<T extends unknown[]>(
 ) {
   return async (request: NextRequest, ...args: T): Promise<NextResponse> => {
     try {
-      let user: AuthenticatedUser | null = null;
-      
-      // 方式1: NextAuth Session (Web端)
-      const session = await getServerSession();
-      if (session?.user?.id) {
-        const userRole = extractUserRole(session);
-        user = {
-          id: session.user.id,
-          email: session.user.email || '',
-          name: session.user.name || undefined,
-          role: userRole,
-        };
-      }
-      
-      // 方式2: Session Token (Mobile端)
-      if (!user) {
-        const authHeader = request.headers.get('authorization');
-        if (authHeader?.startsWith('Bearer ')) {
-          const sessionToken = authHeader.substring(7);
-          const dbUser = await validateSessionToken(sessionToken);
-          
-          if (dbUser) {
-            user = {
-              id: dbUser.id,
-              email: dbUser.email,
-              name: dbUser.name || undefined,
-              role: dbUser.role as UserRole,
-            };
-          }
-        }
-      }
-      
-      // 验证失败
+      const { user } = await getUserFromRequest(request);
+
       if (!user) {
         return NextResponse.json(
           { message: 'Unauthorized', error: 'NO_SESSION' },

@@ -1,6 +1,6 @@
 import { User, UserRole } from '@prisma/client';
 import prisma from '@/lib/database/prisma';
-import { PermissionError } from './auth.error';
+import { PermissionError } from '../types/auth.error';
 
 // 权限类型定义
 export type Permission = 
