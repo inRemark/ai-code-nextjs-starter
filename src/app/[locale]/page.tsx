@@ -1,6 +1,4 @@
-"use client";
-
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { Button } from "@shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/card";
 import { Badge } from "@shared/ui/badge";
@@ -23,8 +21,8 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export default function FeaturesPage() {
-  const t = useTranslations('home');
+export default async function FeaturesPage() {
+  const t = await getTranslations('home');
   return (
     <PortalLayout showHero={true}>
       <div className="bg-gradient-to-b from-background to-muted/20 dark:from-background dark:to-muted/10">

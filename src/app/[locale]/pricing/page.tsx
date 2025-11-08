@@ -1,6 +1,4 @@
-"use client";
-
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Button } from "@shared/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@shared/ui/card";
 import { Badge } from "@shared/ui/badge";
@@ -9,8 +7,8 @@ import { PageContent } from "@/shared/layout/portal-page-content";
 import { Check } from "lucide-react";
 import Link from "next/link";
 
-export default function PricingPage() {
-  const t = useTranslations("pricing");
+export default async function PricingPage() {
+  const t = await getTranslations("pricing");
   return (
     <PortalLayout>
       <div className="bg-gradient-to-b from-background to-muted/20 dark:from-background dark:to-muted/10">
