@@ -1,9 +1,8 @@
 import { MarkdownRenderer } from '@/shared/ui/markdown-simple/markdown-renderer';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 
 export default async function TermsOfServicePage() {
-  // 读取服务条款markdown文件
   const markdownPath = path.join(process.cwd(), 'public/legal/terms-of-service.md');
   const markdownContent = await fs.readFile(markdownPath, 'utf8');
 

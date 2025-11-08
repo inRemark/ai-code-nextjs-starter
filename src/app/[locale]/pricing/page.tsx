@@ -8,7 +8,6 @@ import { PageContent } from "@/shared/layout/portal-page-content";
 import { Check } from "lucide-react";
 import Link from "next/link";
 
-// 生成多语言 SEO metadata
 export const generateMetadata = createPageMetadataGenerator('pricing');
 
 export default async function PricingPage() {

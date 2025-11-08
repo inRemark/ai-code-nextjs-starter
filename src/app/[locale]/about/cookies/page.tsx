@@ -1,9 +1,8 @@
 import { MarkdownRenderer } from '@/shared/ui/markdown-simple/markdown-renderer';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { promises as fs } from 'node:fs';
+import path from 'node:path';
 
 export default async function CookiePolicyPage() {
-  // 读取Cookie政策markdown文件
   const markdownPath = path.join(process.cwd(), 'public/legal/cookie-policy.md');
   const markdownContent = await fs.readFile(markdownPath, 'utf8');
 

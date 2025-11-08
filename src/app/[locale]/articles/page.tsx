@@ -1,7 +1,3 @@
-/**
- * Articles Page - 文章列表页面
- */
-
 import { Suspense } from 'react';
 import Link from 'next/link';
 import { createPageMetadataGenerator } from '@/lib/seo';
