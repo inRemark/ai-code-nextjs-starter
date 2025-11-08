@@ -36,7 +36,7 @@ export const GET = requireAdmin(async (request: NextRequest) => {
         email: true,
         name: true,
         role: true,
-        isActive: true,
+        emailVerified: true, // 用 emailVerified 代替 isActive
         createdAt: true,
       },
     });
@@ -89,7 +89,7 @@ export const PATCH = requireAdmin(async (request: NextRequest) => {
         email: true,
         name: true,
         role: true,
-        isActive: true,
+        emailVerified: true, // 用 emailVerified 代替 isActive
       },
     });
 

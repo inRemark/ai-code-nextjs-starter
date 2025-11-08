@@ -2,21 +2,23 @@
 
 import { useState, useEffect } from 'react';
 import { UserRole } from '@shared/types/user';
-import { usePermission } from '@features/auth/hooks/auth.hooks';
 
 interface User {
   id: string;
   email: string;
   name: string | null;
   role: UserRole;
-  isActive: boolean;
+  emailVerified: string | null; // 邮箱验证状态，用于判断账户是否激活
   createdAt: string;
 }
 
 /**
  * 用户管理组件
- * 使用NextAuth session，通过API中间件自动处理认证
- * 不再需要手动传递token
+ * 
+ * 权限说明：
+ * - 不在组件层面检查权限（前端检查可被绕过，无安全意义）
+ * - 依赖 API 层的 requireAdmin() 中间件进行真正的权限控制
+ * - 页面级路由保护确保只有管理员能访问此页面
  */
 export default function UserManagement() {
   const [users, setUsers] = useState<User[]>([]);
@@ -24,10 +26,8 @@ export default function UserManagement() {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const { hasPerm } = usePermission('read:user');
 
   const fetchUsers = async () => {
-    if (!hasPerm) return;
     
     try {
       setLoading(true);
@@ -56,11 +56,9 @@ export default function UserManagement() {
   };
 
   useEffect(() => {
-    if (hasPerm) {
-      fetchUsers();
-    }
+    fetchUsers();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page, hasPerm]);
+  }, [page]);
 
   const handleRoleChange = async (userId: string, newRole: UserRole) => {
     try {
@@ -91,25 +89,6 @@ export default function UserManagement() {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
     }
   };
-
-  if (!hasPerm) {
-    return (
-      <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-        <div className="flex">
-          <div className="flex-shrink-0">
-            <svg className="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-            </svg>
-          </div>
-          <div className="ml-3">
-            <p className="text-sm text-yellow-700">
-              You don't have permission to view user management.
-            </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (loading) {
     return (
@@ -178,11 +157,11 @@ export default function UserManagement() {
                     
                     <div className="flex items-center">
                       <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                        user.isActive 
+                        user.emailVerified 
                           ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
+                          : 'bg-yellow-100 text-yellow-800'
                       }`}>
-                        {user.isActive ? 'Active' : 'Inactive'}
+                        {user.emailVerified ? 'Verified' : 'Unverified'}
                       </span>
                     </div>
                   </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { AdminLayout } from '@/shared/layout/admin-layout';
-import UserManagement from '@/features/auth/components/user-management';
+import UserManagement from '@/features/admin/components/user-management';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Users } from 'lucide-react';
 
