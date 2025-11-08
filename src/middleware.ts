@@ -5,48 +5,29 @@ import { getToken } from 'next-auth/jwt';
 import { logger } from '@logger';
 import { routing } from './i18n/routing';
 
-// 创建 next-intl 中间件
 const intlMiddleware = createIntlMiddleware(routing);
 
-// 定义开放页面路由（无需认证即可访问）
 const publicRoutes = [
   '/',
-  '/portal',
   '/about',
   '/help',
   '/blog',
   '/pricing',
-  '/login',
-  '/register',
   '/api/auth',
-  // AICoder 相关页面（无需认证）
-  '/explore',
 ];
 
-// 定义用户受保护路由（需要登录用户访问）
 const userProtectedRoutes = [
   '/profile',
   '/console',
-  '/test-iframe',
-  '/test-worker',
-  '/test-routing',
-  '/test-performance',
 ];
 
-// 定义管理员受保护路由（需要超级管理员访问）
 const adminProtectedRoutes = [
   '/admin',
 ];
 
-// 定义需要保护的路由（除开放页面外的所有受保护路由）
 const protectedRoutes = [
   '/profile',
-  '/mail',
-  '/templates',
-  '/reports',
 ];
-
-// 提取辅助函数以降低认知复杂度
 
 function extractLocale(pathname: string): string {
   return pathname.split('/')[1] || 'zh';
@@ -172,17 +153,15 @@ export async function middleware(request: NextRequest) {
   }
 }
 
-// 配置匹配器
 export const config = {
   matcher: [
     /*
-     * 匹配所有请求路径，除了那些以特定前缀开头的路径:
-     * - api (API路由)
-     * - _next/static (静态文件)
-     * - _next/image (图像优化文件)
-     * - favicon.ico (favicon文件)
-     * - sitemap.xml (站点地图)
-     * - robots.txt (爬虫协议)
+     * - api
+     * - _next/static
+     * - _next/image
+     * - favicon.ico
+     * - sitemap.xml
+     * - robots.txt
      */
     '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
   ],
