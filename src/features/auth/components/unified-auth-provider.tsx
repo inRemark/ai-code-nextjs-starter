@@ -1,140 +1,142 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useMemo, useCallback, type ReactNode } from 'react';
 import { useSession, signIn, signOut } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { MeResponse } from '@features/auth/types/auth.types';
+import type { MeResponse } from '@features/auth/types/auth.types';
+import type { Session } from 'next-auth';
 
 interface AuthContextType {
   user: MeResponse | null;
   loading: boolean;
+  isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
-  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function UnifiedAuthProvider({ children }: { children: ReactNode }) {
-  const { data: session, status } = useSession();
-  const [user, setUser] = useState<MeResponse | null>(null);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
+/**
+ * 将 NextAuth Session 转换为业务层 MeResponse 格式
+ */
+function transformSessionToUser(session: Session | null): MeResponse | null {
+  if (!session?.user) return null;
 
-  // 从NextAuth session获取用户信息 - 按照文档架构只处理NextAuth
-  useEffect(() => {
-    if (status === 'loading') {
-      setLoading(true);
-      return;
-    }
-
-    if (status === 'authenticated' && session?.user) {
-      // 将NextAuth session转换为MeResponse格式
-      const authUser: MeResponse = {
-        id: session.user.id || '',
-        email: session.user.email || '',
-        name: session.user.name || null,
-        avatar: null, // NextAuth session中不包含avatar字段
-        role: ((session.user as { role?: string }).role || 'USER') as MeResponse['role'],
-        createdAt: new Date(),
-      };
-      setUser(authUser);
-      setLoading(false);
-      
-      // 登录成功后跳转到profile
-      if (window.location.pathname === '/auth/login') {
-        router.push('/profile');
-      }
-    } else if (status === 'unauthenticated') {
-      // 按照文档架构，Web端不再支持JWT，仅使用NextAuth
-      setUser(null);
-      setLoading(false);
-      
-      // 如果在受保护的页面但未认证，则跳转到登录页
-      const protectedRoutes = ['/console', '/profile', '/mail', '/templates', '/reports'];
-      if (protectedRoutes.some(route => window.location.pathname.startsWith(route))) {
-        router.push('/auth/login');
-      }
-    }
-  }, [session, status, router]);
-
-  // 按照文档架构，Web端仅使用NextAuth，不再需要JWT相关逻辑
-  const refreshUser = async () => {
-    // NextAuth会自动处理session刷新，无需手动操作
-    router.refresh();
+  return {
+    id: session.user.id || '',
+    email: session.user.email || '',
+    name: session.user.name || null,
+    avatar: null,
+    role: ((session.user as { role?: string }).role || 'USER') as MeResponse['role'],
+    createdAt: new Date(),
   };
-
-    const login = async (email: string, password: string) => {
-      // 使用NextAuth的signIn进行登录
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (result?.error) {
-        throw new Error(result.error);
-      }
-
-      if (result?.ok) {
-        // 登录成功，等待session更新后再跳转
-        // 使用useSession hook监听session状态变化
-        // 在LoginForm中处理跳转逻辑
-        return Promise.resolve();
-      } else {
-        throw new Error('Login failed');
-      }
-    };
-
-    const register = async (email: string, password: string, name: string) => {
-      // 调用注册API
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password, name }),
-      });
-
-      const data = await response.json();
-      
-      if (!data.success) {
-        throw new Error(data.error || 'Registration failed');
-      }
-
-      // 注册成功后自动登录
-      await login(email, password);
-    };
-
-  const logout = async () => {
-    // 按照文档架构，Web端使用NextAuth登出
-    await signOut({ redirect: false });
-    
-    // 清除本地状态
-    setUser(null);
-    
-    // 跳转到登录页面
-    router.push('/auth/login');
-  };
-
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        loading,
-        login,
-        register,
-        logout,
-        refreshUser,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  );
 }
 
-export function useAuth() {
+/**
+ * 统一认证Provider - 封装NextAuth，提供业务级认证API
+ * 
+ * 职责：
+ * 1. 将NextAuth session转换为业务MeResponse格式
+ * 2. 提供统一的login/register/logout方法
+ * 3. 管理认证状态（user/loading/isAuthenticated）
+ * 
+ * 注意：路由跳转逻辑应由各组件自行处理，不在Provider中处理
+ */
+export function UnifiedAuthProvider({ children }: Readonly<{ children: ReactNode }>) {
+  const { data: session, status } = useSession();
+
+  // 转换 session 为业务用户对象
+  const user = useMemo(() => transformSessionToUser(session), [session]);
+
+  const loading = status === 'loading';
+  const isAuthenticated = status === 'authenticated';
+
+  /**
+   * 登录方法 - 使用 NextAuth credentials provider
+   * @throws {Error} 登录失败时抛出错误
+   */
+  const login = useCallback(async (email: string, password: string): Promise<void> => {
+    const result = await signIn('credentials', {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (result?.error) {
+      throw new Error(result.error);
+    }
+
+    if (!result?.ok) {
+      throw new Error('Login failed');
+    }
+  }, []);
+
+  /**
+   * 注册方法 - 调用注册API后自动登录
+   * @throws {Error} 注册或登录失败时抛出错误
+   */
+  const register = useCallback(async (email: string, password: string, name: string): Promise<void> => {
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, name }),
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.error || 'Registration failed');
+    }
+
+    const data = await response.json();
+    if (!data.success) {
+      throw new Error(data.error || 'Registration failed');
+    }
+
+    // 注册成功后自动登录
+    const loginResult = await signIn('credentials', {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (loginResult?.error || !loginResult?.ok) {
+      throw new Error('Auto-login after registration failed');
+    }
+  }, []);
+
+  /**
+   * 登出方法 - 使用 NextAuth signOut
+   * 注意：不在这里处理路由跳转，由调用组件决定跳转逻辑
+   */
+  const logout = useCallback(async (): Promise<void> => {
+    await signOut({ redirect: false });
+  }, []);
+
+  const contextValue = useMemo<AuthContextType>(
+    () => ({
+      user,
+      loading,
+      isAuthenticated,
+      login,
+      register,
+      logout,
+    }),
+    [user, loading, isAuthenticated, login, register, logout]
+  );
+
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
+}
+
+/**
+ * useAuth Hook - 获取认证上下文
+ * @throws {Error} 必须在 UnifiedAuthProvider 内部使用
+ * 
+ * @example
+ * ```tsx
+ * const { user, loading, isAuthenticated, login, logout } = useAuth();
+ * ```
+ */
+export function useAuth(): AuthContextType {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error('useAuth must be used within a UnifiedAuthProvider');

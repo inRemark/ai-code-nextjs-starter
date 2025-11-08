@@ -4,8 +4,7 @@ import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { routing } from '@/i18n/routing';
-import { AuthSessionProvider } from '@features/auth/components/session-provider';
-import { UnifiedAuthProvider } from '@features/auth/components/unified-auth-provider';
+import { AuthProviders } from '@features/auth/components/auth-providers';
 import { BreakpointProvider } from '@shared/theme/breakpoint-provider';
 import { ReactQueryProvider } from '@/lib/react-query';
 import { ThemeProvider } from '@shared/theme/context';
@@ -85,9 +84,7 @@ export default async function LocaleLayout({
           <ThemeProvider>
             <ReactQueryProvider>
               <BreakpointProvider>
-                <AuthSessionProvider>
-                  <UnifiedAuthProvider>{children}</UnifiedAuthProvider>
-                </AuthSessionProvider>
+                <AuthProviders>{children}</AuthProviders>
               </BreakpointProvider>
             </ReactQueryProvider>
           </ThemeProvider>

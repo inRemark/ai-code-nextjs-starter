@@ -532,6 +532,75 @@ export interface AuthenticatedUser extends AuthUser {}
 
 ---
 
+#### 🧹 Phase 5.1: 组件清理与重构 【已完成】
+
+**清理日期：** 2024-11-09
+
+**删除的冗余组件：**
+
+1. ❌ `components/with-auth.tsx`
+   - **原因：** 未被使用的HOC组件，功能与`protected-route.tsx`重复
+   - **影响范围：** 无引用，安全删除
+   - **代码减少：** ~80行
+
+2. ❌ `components/session-provider.tsx`
+   - **原因：** 无附加价值的包装层，直接使用NextAuth `SessionProvider`更清晰
+   - **影响范围：** 更新了`app/[locale]/layout.tsx`的导入
+   - **代码减少：** ~70行
+   - **变更详情：**
+     ```typescript
+     // 修改前
+     import { AuthSessionProvider } from '@features/auth/components/session-provider';
+     <AuthSessionProvider>{children}</AuthSessionProvider>
+     
+     // 修改后
+     import { SessionProvider } from 'next-auth/react';
+     <SessionProvider>{children}</SessionProvider>
+     ```
+
+**重组的组件：**
+
+1. 📦 `components/divider.tsx` → `@shared/ui/divider.tsx`
+   - **原因：** 通用UI组件，不属于auth业务逻辑
+   - **影响范围：** 更新了2个文件的导入路径
+     - `login-form.tsx`
+     - `register-form.tsx`
+   - **变更详情：**
+     ```typescript
+     // 修改前
+     import { Divider } from './divider';
+     
+     // 修改后
+     import { Divider } from '@shared/ui/divider';
+     ```
+
+**保留决策分析：**
+
+1. ✅ `components/oauth-button.tsx`
+   - **分析：** OAuth社交登录按钮，auth核心功能组件
+   - **决策：** 保留（按用户需求）
+   - **用途：** 提供Google/GitHub等社交登录入口
+
+2. ✅ `components/form-field.tsx` (auth版本)
+   - **对比分析：**
+     - **Auth版FormField：** 完整的表单输入组件（包含Input元素）
+     - **Shared版FormField：** 仅为标签包装器（FormItem/FormLabel/FormControl）
+   - **决策：** 两者用途不同，保留两个版本
+   - **场景：** Auth版用于快速构建带验证的输入框
+
+**清理成果统计：**
+
+| 指标 | 数据 |
+|------|------|
+| 文件数量减少 | 16 → 13 (-18.75%) |
+| 代码行数减少 | ~150行 |
+| 抽象层简化 | 减少1层不必要包装 |
+| 组件职责清晰度 | ↑ 提升 |
+
+**Breaking Changes：** 无（所有变更向后兼容）
+
+---
+
 ### Phase 6: OAuth完整集成 【低优先级】
 
 **仅在需要时执行**
@@ -928,6 +997,16 @@ DATABASE_URL=your_database_url
 ---
 
 ## 📝 版本历史
+
+### v1.3.0 (2024-11-09) 🧹 **组件清理与优化**
+
+- ✅ **删除冗余组件：** 移除`with-auth.tsx`（未使用的HOC，功能与protected-route重复）
+- ✅ **移除无用包装层：** 删除`session-provider.tsx`，直接使用NextAuth的`SessionProvider`
+- ✅ **组件重组：** 将`divider.tsx`移至`@shared/ui`（通用UI组件）
+- ✅ **保留oauth-button：** 根据需求保留OAuth按钮组件
+- ✅ **FormField分析：** 确认auth和shared的FormField功能不同，保留两者
+- 📊 减少auth/components文件数量：16 → 13（-18.75%）
+- 🎯 改善：删除~150行冗余代码，提升模块清晰度
 
 ### v1.2.0 (2024-11-09) 🎉 **重大更新**
 

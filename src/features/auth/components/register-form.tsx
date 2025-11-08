@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { authAPI } from '@/lib/api-client';
 import { FormField } from './form-field';
 import { SocialLogin } from './social-login';
-import { Divider } from './divider';
+import { Divider } from '@shared/ui/divider';
 import { PasswordStrength } from './password-strength';
 import { Button } from '@shared/ui/button';
 import { Alert, AlertDescription } from '@shared/ui/alert';

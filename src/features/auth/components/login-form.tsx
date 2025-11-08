@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useAuth } from '@features/auth/components/unified-auth-provider';
 import { FormField } from './form-field';
 import { SocialLogin } from './social-login';
-import { Divider } from './divider';
+import { Divider } from '@shared/ui/divider';
 import { Button } from '@shared/ui/button';
 import { Alert, AlertDescription } from '@shared/ui/alert';
 import { Loader2, AlertCircle } from 'lucide-react';
