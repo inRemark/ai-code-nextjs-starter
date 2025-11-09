@@ -92,9 +92,8 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
         // 登录成功处理
         if (onSuccess) {
           onSuccess();
-        } else {
-          router.push('/console');
         }
+        router.push('/console');
       }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : t('loginFailed');

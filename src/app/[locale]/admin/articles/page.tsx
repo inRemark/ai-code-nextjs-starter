@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import Link from 'next/link';
-import { getServerSession } from 'next-auth';
-import { authConfig } from '@features/auth/services/next-auth.config';
+import { auth } from '@features/auth/services';
 import { getArticles } from '@/features/articles/services/article.service';
 import type { Article } from '@/features/articles/types/article.types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -14,7 +13,7 @@ import { format } from 'date-fns';
 import { zhCN } from 'date-fns/locale';
 
 async function ArticlesContent() {
-  const session = await getServerSession(authConfig);
+  const session = await auth();
 
   if (!session?.user?.id) {
     redirect('/auth/login');

@@ -1,3 +1,3 @@
-import NextAuth from '@features/auth/services/next-auth.config';
+import { handlers } from '@features/auth/services/auth.config';
 
-export { NextAuth as GET, NextAuth as POST };
+export const { GET, POST } = handlers;

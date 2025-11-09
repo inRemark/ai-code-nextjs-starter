@@ -3,8 +3,7 @@ import { logger } from '@logger';
 
 import { signIn } from 'next-auth/react';
 import { Button } from '@shared/ui/button';
-import { Chrome, Github } from 'lucide-react';
-import { WeChatIcon } from './icons/wechat-icon';
+import { FaGithub, FaGoogle, FaWeixin } from "react-icons/fa";
 
 type OAuthProvider = 'google' | 'github' | 'wechat';
 
@@ -18,17 +17,17 @@ interface SocialLoginProps {
 const providerConfig = {
   google: {
     label: "使用 Google 登录",
-    icon: Chrome,
+    icon: FaGoogle,
     className: "border-red-200 hover:bg-red-50 dark:border-red-800 dark:hover:bg-red-950"
   },
   github: {
     label: "使用 GitHub 登录",
-    icon: Github,
+    icon: FaGithub,
     className: "border-gray-200 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-950"
   },
   wechat: {
     label: "使用微信登录",
-    icon: WeChatIcon,
+    icon: FaWeixin,
     className: "border-green-200 hover:bg-green-50 dark:border-green-800 dark:hover:bg-green-950"
   }
 };
@@ -38,7 +37,7 @@ export function SocialLogin({
   onSuccess,
   onError,
   disabled = false 
-}: SocialLoginProps) {
+}: Readonly<SocialLoginProps>) {
   const handleOAuthLogin = async (provider: OAuthProvider) => {
     try {
       await signIn(provider, { 

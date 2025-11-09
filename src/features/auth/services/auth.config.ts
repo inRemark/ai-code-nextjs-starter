@@ -1,29 +1,29 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
-import { UserRole } from '@shared/types/user';
-import { logger } from '@logger';
-// NextAuth 类型扩展已移至 @features/auth/types/next-auth.d.ts
-import CredentialsProvider from 'next-auth/providers/credentials';
-import GoogleProvider from 'next-auth/providers/google';
-import GitHubProvider from 'next-auth/providers/github';
-import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import { verifyPassword } from './auth.service';
+import NextAuth from 'next-auth';
+import { PrismaAdapter } from '@auth/prisma-adapter';
+import Credentials from 'next-auth/providers/credentials';
+import Google from 'next-auth/providers/google';
+import GitHub from 'next-auth/providers/github';
 import prisma from '@/lib/database/prisma';
+import { verifyPassword } from './auth.service';
+import { logger } from '@logger';
+import type { UserRole } from '@shared/types/user';
 
-export const authConfig: NextAuthOptions = {
+export const authConfig: any = {
   debug: process.env.NODE_ENV === 'development',
   adapter: PrismaAdapter(prisma),
   session: {
-    strategy: 'jwt',
+    strategy: 'jwt' as const,
     maxAge: 7 * 24 * 60 * 60, // 7天
   },
+  pages: {
+    signIn: '/auth/login',
+    error: '/auth/login',
+  },
   providers: [
-    // OAuth提供商：需要时在环境变量中配置并取消注释
-    // 参考文档 Phase 6 了解如何启用OAuth
-    CredentialsProvider({
-      name: 'Credentials',
+    Credentials({
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -34,23 +34,23 @@ export const authConfig: NextAuthOptions = {
           if (process.env.NODE_ENV === 'development') {
             logger.warn('🔍 Credentials authorization attempt:', credentials.email);
           }
-          
+
           const user = await prisma.user.findUnique({
-            where: { email: credentials.email as string }
+            where: { email: credentials.email as string },
           });
 
           if (process.env.NODE_ENV === 'development') {
-            logger.warn('👤 User found:', user ? { 
-              id: user.id, 
-              email: user.email, 
+            logger.warn('👤 User found:', user ? {
+              id: user.id,
+              email: user.email,
               hasPassword: !!user.password,
-              role: user.role 
+              role: user.role,
             } : null);
           }
 
-          if (!user || !user.password) {
+          if (!user) {
             if (process.env.NODE_ENV === 'development') {
-              logger.warn('❌ User not found or no password');
+              logger.warn('❌ User not found');
             }
             return null;
           }
@@ -74,8 +74,7 @@ export const authConfig: NextAuthOptions = {
           if (process.env.NODE_ENV === 'development') {
             logger.warn('✅ Authorization successful for user:', user.email);
           }
-          // NextAuth v4 database session 必须返回完整用户对象
-          // 返回 NextAuth 需要的最小用户对象
+
           return {
             id: user.id,
             email: user.email,
@@ -86,49 +85,50 @@ export const authConfig: NextAuthOptions = {
           logger.error('💥 Credentials authorization error:', error);
           return null;
         }
-      }
-    })
-    // 可选的 OAuth 提供商：在环境变量中配置 clientId/clientSecret 即可启用
-    , ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET ? [
-      GoogleProvider({
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      })
-    ] : []), ...(process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET ? [
-      GitHubProvider({
-        clientId: process.env.GITHUB_CLIENT_ID,
-        clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      })
-    ] : [])
+      },
+    }),
+    // OAuth providers
+    ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+      ? [
+          Google({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          }),
+        ]
+      : []),
+    ...(process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
+      ? [
+          GitHub({
+            clientId: process.env.GITHUB_CLIENT_ID,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET,
+          }),
+        ]
+      : []),
   ],
   callbacks: {
-    // 自动账户关联逻辑和 JWT token 创建
     async signIn({ user, account, profile }) {
-      // 按照架构文档，完全使用 JWT 策略
       if (!account || account.provider === 'credentials') {
-        // 对于 Credentials Provider，确保用户已验证
-        // NextAuth v4 会自动在 JWT 策略下创建 token
         return true;
       }
 
       const email = user.email || profile?.email;
-      
+
       if (!email) {
         throw new Error('Email is required for OAuth login');
       }
-      
+
       // 查找现有用户
       const existingUser = await prisma.user.findUnique({
         where: { email },
-        include: { accounts: true }
+        include: { accounts: true },
       });
-      
+
       if (existingUser) {
         // 检查是否已关联此OAuth提供商
         const existingAccount = existingUser.accounts.find(
-          (acc) => acc.provider === account.provider
+          (acc: { provider: string }) => acc.provider === account.provider
         );
-        
+
         if (!existingAccount) {
           // 自动关联新的OAuth账户到现有用户
           await prisma.account.create({
@@ -143,60 +143,55 @@ export const authConfig: NextAuthOptions = {
               token_type: account.token_type,
               scope: account.scope,
               id_token: account.id_token,
-            }
+            },
           });
         }
         user.id = existingUser.id;
       }
-      
+
       return true;
     },
     async jwt({ token, user }) {
-      // 初始登录时，将用户信息添加到 token 中
       if (user) {
         token.sub = user.id;
-        // 安全地访问user对象的role属性，避免SonarQube警告
-        token.role = ('role' in user && typeof user.role === 'string') ? user.role as UserRole : 'USER';
+        token.role = ('role' in user && typeof user.role === 'string')
+          ? user.role as UserRole
+          : 'USER';
         token.email = user.email;
         token.name = user.name;
-        // 添加调试日志
+
         if (process.env.NODE_ENV === 'development') {
           logger.warn('JWT token created:', token);
         }
       }
-      // 添加调试日志
+
       if (process.env.NODE_ENV === 'development') {
         logger.warn('JWT token:', token);
       }
+
       return token;
     },
     async session({ session, token }) {
-      // 在 JWT 策略下，我们需要从 token 中获取用户信息
       if (session.user && token) {
-        // 类型安全地扩展 session.user 字段
         Object.assign(session.user, {
           id: token.sub || '',
           role: (token.role as UserRole) || 'USER',
           email: token.email || '',
           name: token.name || '',
         });
+
         if (process.env.NODE_ENV === 'development') {
           logger.warn('Session callback user:', session.user);
         }
       }
-      // 添加调试日志
+
       if (process.env.NODE_ENV === 'development') {
         logger.warn('Session created:', session);
       }
+
       return session;
     },
   },
-  pages: {
-    signIn: '/auth/login',
-    error: '/auth/login',
-  }
 };
 
-// NextAuth v4 导出方式
-const handler = NextAuth(authConfig);
-export default handler;
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

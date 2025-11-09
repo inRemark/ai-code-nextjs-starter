@@ -6,8 +6,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authConfig } from '@features/auth/services/next-auth.config';
+import { auth } from '@features/auth/services';
 import {
   getArticleById,
   updateArticle,
@@ -56,7 +55,7 @@ export async function GET(request: NextRequest, { params }: Params) {
 // PATCH /api/articles/[id] - 更新文章
 export async function PATCH(request: NextRequest, { params }: Params) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session?.user?.id) {
       return NextResponse.json(
@@ -129,7 +128,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 // DELETE /api/articles/[id] - 删除文章
 export async function DELETE(request: NextRequest, { params }: Params) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session?.user?.id) {
       return NextResponse.json(

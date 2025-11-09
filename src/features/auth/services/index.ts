@@ -4,7 +4,7 @@
  */
 
 // NextAuth相关
-export { authConfig } from './next-auth.config';
+export { authConfig, auth, signIn, signOut } from './auth.config';
 
 // 统一认证中间件（推荐使用）
 export {
@@ -14,9 +14,6 @@ export {
   withNextAuth,
   getCurrentSession,
   getAuthUserFromRequest,
-  auth,
-  type AuthenticatedUser,
-  type AuthenticatedRequest
 } from '../middleware/auth.middleware';
 
 // 密码工具函数

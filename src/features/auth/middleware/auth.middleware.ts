@@ -7,9 +7,8 @@ import { AuthUser } from '@features/auth/types/auth.types';
 
 async function getServerSession() {
   try {
-    const { authConfig } = await import('../services/next-auth.config');
-    const { getServerSession } = await import('next-auth/next');
-    return await getServerSession(authConfig);
+    const { auth } = await import('../services/auth.config');
+    return await auth();
   } catch (error) {
     logger.error('Failed to get server session:', error);
     return null;
@@ -93,7 +92,6 @@ export async function getCurrentSession() {
 /**
  * 验证用户是否有指定权限
  * 使用统一的getUserFromRequest，结合RBAC系统
- * 支持双模式验证：NextAuth Session (Web端) + Session Token (Mobile端)
  */
 export async function requirePermission(permission: Permission) {
   return async (
@@ -144,7 +142,6 @@ export async function requirePermission(permission: Permission) {
 
 /**
  * 验证用户角色
- * 支持双模式验证：NextAuth Session (Web端) + Session Token (Mobile端)
  */
 export async function requireRole(roles: string[]) {
   return async (
@@ -175,7 +172,6 @@ export async function requireRole(roles: string[]) {
 
 /**
  * 管理员权限验证 - 专用中间件
- * 支持双模式验证：NextAuth Session (Web端) + Session Token (Mobile端)
  */
 export function requireAdmin<T extends unknown[]>(
   handler: (request: NextRequest, user: AuthUser, ...args: T) => Promise<NextResponse>
@@ -204,7 +200,6 @@ export function requireAdmin<T extends unknown[]>(
 
 /**
  * 基础认证验证 - 兼容现有API签名
- * 支持双模式验证：NextAuth Session (Web端) + Session Token (Mobile端)
  */
 export function requireAuth<T extends unknown[]>(
   handler: (user: AuthUser, request: NextRequest, ...args: T) => Promise<NextResponse>
@@ -247,21 +242,6 @@ export async function getAuthUserFromRequest(): Promise<AuthUser> {
   }
   
   throw new Error('No authentication session found');
-}
-
-/**
- * @deprecated 使用 @features/auth/types/auth.types 中的 AuthUser 替代
- * 为保持向后兼容暂时保留此类型别名
- */
-export type AuthenticatedUser = AuthUser;
-
-/**
- * 扩展的认证请求类型
- */
-export interface AuthenticatedRequest extends NextRequest {
-  session: {
-    user: AuthUser;
-  };
 }
 
 /**

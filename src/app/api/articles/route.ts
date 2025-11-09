@@ -5,8 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authConfig } from '@features/auth/services/next-auth.config';
+import { auth } from '@features/auth/services';
 import { getArticles, createArticle } from '@/features/articles/services/article.service';
 import { createArticleSchema } from '@/features/articles/validators/article.schema';
 
@@ -47,7 +46,7 @@ export async function GET(request: NextRequest) {
 // POST /api/articles - 创建文章
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authConfig);
+    const session = await auth();
 
     if (!session?.user?.id) {
       return NextResponse.json(

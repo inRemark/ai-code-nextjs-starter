@@ -6,7 +6,6 @@ import { logger } from '@logger';
 
 /**
  * 自定义Hook用于获取当前用户信息
- * 使用NextAuth session替代localStorage
  */
 export function useCurrentUser() {
   const { data: session, status } = useSession();
@@ -27,9 +26,9 @@ export function useCurrentUser() {
     id: session.user.id,
     email: session.user.email,
     name: session.user.name || null,
-    avatar: null, // NextAuth session不包含avatar
     role: session.user.role,
     createdAt: new Date(), // Session中没有createdAt，使用当前时间
+    updatedAt: new Date(), // Session中没有updatedAt，使用当前时间
   } : null;
 
   return { user, loading, error };

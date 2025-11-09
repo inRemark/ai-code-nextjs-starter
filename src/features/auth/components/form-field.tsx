@@ -44,6 +44,16 @@ export const FormField: React.FC<FormFieldProps> = ({
     setShowPassword(!showPassword);
   };
 
+  // Extracted input className logic
+  let inputClassName = "pr-10 transition-colors duration-200 ";
+  if (hasError) {
+    inputClassName += "border-chart-3 focus:border-chart-3 focus:ring-chart-3";
+  } else if (isValid) {
+    inputClassName += "border-chart-1 focus:border-chart-1 focus:ring-chart-1";
+  } else {
+    inputClassName += "border-input focus:border-primary focus:ring-primary";
+  }
+
   return (
     <div className="space-y-2">
       <Label 
@@ -63,15 +73,7 @@ export const FormField: React.FC<FormFieldProps> = ({
           onChange={(e) => onChange(e.target.value)}
           onBlur={handleBlur}
           placeholder={placeholder}
-          className={`
-            pr-10 transition-colors duration-200
-            ${hasError 
-              ? 'border-chart-3 focus:border-chart-3 focus:ring-chart-3' 
-              : isValid 
-                ? 'border-chart-1 focus:border-chart-1 focus:ring-chart-1'
-                : 'border-input focus:border-primary focus:ring-primary'
-            }
-          `}
+          className={inputClassName}
           required={required}
         />
         

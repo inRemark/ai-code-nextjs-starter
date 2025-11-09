@@ -51,9 +51,3 @@ export interface AuthUser {
   name?: string;
   role: UserRole;
 }
-
-/**
- * @deprecated 使用 AuthUser 替代
- * 为保持向后兼容暂时保留
- */
-export type AuthenticatedUser = AuthUser;

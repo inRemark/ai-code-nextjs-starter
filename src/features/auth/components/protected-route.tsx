@@ -9,7 +9,7 @@ interface ProtectedRouteProps {
   requireAdmin?: boolean;
 }
 
-export default function ProtectedRoute({ children, requireAdmin = false }: ProtectedRouteProps) {
+export default function ProtectedRoute({ children, requireAdmin = false }: Readonly<ProtectedRouteProps>) {
   const { data: session, status } = useSession();
   const router = useRouter();
   const loading = status === 'loading';
