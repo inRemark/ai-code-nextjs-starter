@@ -5,7 +5,7 @@ import { baseSchemas } from '@/lib/validators/base';
  * 认证相关验证模式
  */
 
-// 用户注册验证 Schema
+// 用户注册验证 Schema（前端使用，包含 confirmPassword）
 export const registerSchema = z.object({
   email: baseSchemas.email,
   password: baseSchemas.password,
@@ -17,6 +17,16 @@ export const registerSchema = z.object({
 }).refine((data) => data.password === data.confirmPassword, {
   message: '确认密码与密码不匹配',
   path: ['confirmPassword'],
+});
+
+// API 注册验证 Schema（后端使用，不需要 confirmPassword）
+export const registerApiSchema = z.object({
+  email: baseSchemas.email,
+  password: baseSchemas.password,
+  name: z.string()
+    .transform((val) => val.trim())
+    .optional()
+    .refine((val) => !val || val.length <= 100, '姓名长度不能超过100字符'),
 });
 
 // 用户登录验证 Schema
@@ -46,18 +56,7 @@ export const settingsSchema = z.object({
 
 // 类型导出
 export type RegisterData = z.infer<typeof registerSchema>;
+export type RegisterApiData = z.infer<typeof registerApiSchema>;
 export type LoginData = z.infer<typeof loginSchema>;
 export type ProfileData = z.infer<typeof profileSchema>;
 export type SettingsData = z.infer<typeof settingsSchema>;
-
-/**
- * 注意：旧的函数式验证器已废弃
- * 
- * 迁移指南：
- * - validateEmail() → 使用 baseSchemas.email.safeParse()
- * - validatePassword() → 使用 baseSchemas.password.safeParse()
- * - validateRegisterRequest() → 使用 registerSchema.safeParse()
- * - validateLoginRequest() → 使用 loginSchema.safeParse()
- * 
- * 所有验证逻辑统一在 @/lib/validators/base.ts
- */

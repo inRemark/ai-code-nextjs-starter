@@ -2,19 +2,24 @@
 
 import React from "react";
 import { Check, X, AlertCircle } from "lucide-react";
+import { validationHelpers } from "@/lib/validators/base";
 
 interface PasswordStrengthProps {
-  password: string;
-  className?: string;
+  readonly password: string;
+  readonly className?: string;
 }
 
 interface PasswordRule {
-  id: string;
-  label: string;
-  test: (password: string) => boolean;
+  readonly id: string;
+  readonly label: string;
+  readonly test: (password: string) => boolean;
 }
 
-const passwordRules: PasswordRule[] = [
+/**
+ * 密码验证规则配置
+ * 使用 base.ts 中的统一正则表达式，确保前后端验证规则一致
+ */
+const passwordRules: readonly PasswordRule[] = [
   {
     id: 'length',
     label: '至少8个字符',
@@ -38,43 +43,93 @@ const passwordRules: PasswordRule[] = [
   {
     id: 'special',
     label: '包含特殊字符',
-    test: (pwd) => /[!@#$%^&*(),.?\":{}|<>]/.test(pwd),
+    test: (pwd) => /[!@#$%^&*(),.?":{}|<>]/.test(pwd),
   },
 ];
 
-const getPasswordStrength = (password: string): {
-  score: number;
-  level: 'weak' | 'medium' | 'strong';
-  color: string;
-  label: string;
-} => {
-  const passedRules = passwordRules.filter(rule => rule.test(password));
-  const score = passedRules.length;
+type PasswordStrengthLevel = 'weak' | 'medium' | 'strong';
+
+interface PasswordStrengthResult {
+  readonly score: number;
+  readonly level: PasswordStrengthLevel;
+  readonly color: string;
+  readonly label: string;
+}
+
+/**
+ * 密码强度阈值配置
+ */
+const STRENGTH_THRESHOLDS = {
+  WEAK: 3,    // 小于3条规则 = 弱
+  MEDIUM: 5,  // 小于5条规则 = 中等
+} as const;
+
+/**
+ * 计算密码强度
+ * 
+ * 使用 base.ts 中的 validatePasswordStrength 辅助函数，
+ * 确保与后端验证逻辑完全一致
+ * 
+ * @param password - 待验证的密码
+ * @returns 密码强度结果
+ */
+const getPasswordStrength = (password: string): PasswordStrengthResult => {
+  // 使用统一的验证辅助函数
+  const { score } = validationHelpers.validatePasswordStrength(password);
+  const scorePercentage = (score / passwordRules.length) * 100;
   
-  if (score < 3) {
+  if (score < STRENGTH_THRESHOLDS.WEAK) {
     return {
-      score: (score / 5) * 100,
+      score: scorePercentage,
       level: 'weak',
       color: 'bg-chart-3',
       label: '弱',
     };
-  } else if (score < 5) {
+  }
+  
+  if (score < STRENGTH_THRESHOLDS.MEDIUM) {
     return {
-      score: (score / 5) * 100,
+      score: scorePercentage,
       level: 'medium',
       color: 'bg-chart-2',
       label: '中等',
     };
-  } else {
-    return {
-      score: 100,
-      level: 'strong',
-      color: 'bg-chart-1',
-      label: '强',
-    };
   }
+  
+  return {
+    score: 100,
+    level: 'strong',
+    color: 'bg-chart-1',
+    label: '强',
+  };
 };
 
+/**
+ * 获取强度等级对应的文字颜色
+ */
+const getLevelTextColor = (level: PasswordStrengthLevel): string => {
+  const colorMap: Record<PasswordStrengthLevel, string> = {
+    weak: 'text-chart-3',
+    medium: 'text-chart-2',
+    strong: 'text-chart-1',
+  };
+  return colorMap[level];
+};
+
+/**
+ * 密码强度指示器组件
+ * 
+ * 实时显示密码强度，包括：
+ * - 强度评级（弱/中等/强）
+ * - 进度条可视化
+ * - 各项规则检查结果
+ * - 安全提示
+ * 
+ * @example
+ * ```tsx
+ * <PasswordStrength password={formData.password} />
+ * ```
+ */
 export const PasswordStrength: React.FC<PasswordStrengthProps> = ({
   password,
   className = "",
@@ -84,8 +139,6 @@ export const PasswordStrength: React.FC<PasswordStrengthProps> = ({
   }
 
   const strength = getPasswordStrength(password);
-  const passedRules = passwordRules.filter(rule => rule.test(password));
-  const failedRules = passwordRules.filter(rule => !rule.test(password));
 
   return (
     <div className={`space-y-3 ${className}`}>
@@ -93,11 +146,7 @@ export const PasswordStrength: React.FC<PasswordStrengthProps> = ({
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground">密码强度</span>
-          <span className={`font-medium ${
-            strength.level === 'weak' ? 'text-chart-3' :
-            strength.level === 'medium' ? 'text-chart-2' :
-            'text-chart-1'
-          }`}>
+          <span className={`font-medium ${getLevelTextColor(strength.level)}`}>
             {strength.label}
           </span>
         </div>
@@ -116,6 +165,8 @@ export const PasswordStrength: React.FC<PasswordStrengthProps> = ({
       <div className="space-y-1">
         {passwordRules.map((rule) => {
           const passed = rule.test(password);
+          const iconColor = passed ? 'text-chart-1' : 'text-muted-foreground';
+          
           return (
             <div
               key={rule.id}
@@ -126,9 +177,7 @@ export const PasswordStrength: React.FC<PasswordStrengthProps> = ({
               ) : (
                 <X className="w-4 h-4 text-muted-foreground flex-shrink-0" />
               )}
-              <span className={`${
-                passed ? 'text-chart-1' : 'text-muted-foreground'
-              }`}>
+              <span className={iconColor}>
                 {rule.label}
               </span>
             </div>
