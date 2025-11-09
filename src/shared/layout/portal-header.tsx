@@ -7,7 +7,7 @@ import { useMessages, useLocale } from "next-intl";
 import { Button } from "@shared/ui/button";
 import { cn } from "@shared/utils";
 import { Menu, X, Sparkles } from "lucide-react";
-import { ThemeToggle } from "@shared/ui/theme-toggle";
+import { ThemeToggle } from "@/shared/theme/theme-toggle";
 import { LanguageSwitcher } from "@shared/components/language-switcher";
 import { PortalHeaderAuth } from "./portal-header-auth";
 

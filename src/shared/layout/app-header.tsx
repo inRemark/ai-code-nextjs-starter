@@ -7,7 +7,7 @@ import { Button } from "@shared/ui/button";
 import { Menu, Settings, User, HelpCircle, LogOut, Bell } from "lucide-react";
 import { Breadcrumb } from "./breadcrumb";
 import { HeaderConfig } from "./app-layout-config";
-import { ThemeToggle } from "@shared/ui/theme-toggle";
+import { ThemeToggle } from "@/shared/theme/theme-toggle";
 import { useAuth } from "@features/auth/hooks/use-auth";
 import { logger } from '@logger';
 import { 

@@ -1,27 +1,20 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { cn } from "@shared/utils";
-
-type Theme = 'light' | 'dark' | 'system';
-
-interface ThemeContextValue {
-  theme: Theme;
-  setTheme: (theme: Theme) => void;
-  isDarkMode: boolean;
-  toggleDarkMode: () => void;
-  rootClassName: string;
-}
-
-const ThemeContext = createContext<ThemeContextValue | null>(null);
+import { Theme, ThemeContext } from "./theme.types";
 
 const THEME_KEY = 'theme';
 
 function getSystemTheme(): 'light' | 'dark' {
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  return globalThis.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+interface ThemeProviderProps {
+  readonly children: React.ReactNode;
+}
+
+export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>('system');
   const [systemTheme, setSystemTheme] = useState<'light' | 'dark'>('light');
   const [isInitialized, setIsInitialized] = useState(false);
@@ -29,13 +22,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Initialize theme from localStorage after hydration
   useEffect(() => {
     // Use the pre-set theme preference from the inline script
-    const preSetTheme = (window as any).__THEME_PREFERENCE__;
+    const preSetTheme = (globalThis as any).__THEME_PREFERENCE__;
     if (preSetTheme) {
       setTheme(preSetTheme.theme);
       setSystemTheme(getSystemTheme());
       setIsInitialized(true);
       // Clean up the global variable
-      delete (window as any).__THEME_PREFERENCE__;
+      delete (globalThis as any).__THEME_PREFERENCE__;
     } else {
       // Fallback to normal initialization
       const savedTheme = localStorage.getItem(THEME_KEY);
@@ -49,7 +42,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const mediaQuery = globalThis.matchMedia('(prefers-color-scheme: dark)');
     
     const handleChange = (e: MediaQueryListEvent) => {
       setSystemTheme(e.matches ? 'dark' : 'light');
@@ -59,11 +52,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
-  const setThemeWithPersist = (newTheme: Theme) => {
+  const setThemeWithPersist = useCallback((newTheme: Theme) => {
     setTheme(newTheme);
     localStorage.setItem(THEME_KEY, newTheme);
 
-    const root = window.document.documentElement;
+    const root = globalThis.document.documentElement;
     if (newTheme === 'system') {
       const isSystemDark = getSystemTheme() === 'dark';
       root.classList.toggle('dark', isSystemDark);
@@ -75,12 +68,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     setTimeout(() => {
       root.classList.remove('theme-transition');
     }, 300);
-  };
+  }, []);
 
-  const toggleDarkMode = () => {
+  const toggleDarkMode = useCallback(() => {
     const currentTheme = theme === 'system' ? systemTheme : theme;
     setThemeWithPersist(currentTheme === 'dark' ? 'light' : 'dark');
-  };
+  }, [theme, systemTheme, setThemeWithPersist]);
 
   // Only apply theme changes after initialization to prevent flashing
   useEffect(() => {
@@ -89,7 +82,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       return;
     }
 
-    const root = window.document.documentElement;
+    const root = globalThis.document.documentElement;
     const isDark = theme === 'system' ? systemTheme === 'dark' : theme === 'dark';
     
     // Only update if the class actually needs to change
@@ -102,35 +95,38 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const isDarkMode = theme === 'system' ? systemTheme === 'dark' : theme === 'dark';
 
   const rootClassName = useMemo(
-    () => cn(
-      "h-screen w-screen flex flex-col overflow-hidden",
-      // Use neutral background during initialization to prevent hydration mismatch
-      isInitialized 
-        ? (isDarkMode ? "bg-gray-900" : "bg-gray-50")
-        : "bg-background"
-    ),
+    () => {
+      let bgClass: string;
+      if (!isInitialized) {
+        bgClass = "bg-background";
+      } else if (isDarkMode) {
+        bgClass = "bg-gray-900";
+      } else {
+        bgClass = "bg-gray-50";
+      }
+      
+      return cn(
+        "h-screen w-screen flex flex-col overflow-hidden",
+        bgClass
+      );
+    },
     [isDarkMode, isInitialized]
   );
 
-  const value = {
-    theme,
-    setTheme: setThemeWithPersist,
-    isDarkMode,
-    toggleDarkMode,
-    rootClassName,
-  };
+  const value = useMemo(
+    () => ({
+      theme,
+      setTheme: setThemeWithPersist,
+      isDarkMode,
+      toggleDarkMode,
+      rootClassName,
+    }),
+    [theme, isDarkMode, rootClassName, setThemeWithPersist, toggleDarkMode]
+  );
 
   return (
     <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );
-}
-
-export function useTheme() {
-  const context = useContext(ThemeContext);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
 } 

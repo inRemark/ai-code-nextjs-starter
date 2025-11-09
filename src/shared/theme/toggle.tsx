@@ -1,10 +1,10 @@
 import { Button } from "@shared/ui/button";
 import { cn } from "@shared/utils";
 import { Moon, Sun } from "lucide-react";
-import { useTheme } from "./context";
+import { useTheme } from "./use-theme";
 
 interface ThemeToggleProps {
-  className?: string;
+  readonly className?: string;
 }
 
 export function ThemeToggle({ className }: ThemeToggleProps) {
