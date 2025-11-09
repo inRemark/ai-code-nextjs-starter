@@ -3,7 +3,31 @@ import { z } from 'zod';
 /**
  * 基础验证模式
  * 包含清理和验证功能，供各功能模块复用
+ * 
+ * @module validators/base
+ * @description 提供统一的验证规则和辅助函数，确保前后端验证逻辑一致
  */
+
+/**
+ * 验证正则表达式常量
+ * 集中管理所有正则表达式，便于维护和复用
+ */
+const REGEX_PATTERNS = {
+  /** 邮箱格式：xxx@xxx.xxx */
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  /** URL格式：http(s)://... */
+  url: /^https?:\/\/.+/,
+  /** CUID2格式：24-32位小写字母+数字 */
+  cuid: /^[a-z0-9]{24,32}$/,
+  /** 小写字母 */
+  lowercase: /[a-z]/,
+  /** 大写字母 */
+  uppercase: /[A-Z]/,
+  /** 数字 */
+  digit: /\d/,
+  /** 特殊字符 */
+  specialChar: /[!@#$%^&*(),.?":{}|<>]/,
+} as const;
 
 // 基础验证模式
 export const baseSchemas = {
@@ -29,13 +53,13 @@ export const baseSchemas = {
   email: z.string()
     .trim()
     .toLowerCase()
-    .email('请输入有效的邮箱地址')
+    .regex(REGEX_PATTERNS.email, '请输入有效的邮箱地址')
     .max(255, '邮箱长度不能超过255字符'),
   
   // 验证URL
   url: z.string()
     .trim()
-    .url('请输入有效的URL')
+    .regex(REGEX_PATTERNS.url, '请输入有效的URL')
     .max(500, 'URL长度不能超过500字符')
     .optional()
     .or(z.literal('')),
@@ -50,10 +74,10 @@ export const baseSchemas = {
   password: z.string()
     .min(8, '密码长度至少8位')
     .max(128, '密码长度不能超过128位')
-    .regex(/[a-z]/, '密码必须包含小写字母')
-    .regex(/[A-Z]/, '密码必须包含大写字母')
-    .regex(/\d/, '密码必须包含数字')
-    .regex(/[!@#$%^&*(),.?":{}|<>]/, '密码必须包含特殊字符'),
+    .regex(REGEX_PATTERNS.lowercase, '密码必须包含小写字母')
+    .regex(REGEX_PATTERNS.uppercase, '密码必须包含大写字母')
+    .regex(REGEX_PATTERNS.digit, '密码必须包含数字')
+    .regex(REGEX_PATTERNS.specialChar, '密码必须包含特殊字符'),
   
   // 验证确认密码
   confirmPassword: z.string(),
@@ -81,19 +105,24 @@ export const baseSchemas = {
 
 // 通用验证辅助函数
 export const validationHelpers = {
-  // 验证ID格式
+  // 验证ID格式 (CUID2 格式: 24-32个字符，由a-z0-9组成)
   validateId: (id: string): boolean => {
-    return z.string().cuid().safeParse(id).success;
+    return REGEX_PATTERNS.cuid.test(id);
   },
   
   // 验证邮箱格式
   validateEmail: (email: string): boolean => {
-    return z.string().email().safeParse(email).success;
+    return REGEX_PATTERNS.email.test(email);
   },
   
   // 验证URL格式
   validateUrl: (url: string): boolean => {
-    return z.string().url().safeParse(url).success;
+    try {
+      new URL(url);
+      return true;
+    } catch {
+      return false;
+    }
   },
   
   // 验证密码强度
@@ -105,20 +134,21 @@ export const validationHelpers = {
     const feedback: string[] = [];
     let score = 0;
     
-    if (password.length >= 8) score += 1;
-    else feedback.push('密码长度至少8位');
+    const checks = [
+      { test: password.length >= 8, message: '密码长度至少8位' },
+      { test: REGEX_PATTERNS.lowercase.test(password), message: '密码应包含小写字母' },
+      { test: REGEX_PATTERNS.uppercase.test(password), message: '密码应包含大写字母' },
+      { test: REGEX_PATTERNS.digit.test(password), message: '密码应包含数字' },
+      { test: REGEX_PATTERNS.specialChar.test(password), message: '密码应包含特殊字符' },
+    ];
     
-    if (/[a-z]/.test(password)) score += 1;
-    else feedback.push('密码应包含小写字母');
-    
-    if (/[A-Z]/.test(password)) score += 1;
-    else feedback.push('密码应包含大写字母');
-    
-    if (/\d/.test(password)) score += 1;
-    else feedback.push('密码应包含数字');
-    
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score += 1;
-    else feedback.push('密码应包含特殊字符');
+    for (const check of checks) {
+      if (check.test) {
+        score += 1;
+      } else {
+        feedback.push(check.message);
+      }
+    }
     
     return {
       isValid: score >= 3,
