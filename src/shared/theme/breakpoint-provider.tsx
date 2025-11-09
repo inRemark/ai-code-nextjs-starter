@@ -1,38 +1,14 @@
 "use client";
 
 import { useWindowSize } from "@shared/hooks/useWindowSize";
-import { createContext, ReactNode, useContext, useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
+import { BREAKPOINTS, Breakpoint, BreakpointContextValue, BreakpointContext } from "./breakpoint.types";
 
-/**
- * 应用的断点配置
- * 与 Tailwind CSS 的默认断点保持一致
- * @see https://tailwindcss.com/docs/breakpoints
- */
-export const BREAKPOINTS = {
-  sm: 640,
-  md: 768,
-  lg: 1024,
-  xl: 1280,
-  '2xl': 1536,
-} as const;
-
-export type Breakpoint = keyof typeof BREAKPOINTS;
-
-
-
-interface BreakpointContextValue {
-  breakpoint: Breakpoint;
-  width: number;
-  isMobile: boolean;
-  isTablet: boolean;
-  isDesktop: boolean;
-  isGreaterThan: (bp: Breakpoint) => boolean;
-  isLessThan: (bp: Breakpoint) => boolean;
+interface BreakpointProviderProps {
+  readonly children: ReactNode;
 }
 
-const BreakpointContext = createContext<BreakpointContextValue | null>(null);
-
-export function BreakpointProvider({ children }: { children: ReactNode }) {
+export function BreakpointProvider({ children }: BreakpointProviderProps) {
   const { width } = useWindowSize();
   const [isClient, setIsClient] = useState(false);
 
@@ -41,7 +17,6 @@ export function BreakpointProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo((): BreakpointContextValue => {
-    // 在服务端渲染或客户端第一次渲染时，使用默认值
     if (!isClient || width === 0) {
       return {
         breakpoint: "lg",
@@ -54,16 +29,18 @@ export function BreakpointProvider({ children }: { children: ReactNode }) {
       };
     }
 
-    const breakpoint: Breakpoint =
-      width >= BREAKPOINTS["2xl"]
-        ? "2xl"
-        : width >= BREAKPOINTS.xl
-        ? "xl"
-        : width >= BREAKPOINTS.lg
-        ? "lg"
-        : width >= BREAKPOINTS.md
-        ? "md"
-        : "sm";
+    let breakpoint: Breakpoint;
+    if (width >= BREAKPOINTS["2xl"]) {
+      breakpoint = "2xl";
+    } else if (width >= BREAKPOINTS.xl) {
+      breakpoint = "xl";
+    } else if (width >= BREAKPOINTS.lg) {
+      breakpoint = "lg";
+    } else if (width >= BREAKPOINTS.md) {
+      breakpoint = "md";
+    } else {
+      breakpoint = "sm";
+    }
 
     return {
       breakpoint,
@@ -81,14 +58,4 @@ export function BreakpointProvider({ children }: { children: ReactNode }) {
       {children}
     </BreakpointContext.Provider>
   );
-}
-
-export function useBreakpointContext() {
-  const context = useContext(BreakpointContext);
-  if (!context) {
-    throw new Error(
-      "useBreakpointContext must be used within a BreakpointProvider"
-    );
-  }
-  return context;
 }

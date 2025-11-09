@@ -1,5 +1,3 @@
-// Portal和营销页面相关的类型定义
-
 export interface LandingPageData {
   banner: {
     title: string;

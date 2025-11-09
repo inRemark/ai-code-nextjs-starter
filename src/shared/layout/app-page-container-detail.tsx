@@ -3,7 +3,7 @@ import { cn } from "@shared/utils";
 import { Button } from "@shared/ui/button";
 import { Input } from "@shared/ui/input";
 import { Search, Plus, Filter, Grid, List } from "lucide-react";
-import { useBreakpointContext } from "@shared/theme/breakpoint-provider";
+import { useBreakpoint } from "@shared/theme";
 
 export interface PageContainerProps {
   // Page title
@@ -72,7 +72,7 @@ export const PageContainer: React.FC<PageContainerProps> = ({
   showFilters = false,
   showViewToggle = false,
 }) => {
-  const { isMobile } = useBreakpointContext();
+  const { isMobile } = useBreakpoint();
 
   return (
     <div className={cn("h-full flex flex-col flex-grow-1", className)}>

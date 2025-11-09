@@ -15,7 +15,7 @@ export function formatTime(date: Date | string | number): string {
   const diff = now.getTime() - messageDate.getTime();
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
   
-  // 如果是今天
+  // today
   if (days === 0) {
     return messageDate.toLocaleTimeString('zh-CN', {
       hour: '2-digit',
@@ -23,13 +23,13 @@ export function formatTime(date: Date | string | number): string {
       hour12: false
     });
   }
-  
-  // 如果是昨天
+
+  // yesterday
   if (days === 1) {
-    return '昨天';
+    return 'Yesterday';
   }
   
-  // 如果是今年
+  // within this year
   if (messageDate.getFullYear() === now.getFullYear()) {
     return messageDate.toLocaleDateString('zh-CN', {
       month: 'numeric',
@@ -37,7 +37,7 @@ export function formatTime(date: Date | string | number): string {
     });
   }
   
-  // 如果是更早
+  // older
   return messageDate.toLocaleDateString('zh-CN', {
     year: 'numeric',
     month: 'numeric',

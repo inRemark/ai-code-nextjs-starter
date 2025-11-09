@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { useBreakpointContext } from "@shared/theme/breakpoint-provider";
+import { useBreakpoint } from "@shared/theme";
 import { cn } from "@shared/utils";
 import { TooltipProvider } from "@shared/ui/tooltip";
 import { Sidebar } from "./app-sidebar";
@@ -20,7 +20,7 @@ export const UnifiedLayout: React.FC<UnifiedLayoutProps> = ({
   config,
   className 
 }) => {
-  const { isMobile, isDesktop } = useBreakpointContext();
+  const { isMobile, isDesktop } = useBreakpoint();
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 

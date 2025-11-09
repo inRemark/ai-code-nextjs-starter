@@ -1,5 +1,3 @@
-// 用户相关的类型定义
-
 export interface UserProfile {
   id: string;
   email: string;
@@ -78,10 +76,5 @@ export interface UserSession {
   isActive: boolean;
 }
 
-/**
- * 用户角色类型
- * 与数据库中的UserRole枚举保持一致
- */
 export type UserRole = 'ADMIN' | 'EDITOR' | 'USER';
-
 export type UserStatus = 'active' | 'inactive' | 'suspended';
