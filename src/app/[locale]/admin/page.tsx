@@ -14,18 +14,16 @@ import {
 } from 'lucide-react';
 
 export default function AdminPage() {
-  const { user, loading } = useAuth();
+  const { user, isLoading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/auth/login');
-    } else if (user && (user.role !== 'ADMIN' && user.role !== 'EDITOR')) {
-      router.push('/unauthorized');
+    if (isLoading) {
+      return;
     }
-  }, [user, loading, router]);
+  }, [user, isLoading, router]);
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
@@ -51,7 +49,7 @@ export default function AdminPage() {
     <AdminLayout>
       <div className="space-y-6">
         {/* 欢迎信息 */}
-        <Card className="bg-gradient-to-r from-primary/5 to-chart-1/10 border-primary/20">
+        <Card className="bg-linear-to-r from-primary/5 to-chart-1/10 border-primary/20">
           <CardContent className="p-6">
             <h1 className="text-2xl font-bold mb-2 text-foreground">
               欢迎回来，{user.name || user.email}！

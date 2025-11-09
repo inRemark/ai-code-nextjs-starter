@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { authAPI } from '@/lib/api-client';
 import { FormField } from './form-field';
@@ -10,8 +10,7 @@ import { Divider } from '@shared/ui/divider';
 import { PasswordStrength } from './password-strength';
 import { Button } from '@shared/ui/button';
 import { Alert, AlertDescription } from '@shared/ui/alert';
-import { Badge } from '@shared/ui/badge';
-import { Loader2, AlertCircle, Users, Gift } from 'lucide-react';
+import { Loader2, AlertCircle } from 'lucide-react';
 import { logger } from '@logger';
 import { useTranslations } from 'next-intl';
 
@@ -52,34 +51,7 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [serverError, setServerError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [referralCode, setReferralCode] = useState<string | null>(null);
-  const [referralInfo, setReferralInfo] = useState<{ name?: string; email?: string } | null>(null);
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  // 从URL获取推荐码
-  useEffect(() => {
-    const refCode = searchParams.get('ref');
-    if (refCode) {
-      setReferralCode(refCode);
-      validateReferralCode(refCode);
-    }
-  }, [searchParams]);
-
-  // 验证推荐码
-  const validateReferralCode = async (code: string) => {
-    try {
-      const response = await fetch(`/api/referral/validate?code=${code}`);
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success && data.isValid) {
-          setReferralInfo(data.referrerInfo);
-        }
-      }
-    } catch (error) {
-      logger.error('Failed to validate referral code:', error);
-    }
-  };
 
   const handleFieldChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -124,26 +96,6 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const trackReferralConversion = async (userId: string) => {
-    if (referralCode) {
-      try {
-        await fetch('/api/referral/track', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            referralCodeId: referralCode,
-            stepType: 'REGISTER',
-            userId,
-          }),
-        });
-      } catch (error) {
-        logger.error('Failed to track referral conversion:', error);
-      }
-    }
-  };
-
   const signInAfterRegister = async (email: string, password: string) => {
     const { signIn } = await import('next-auth/react');
     return await signIn('credentials', {
@@ -179,9 +131,6 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
         return;
       }
 
-      // 如果有推荐码，记录推荐转化
-      await trackReferralConversion(response.data.user.id);
-
       // 调用成功回调或重定向
       if (onSuccess) {
         onSuccess();
@@ -214,25 +163,6 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
   return (
     <>
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* 推荐信息提示 */}
-        {referralInfo && (
-          <Alert className="border-green-200 bg-green-50">
-            <Users className="h-4 w-4 text-green-600" />
-            <AlertDescription className="text-green-800">
-              <div className="flex items-center justify-between">
-                <div>
-                  <strong>{referralInfo.name || '好友'}</strong> 邀请您加入 AICoder
-                </div>
-                <Badge variant="secondary" className="bg-green-100 text-green-800">
-                  <Gift className="h-3 w-3 mr-1" />
-                  +50 积分
-                </Badge>
-              </div>
-              <p className="text-sm mt-1">注册成功后，您和推荐人都将获得积分奖励！</p>
-            </AlertDescription>
-          </Alert>
-        )}
-
         {/* 服务器错误提示 */}
         {serverError && (
           <Alert variant="destructive">

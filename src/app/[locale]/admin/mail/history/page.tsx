@@ -11,7 +11,6 @@ import {
   Mail,
   CheckCircle,
   XCircle,
-  Clock,
   User,
   Calendar,
   Eye

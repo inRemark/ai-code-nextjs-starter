@@ -64,15 +64,14 @@ export default function DashboardPage() {
   return (
     <ProtectedRoute>
       <ConsoleLayout>
-        <div className="container mx-auto px-4 py-8 max-w-7xl">
-          <div className="space-y-8">
-            {/* 欢迎区域 */}
-            <div>
-              <h1 className="text-3xl font-bold mb-2">控制台</h1>
-              <p className="text-muted-foreground">
-                欢迎回来，管理您的内容和设置
-              </p>
-            </div>
+        <div className="space-y-8">
+          {/* 欢迎区域 */}
+          <div>
+            <h1 className="text-3xl font-bold mb-2">控制台</h1>
+            <p className="text-muted-foreground">
+              欢迎回来，管理您的内容和设置
+            </p>
+          </div>
 
             {/* 快速操作 */}
             <div>
@@ -150,7 +149,6 @@ export default function DashboardPage() {
                 </Card>
               </div>
             </div>
-          </div>
         </div>
       </ConsoleLayout>
     </ProtectedRoute>
