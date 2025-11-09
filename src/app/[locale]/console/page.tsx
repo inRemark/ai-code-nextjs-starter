@@ -1,6 +1,7 @@
 'use client';
 
 import { ConsoleLayout } from '@shared/layout/console-layout';
+import { EnhancedPageContainer } from '@/shared/layout/app-page-container';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@shared/ui/card';
 import { Button } from '@shared/ui/button';
 import {
@@ -64,15 +65,12 @@ export default function DashboardPage() {
   return (
     <ProtectedRoute>
       <ConsoleLayout>
-        <div className="space-y-8">
-          {/* 欢迎区域 */}
-          <div>
-            <h1 className="text-3xl font-bold mb-2">控制台</h1>
-            <p className="text-muted-foreground">
-              欢迎回来，管理您的内容和设置
-            </p>
-          </div>
-
+        <EnhancedPageContainer
+          title="控制台"
+          description="欢迎回来，管理您的内容和设置"
+          showSearch={false}
+        >
+          <div className="p-6 space-y-8">
             {/* 快速操作 */}
             <div>
               <h2 className="text-xl font-semibold mb-4">快速操作</h2>
@@ -149,7 +147,8 @@ export default function DashboardPage() {
                 </Card>
               </div>
             </div>
-        </div>
+          </div>
+        </EnhancedPageContainer>
       </ConsoleLayout>
     </ProtectedRoute>
   );

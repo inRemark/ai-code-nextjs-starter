@@ -161,3 +161,6 @@ export const userAPI = {
     return handleResponse(response);
   },
 };
+
+// 向后兼容：apiClient 是 api 的别名
+export const apiClient = api;

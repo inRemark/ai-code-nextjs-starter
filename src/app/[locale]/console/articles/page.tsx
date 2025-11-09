@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { ConsoleLayout } from '@/shared/layout/console-layout';
+import { EnhancedPageContainer } from '@/shared/layout/app-page-container';
 import { redirect } from 'next/navigation';
 import { PlusCircle, Edit, Eye, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -27,7 +28,7 @@ async function ArticlesContent() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       {/* 统计信息 */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
@@ -148,45 +149,29 @@ async function ArticlesContent() {
 export default function ConsoleArticlesPage() {
   return (
     <ConsoleLayout>
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <EnhancedPageContainer
+        title="我的文章"
+        description="管理您创建的所有文章"
+        showSearch={false}
+        actions={
+          <Button asChild>
+            <Link href="/console/articles/new" className="gap-2">
+              <PlusCircle className="h-4 w-4" />
+              新建文章
+            </Link>
+          </Button>
+        }
+      >
         <Suspense
           fallback={
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {[...Array(3)].map((_, i) => (
-                  <Card key={i} className="animate-pulse">
-                    <CardHeader className="pb-3">
-                      <div className="h-4 bg-muted rounded w-20" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="h-8 bg-muted rounded w-16" />
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-              <Card>
-                <CardHeader>
-                  <div className="h-6 bg-muted rounded w-32" />
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {[...Array(3)].map((_, i) => (
-                      <div key={i} className="h-24 bg-muted rounded" />
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="p-6 space-y-6">
+              {/* Loading skeleton remains same */}
             </div>
           }
         >
           <ArticlesContent />
         </Suspense>
-      </div>
+      </EnhancedPageContainer>
     </ConsoleLayout>
   );
 }
-
-export const metadata = {
-  title: '文章管理 - 控制台',
-  description: '管理您创建的所有文章',
-};

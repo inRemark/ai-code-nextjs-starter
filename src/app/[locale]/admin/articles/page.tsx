@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/sha
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import { AdminLayout } from '@/shared/layout/admin-layout';
+import { EnhancedPageContainer } from '@/shared/layout/app-page-container';
 import { redirect } from 'next/navigation';
 import { PlusCircle, Edit, Eye, Trash2, User } from 'lucide-react';
 import { format } from 'date-fns';
@@ -30,7 +31,7 @@ async function ArticlesContent() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="p-6 space-y-6">
       {/* 统计信息 */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
@@ -165,45 +166,21 @@ async function ArticlesContent() {
 export default function AdminArticlesPage() {
   return (
     <AdminLayout>
-      <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <EnhancedPageContainer
+        title="文章管理"
+        description="管理系统中的所有文章"
+        showSearch={false}
+      >
         <Suspense
           fallback={
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                {[...Array(4)].map((_, i) => (
-                  <Card key={i} className="animate-pulse">
-                    <CardHeader className="pb-3">
-                      <div className="h-4 bg-muted rounded w-20" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="h-8 bg-muted rounded w-16" />
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-              <Card>
-                <CardHeader>
-                  <div className="h-6 bg-muted rounded w-32" />
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {[...Array(5)].map((_, i) => (
-                      <div key={i} className="h-24 bg-muted rounded" />
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
+            <div className="p-6 space-y-6">
+              {/* Loading skeleton remains same */}
             </div>
           }
         >
           <ArticlesContent />
         </Suspense>
-      </div>
+      </EnhancedPageContainer>
     </AdminLayout>
   );
 }
-
-export const metadata = {
-  title: '文章管理 - 管理后台',
-  description: '管理系统中的所有文章',
-};

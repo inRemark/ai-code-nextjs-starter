@@ -55,13 +55,6 @@ export const adminMenuConfig: MenuConfig = {
           icon: FileText,
           href: "/admin/articles",
           description: "管理文章内容"
-        },
-        {
-          id: "notifications",
-          label: "我的通知",
-          icon: Inbox,
-          href: "/admin/notifications",
-          description: "系统通知管理"
         }
       ]
     },

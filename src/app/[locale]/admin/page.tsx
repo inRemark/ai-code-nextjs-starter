@@ -4,6 +4,7 @@ import { useAuth } from '@features/auth/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { AdminLayout } from '@shared/layout/admin-layout';
+import { EnhancedPageContainer } from '@/shared/layout/app-page-container';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@shared/ui/card';
 import { Badge } from '@shared/ui/badge';
 import { 
@@ -47,21 +48,14 @@ export default function AdminPage() {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        {/* 欢迎信息 */}
-        <Card className="bg-linear-to-r from-primary/5 to-chart-1/10 border-primary/20">
-          <CardContent className="p-6">
-            <h1 className="text-2xl font-bold mb-2 text-foreground">
-              欢迎回来，{user.name || user.email}！
-            </h1>
-            <p className="text-muted-foreground">
-              您正在使用 AICoder 管理后台，当前角色：{user.role === 'ADMIN' ? '管理员' : '编辑者'}
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* 统计卡片 - 文章相关数据 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <EnhancedPageContainer
+        title={`欢迎回来，${user.name || user.email}！`}
+        description={`您正在使用 AICoder 管理后台，当前角色：${user.role === 'ADMIN' ? '管理员' : '编辑者'}`}
+        showSearch={false}
+      >
+        <div className="p-6 space-y-6">
+          {/* 统计卡片 - 文章相关数据 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">总文章数</CardTitle>
@@ -194,7 +188,8 @@ export default function AdminPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
+        </div>
+      </EnhancedPageContainer>
     </AdminLayout>
   );
 }
