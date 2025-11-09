@@ -46,11 +46,14 @@ export const baseSchemas = {
     .max(100, '搜索查询长度不能超过100字符')
     .optional(),
   
-  // 验证密码
+  // 验证密码 - 与 PasswordStrength 组件规则保持一致
   password: z.string()
     .min(8, '密码长度至少8位')
     .max(128, '密码长度不能超过128位')
-    .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, '密码必须包含大小写字母和数字'),
+    .regex(/[a-z]/, '密码必须包含小写字母')
+    .regex(/[A-Z]/, '密码必须包含大写字母')
+    .regex(/\d/, '密码必须包含数字')
+    .regex(/[!@#$%^&*(),.?":{}|<>]/, '密码必须包含特殊字符'),
   
   // 验证确认密码
   confirmPassword: z.string(),

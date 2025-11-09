@@ -50,65 +50,14 @@ export type LoginData = z.infer<typeof loginSchema>;
 export type ProfileData = z.infer<typeof profileSchema>;
 export type SettingsData = z.infer<typeof settingsSchema>;
 
-// 兼容性：保持原有的函数式验证器
-export function validateEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-
-export function validatePassword(password: string): { isValid: boolean; message: string } {
-  if (password.length < 8) {
-    return { isValid: false, message: 'Password must be at least 8 characters long' };
-  }
-  
-  if (!/[a-zA-Z]/.test(password)) {
-    return { isValid: false, message: 'Password must contain at least one letter' };
-  }
-  
-  if (!/\d/.test(password)) {
-    return { isValid: false, message: 'Password must contain at least one number' };
-  }
-  
-  return { isValid: true, message: 'Password is valid' };
-}
-
-export function validateRegisterRequest(email: string, password: string, name?: string): { isValid: boolean; errors: string[] } {
-  const errors: string[] = [];
-  
-  if (!email) {
-    errors.push('Email is required');
-  } else if (!validateEmail(email)) {
-    errors.push('Invalid email format');
-  }
-  
-  if (!password) {
-    errors.push('Password is required');
-  } else {
-    const passwordValidation = validatePassword(password);
-    if (!passwordValidation.isValid) {
-      errors.push(passwordValidation.message);
-    }
-  }
-  
-  if (name && name.length > 50) {
-    errors.push('Name must be less than 50 characters');
-  }
-  
-  return { isValid: errors.length === 0, errors };
-}
-
-export function validateLoginRequest(email: string, password: string): { isValid: boolean; errors: string[] } {
-  const errors: string[] = [];
-  
-  if (!email) {
-    errors.push('Email is required');
-  } else if (!validateEmail(email)) {
-    errors.push('Invalid email format');
-  }
-  
-  if (!password) {
-    errors.push('Password is required');
-  }
-  
-  return { isValid: errors.length === 0, errors };
-}
+/**
+ * 注意：旧的函数式验证器已废弃
+ * 
+ * 迁移指南：
+ * - validateEmail() → 使用 baseSchemas.email.safeParse()
+ * - validatePassword() → 使用 baseSchemas.password.safeParse()
+ * - validateRegisterRequest() → 使用 registerSchema.safeParse()
+ * - validateLoginRequest() → 使用 loginSchema.safeParse()
+ * 
+ * 所有验证逻辑统一在 @/lib/validators/base.ts
+ */
