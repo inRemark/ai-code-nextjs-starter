@@ -13,7 +13,7 @@ import { ModalContext } from "./context";
 import { ModalOptions, ModalState } from "./types";
 import { cn } from "@shared/utils";
 import { logger } from '@logger';
-export function ModalProvider({ children }: { children: React.ReactNode }) {
+export function ModalProvider({ children }: { readonly children: React.ReactNode }) {
   const [state, setState] = useState<ModalState>({
     isOpen: false,
     options: {},
@@ -36,8 +36,8 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
   const confirm = useCallback((options: Omit<ModalOptions, 'content'>) => {
     show({
       ...options,
-      okText: options.okText ?? '确认',
-      cancelText: options.cancelText ?? '取消',
+      okText: options.okText ?? 'OK',
+      cancelText: options.cancelText ?? 'Cancel',
     });
   }, [show]);
 
@@ -61,8 +61,10 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  const contextValue = React.useMemo(() => ({ show, confirm, close }), [show, confirm, close]);
+
   return (
-    <ModalContext.Provider value={{ show, confirm, close }}>
+    <ModalContext.Provider value={contextValue}>
       {children}
       <Dialog open={state.isOpen} onOpenChange={open => !open && handleCancel()}>
         <DialogContent className={cn(state.options.className)}>
@@ -80,10 +82,10 @@ export function ModalProvider({ children }: { children: React.ReactNode }) {
           {state.options.showFooter !== false && (
             <DialogFooter>
               <Button variant="outline" onClick={handleCancel}>
-                {state.options.cancelText ?? '取消'}
+                {state.options.cancelText ?? 'Cancel'}
               </Button>
               <Button onClick={handleOk}>
-                {state.options.okText ?? '确认'}
+                {state.options.okText ?? 'OK'}
               </Button>
             </DialogFooter>
           )}

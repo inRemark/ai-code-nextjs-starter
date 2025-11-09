@@ -1,7 +1,7 @@
 import React from 'react';
 import { cn } from '@shared/utils';
 
-// Timeline组件类型定义
+// Timeline
 export interface TimelineItem {
   id: string;
   title: string;
@@ -15,16 +15,16 @@ interface TimelineProps {
   className?: string;
 }
 
-// Timeline组件实现
+// Timeline
 export const Timeline: React.FC<TimelineProps> = ({ items, className }) => {
   return (
     <div className={cn("relative", className)}>
-      {/* 时间线主线 */}
+      {/* Timeline line */}
       <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-border" />
       
       <div className="space-y-6">
-        {items.map((item, index) => (
-          <TimelineItem key={item.id} item={item} isLast={index === items.length - 1} />
+        {items.map((item) => (
+          <TimelineItem key={item.id} item={item} />
         ))}
       </div>
     </div>
@@ -33,10 +33,9 @@ export const Timeline: React.FC<TimelineProps> = ({ items, className }) => {
 
 interface TimelineItemProps {
   item: TimelineItem;
-  isLast?: boolean;
 }
 
-export const TimelineItem: React.FC<TimelineItemProps> = ({ item, isLast }) => {
+export const TimelineItem: React.FC<TimelineItemProps> = ({ item }) => {
   const getTypeColor = (type: TimelineItem['type']) => {
     switch (type) {
       case 'success':
@@ -52,15 +51,15 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({ item, isLast }) => {
 
   return (
     <div className="relative pl-10">
-      {/* 时间点 */}
+      {/* Timeline dot */}
       <div 
         className={cn(
           "absolute left-2 w-4 h-4 rounded-full border-2 -translate-x-1/2",
           getTypeColor(item.type)
         )}
       />
-      
-      {/* 内容 */}
+
+      {/* Timeline content */}
       <div className="bg-card border rounded-lg p-4 shadow-sm">
         <div className="flex items-center justify-between mb-2">
           <h3 className="text-lg font-semibold">{item.title}</h3>
@@ -74,7 +73,7 @@ export const TimelineItem: React.FC<TimelineItemProps> = ({ item, isLast }) => {
   );
 };
 
-// 其他数据组件可以在这里添加
+// Data List
 export const DataList: React.FC<{ 
   items: Array<{ id: string; label: string; value: string; }>;
   className?: string;

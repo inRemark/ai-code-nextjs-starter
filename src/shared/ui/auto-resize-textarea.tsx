@@ -1,7 +1,6 @@
+import React, { useCallback, useEffect, useRef } from "react";
 import { Textarea } from "@shared/ui/textarea";
 import { cn } from "@shared/utils";
-import React from "react";
-import { useCallback, useEffect, useRef } from "react";
 
 export interface AutoResizeTextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -16,7 +15,7 @@ export const AutoResizeTextarea = React.forwardRef<
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const lineHeightRef = useRef<number>(0);
 
-  // 获取实际引用
+  // Get the textarea element from ref
   const getTextarea = useCallback(() => {
     if (ref) {
       if (typeof ref === "function") {
@@ -25,47 +24,47 @@ export const AutoResizeTextarea = React.forwardRef<
       return (ref as React.MutableRefObject<HTMLTextAreaElement>).current;
     }
     return textareaRef.current;
-  }, []);
+  }, [ref]);
 
-  // 计算行高
+  // Calculate line height on mount
   useEffect(() => {
     const textarea = getTextarea();
     if (!textarea) return;
 
-    const computedStyle = window.getComputedStyle(textarea);
-    const lineHeight = parseInt(computedStyle.lineHeight);
-    lineHeightRef.current = isNaN(lineHeight) ? 20 : lineHeight;
+    const computedStyle = globalThis.getComputedStyle(textarea);
+    const lineHeight = Number.parseInt(computedStyle.lineHeight);
+    lineHeightRef.current = Number.isNaN(lineHeight) ? 20 : lineHeight;
   }, [getTextarea]);
 
-  // 调整高度的函数
+  // Adjust height function
   const adjustHeight = useCallback(() => {
     const textarea = getTextarea();
     if (!textarea) return;
 
-    // 重置高度以获取正确的 scrollHeight
+    // Reset height to get correct scrollHeight
     textarea.style.height = "auto";
 
-    // 计算最小和最大高度
-    const paddingTop = parseInt(window.getComputedStyle(textarea).paddingTop);
-    const paddingBottom = parseInt(window.getComputedStyle(textarea).paddingBottom);
+    // Calculate min and max height
+    const paddingTop = Number.parseInt(globalThis.getComputedStyle(textarea).paddingTop);
+    const paddingBottom = Number.parseInt(globalThis.getComputedStyle(textarea).paddingBottom);
     const minHeight = lineHeightRef.current * minRows + paddingTop + paddingBottom;
     const maxHeight = lineHeightRef.current * maxRows + paddingTop + paddingBottom;
 
-    // 设置新高度
+    // Set new height
     const newHeight = Math.min(Math.max(textarea.scrollHeight, minHeight), maxHeight);
     textarea.style.height = `${newHeight}px`;
-    
-    // 如果内容超出最大高度，显示滚动条
+
+    // Show scrollbar if content exceeds max height
     textarea.style.overflowY = textarea.scrollHeight > maxHeight ? "auto" : "hidden";
   }, [getTextarea, minRows, maxRows]);
 
-  // 处理内容变化
+  // Handle content change
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     onChange?.(e);
     adjustHeight();
   };
 
-  // 初始化时调整高度
+  // Adjust height on mount and when value/defaultValue changes
   useEffect(() => {
     adjustHeight();
   }, [props.value, props.defaultValue, adjustHeight]);
@@ -78,7 +77,7 @@ export const AutoResizeTextarea = React.forwardRef<
         if (typeof ref === "function") {
           ref(node);
         } else if (ref) {
-          (ref as React.MutableRefObject<HTMLTextAreaElement | null>).current = node;
+          (ref.current = node);
         }
       }}
       onChange={handleChange}

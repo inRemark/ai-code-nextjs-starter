@@ -8,8 +8,8 @@ import { Calendar as CalendarComponent } from './calendar';
 import { cn } from '@shared/utils';
 
 interface DatePickerWithRangeProps {
-  className?: string;
-  placeholder?: string;
+  readonly className?: string;
+  readonly placeholder?: string;
 }
 
 export function DatePickerWithRange({ 
@@ -34,7 +34,6 @@ export function DatePickerWithRange({
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
           <CalendarComponent
-            initialFocus
             mode="range"
             defaultMonth={new Date()}
             numberOfMonths={2}

@@ -5,10 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@shar
 import { cn } from '@shared/utils';
 
 interface FormSectionProps {
-  title: string;
-  description?: string;
-  children: React.ReactNode;
-  className?: string;
+  readonly title: string;
+  readonly description?: string;
+  readonly children: React.ReactNode;
+  readonly className?: string;
 }
 
 export function FormSection({ title, description, children, className }: FormSectionProps) {
@@ -26,12 +26,12 @@ export function FormSection({ title, description, children, className }: FormSec
 }
 
 interface FormFieldProps {
-  label: string;
-  description?: string;
-  error?: string;
-  required?: boolean;
-  children: React.ReactNode;
-  className?: string;
+  readonly label: string;
+  readonly description?: string;
+  readonly error?: string;
+  readonly required?: boolean;
+  readonly children: React.ReactNode;
+  readonly className?: string;
 }
 
 export function FormField({ 
@@ -60,9 +60,9 @@ export function FormField({
 }
 
 interface FormActionsProps {
-  children: React.ReactNode;
-  className?: string;
-  align?: 'left' | 'center' | 'right';
+  readonly children: React.ReactNode;
+  readonly className?: string;
+  readonly align?: 'left' | 'center' | 'right';
 }
 
 export function FormActions({ children, className, align = 'right' }: FormActionsProps) {
