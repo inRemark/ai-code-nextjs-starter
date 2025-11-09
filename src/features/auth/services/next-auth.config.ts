@@ -3,6 +3,8 @@ import { UserRole } from '@shared/types/user';
 import { logger } from '@logger';
 // NextAuth 类型扩展已移至 @features/auth/types/next-auth.d.ts
 import CredentialsProvider from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
+import GitHubProvider from 'next-auth/providers/github';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
 import { verifyPassword } from './auth.service';
 import prisma from '@/lib/database/prisma';
@@ -86,6 +88,18 @@ export const authConfig: NextAuthOptions = {
         }
       }
     })
+    // 可选的 OAuth 提供商：在环境变量中配置 clientId/clientSecret 即可启用
+    , ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET ? [
+      GoogleProvider({
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      })
+    ] : []), ...(process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET ? [
+      GitHubProvider({
+        clientId: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      })
+    ] : [])
   ],
   callbacks: {
     // 自动账户关联逻辑和 JWT token 创建
@@ -178,8 +192,8 @@ export const authConfig: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: '/login',
-    error: '/login',
+    signIn: '/auth/login',
+    error: '/auth/login',
   }
 };
 

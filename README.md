@@ -63,7 +63,15 @@ DATABASE_URL="postgresql://user:pass@host:5432/db"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="$(openssl rand -base64 32)"
 JWT_SECRET="$(openssl rand -base64 32)"
+
+# Optional: OAuth Providers (Google/GitHub)
+GOOGLE_CLIENT_ID="your-client-id.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="your-client-secret"
+GITHUB_CLIENT_ID="your-github-client-id"
+GITHUB_CLIENT_SECRET="your-github-client-secret"
 ```
+
+> 📘 **OAuth Setup**: See [docs/OAUTH_QUICKSTART.md](./docs/OAUTH_QUICKSTART.md) for detailed OAuth configuration guide.
 
 ## Directory Structure (AI-Friendly)
 
@@ -113,6 +121,7 @@ JWT_SECRET=...
 - **Architecture**: [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
 - **Project Structure**: [docs/PROJECT_STRUCTURE.md](./docs/PROJECT_STRUCTURE.md)
 - **Deployment Guide**: [docs/DEPLOYMENT.md](./docs/DEPLOYMENT.md)
+- **OAuth Setup**: [docs/OAUTH_SETUP.md](./docs/OAUTH_SETUP.md) / [Quick Start](./docs/OAUTH_QUICKSTART.md)
 
 ## License
 
