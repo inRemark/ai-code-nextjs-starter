@@ -10,10 +10,122 @@ import rehypeHighlight from 'rehype-highlight';
 import 'highlight.js/styles/github.css';
 
 interface MarkdownRendererProps {
-  title: string;
-  description?: string;
-  content: string;
+  readonly title: string;
+  readonly description?: string;
+  readonly content: string;
 }
+
+// Markdown component definitions
+const MarkdownH1 = ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+  <h1 className="text-2xl font-bold mb-4 text-foreground border-b pb-2" {...props}>
+    {children}
+  </h1>
+);
+
+const MarkdownH2 = ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+  <h2 className="text-xl font-semibold mb-3 mt-6 text-foreground" {...props}>
+    {children}
+  </h2>
+);
+
+const MarkdownH3 = ({ children, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+  <h3 className="text-lg font-semibold mb-2 mt-4 text-foreground" {...props}>
+    {children}
+  </h3>
+);
+
+const MarkdownP = ({ children, ...props }: React.HTMLAttributes<HTMLParagraphElement>) => (
+  <p className="mb-4 text-foreground leading-relaxed" {...props}>
+    {children}
+  </p>
+);
+
+const MarkdownUl = ({ children, ...props }: React.HTMLAttributes<HTMLUListElement>) => (
+  <ul className="mb-4 ml-6 list-disc text-foreground" {...props}>
+    {children}
+  </ul>
+);
+
+const MarkdownOl = ({ children, ...props }: React.HTMLAttributes<HTMLOListElement>) => (
+  <ol className="mb-4 ml-6 list-decimal text-foreground" {...props}>
+    {children}
+  </ol>
+);
+
+const MarkdownLi = ({ children, ...props }: React.HTMLAttributes<HTMLLIElement>) => (
+  <li className="mb-1 text-foreground" {...props}>
+    {children}
+  </li>
+);
+
+const MarkdownStrong = ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
+  <strong className="font-semibold text-foreground" {...props}>
+    {children}
+  </strong>
+);
+
+const MarkdownEm = ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
+  <em className="italic text-foreground" {...props}>
+    {children}
+  </em>
+);
+
+const MarkdownCode = ({ children, ...props }: React.HTMLAttributes<HTMLElement>) => (
+  <code className="bg-muted px-2 py-1 rounded text-sm font-mono text-foreground" {...props}>
+    {children}
+  </code>
+);
+
+const MarkdownPre = ({ children, ...props }: React.HTMLAttributes<HTMLPreElement>) => (
+  <pre className="bg-muted p-4 rounded-lg overflow-x-auto mb-4" {...props}>
+    {children}
+  </pre>
+);
+
+const MarkdownBlockquote = ({ children, ...props }: React.HTMLAttributes<HTMLQuoteElement>) => (
+  <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground mb-4" {...props}>
+    {children}
+  </blockquote>
+);
+
+const MarkdownTable = ({ children, ...props }: React.HTMLAttributes<HTMLTableElement>) => (
+  <div className="overflow-x-auto mb-4">
+    <table className="min-w-full border border-border rounded-lg" {...props}>
+      {children}
+    </table>
+  </div>
+);
+
+const MarkdownTh = ({ children, ...props }: React.ThHTMLAttributes<HTMLTableCellElement>) => (
+  <th className="border border-border px-4 py-2 bg-muted font-semibold text-left" {...props}>
+    {children}
+  </th>
+);
+
+const MarkdownTd = ({ children, ...props }: React.TdHTMLAttributes<HTMLTableCellElement>) => (
+  <td className="border border-border px-4 py-2" {...props}>
+    {children}
+  </td>
+);
+
+// Markdown components configuration
+const markdownComponents = {
+  h1: MarkdownH1,
+  h2: MarkdownH2,
+  h3: MarkdownH3,
+  p: MarkdownP,
+  ul: MarkdownUl,
+  ol: MarkdownOl,
+  li: MarkdownLi,
+  strong: MarkdownStrong,
+  em: MarkdownEm,
+  code: MarkdownCode,
+  pre: MarkdownPre,
+  blockquote: MarkdownBlockquote,
+  table: MarkdownTable,
+  th: MarkdownTh,
+  td: MarkdownTd,
+};
 
 export function MarkdownRenderer({ title, description, content }: MarkdownRendererProps) {
   return (
@@ -33,85 +145,7 @@ export function MarkdownRenderer({ title, description, content }: MarkdownRender
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   rehypePlugins={[rehypeHighlight]}
-                  components={{
-                    h1: ({ children }) => (
-                      <h1 className="text-2xl font-bold mb-4 text-foreground border-b pb-2">
-                        {children}
-                      </h1>
-                    ),
-                    h2: ({ children }) => (
-                      <h2 className="text-xl font-semibold mb-3 mt-6 text-foreground">
-                        {children}
-                      </h2>
-                    ),
-                    h3: ({ children }) => (
-                      <h3 className="text-lg font-semibold mb-2 mt-4 text-foreground">
-                        {children}
-                      </h3>
-                    ),
-                    p: ({ children }) => (
-                      <p className="mb-4 text-foreground leading-relaxed">
-                        {children}
-                      </p>
-                    ),
-                    ul: ({ children }) => (
-                      <ul className="mb-4 ml-6 list-disc text-foreground">
-                        {children}
-                      </ul>
-                    ),
-                    ol: ({ children }) => (
-                      <ol className="mb-4 ml-6 list-decimal text-foreground">
-                        {children}
-                      </ol>
-                    ),
-                    li: ({ children }) => (
-                      <li className="mb-1 text-foreground">
-                        {children}
-                      </li>
-                    ),
-                    strong: ({ children }) => (
-                      <strong className="font-semibold text-foreground">
-                        {children}
-                      </strong>
-                    ),
-                    em: ({ children }) => (
-                      <em className="italic text-foreground">
-                        {children}
-                      </em>
-                    ),
-                    code: ({ children }) => (
-                      <code className="bg-muted px-2 py-1 rounded text-sm font-mono text-foreground">
-                        {children}
-                      </code>
-                    ),
-                    pre: ({ children }) => (
-                      <pre className="bg-muted p-4 rounded-lg overflow-x-auto mb-4">
-                        {children}
-                      </pre>
-                    ),
-                    blockquote: ({ children }) => (
-                      <blockquote className="border-l-4 border-primary pl-4 italic text-muted-foreground mb-4">
-                        {children}
-                      </blockquote>
-                    ),
-                    table: ({ children }) => (
-                      <div className="overflow-x-auto mb-4">
-                        <table className="min-w-full border border-border rounded-lg">
-                          {children}
-                        </table>
-                      </div>
-                    ),
-                    th: ({ children }) => (
-                      <th className="border border-border px-4 py-2 bg-muted font-semibold text-left">
-                        {children}
-                      </th>
-                    ),
-                    td: ({ children }) => (
-                      <td className="border border-border px-4 py-2">
-                        {children}
-                      </td>
-                    ),
-                  }}
+                  components={markdownComponents}
                 >
                   {content}
                 </ReactMarkdown>
