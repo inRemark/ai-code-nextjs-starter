@@ -8,7 +8,7 @@ import { Menu, Settings, User, HelpCircle, LogOut, Bell } from "lucide-react";
 import { Breadcrumb } from "./breadcrumb";
 import { HeaderConfig } from "./app-layout-config";
 import { ThemeToggle } from "@shared/ui/theme-toggle";
-import { useAuth } from "@features/auth/components/unified-auth-provider";
+import { useAuth } from "@features/auth/hooks/use-auth";
 import { logger } from '@logger';
 import { 
   DropdownMenu, 

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { validateSessionToken } from '@features/auth/services/session-token';
 import { hasPermission, type Permission } from '@features/auth/services/rbac.service';
 import { Session } from 'next-auth';
 import { UserRole } from '@shared/types/user';
 import { logger } from '@logger';
 import { AuthUser } from '@features/auth/types/auth.types';
+
 async function getServerSession() {
   try {
     const { authConfig } = await import('../services/next-auth.config');
@@ -30,11 +30,10 @@ function extractUserRole(session: Session | null): UserRole {
 }
 
 /**
- * 从请求中提取已验证用户，优先NextAuth Session，其次移动端Session Token
+ * 从请求中提取已验证用户（仅 NextAuth Session）
  * 返回AuthUser和可选的原始session对象
  */
-async function getUserFromRequest(request: NextRequest): Promise<{ user: AuthUser | null; session?: Session | null }> {
-  // 1. NextAuth Session (Web)
+async function getUserFromRequest(_request: NextRequest): Promise<{ user: AuthUser | null; session?: Session | null }> {
   const session = await getServerSession();
   if (session?.user?.id) {
     const userRole = extractUserRole(session);
@@ -42,18 +41,6 @@ async function getUserFromRequest(request: NextRequest): Promise<{ user: AuthUse
       user: { id: session.user.id, email: session.user.email || '', name: session.user.name || undefined, role: userRole },
       session,
     };
-  }
-
-  // 2. Session Token (Mobile)
-  const authHeader = request.headers.get('authorization');
-  if (authHeader?.startsWith('Bearer ')) {
-    const sessionToken = authHeader.substring(7);
-    const dbUser = await validateSessionToken(sessionToken);
-    if (dbUser) {
-      return {
-        user: { id: dbUser.id, email: dbUser.email, name: dbUser.name || undefined, role: dbUser.role as UserRole },
-      };
-    }
   }
 
   return { user: null };
@@ -245,11 +232,9 @@ export function requireAuth<T extends unknown[]>(
 }
 
 /**
- * 获取用户信息 - 兼容现有API
- * 支持双模式验证：NextAuth Session (Web端) + Session Token (Mobile端)
+ * 获取用户信息 - 仅支持 NextAuth Session
  */
-export async function getAuthUserFromRequest(request: NextRequest): Promise<AuthUser> {
-  // 方式1: NextAuth Session (Web端)
+export async function getAuthUserFromRequest(_request: NextRequest): Promise<AuthUser> {
   const session = await getServerSession();
   if (session?.user?.id) {
     const userRole = extractUserRole(session);
@@ -259,22 +244,6 @@ export async function getAuthUserFromRequest(request: NextRequest): Promise<Auth
       name: session.user.name || undefined,
       role: userRole,
     };
-  }
-  
-  // 方式2: Session Token (Mobile端)
-  const authHeader = request.headers.get('authorization');
-  if (authHeader?.startsWith('Bearer ')) {
-    const sessionToken = authHeader.substring(7);
-    const dbUser = await validateSessionToken(sessionToken);
-    
-    if (dbUser) {
-      return {
-        id: dbUser.id,
-        email: dbUser.email,
-        name: dbUser.name || undefined,
-        role: dbUser.role as UserRole,
-      };
-    }
   }
   
   throw new Error('No authentication session found');

@@ -340,31 +340,7 @@ export const authAPI = {
     return handleResponse(response);
   },
 
-  // 移动端刷新令牌
-  mobileRefreshToken: async (sessionToken: string) => {
-    const response = await fetch('/api/auth/mobile/refresh', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${sessionToken}`,
-      },
-    });
-    
-    return handleResponse(response);
-  },
-
-  // 移动端登出
-  mobileLogout: async (sessionToken: string) => {
-    const response = await fetch('/api/auth/mobile/logout', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${sessionToken}`,
-      },
-    });
-    
-    return handleResponse(response);
-  },
-
-  // 获取当前用户信息（支持Web端和移动端）
+  // 获取当前用户信息
   getMe: async () => {
     const response = await fetch('/api/auth/me', {
       credentials: 'include', // 自动携带NextAuth session cookie

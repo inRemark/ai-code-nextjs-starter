@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@features/auth/components/unified-auth-provider';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -10,8 +10,10 @@ interface ProtectedRouteProps {
 }
 
 export default function ProtectedRoute({ children, requireAdmin = false }: ProtectedRouteProps) {
-  const { user, loading } = useAuth();
+  const { data: session, status } = useSession();
   const router = useRouter();
+  const loading = status === 'loading';
+  const user = session?.user;
 
   useEffect(() => {
     if (!loading && !user) {

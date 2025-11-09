@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@features/auth/components/unified-auth-provider';
+import { useAuth } from '@features/auth/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { AdminLayout } from '@shared/layout/admin-layout';

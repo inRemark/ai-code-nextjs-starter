@@ -4,7 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { Button } from "@shared/ui/button";
 import { LogOut, User, Settings, ShoppingBag } from "lucide-react";
-import { useAuth } from "@features/auth/components/unified-auth-provider";
+import { useAuth } from "@features/auth/hooks/use-auth";
 import {
   DropdownMenu,
   DropdownMenuContent,

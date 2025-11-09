@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { logger } from '@logger';
-import { useAuth } from '@features/auth/components/unified-auth-provider';
+import { useAuth } from '@features/auth/hooks/use-auth';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@shared/ui/card';
 import { Button } from '@shared/ui/button';
 import { Input } from '@shared/ui/input';

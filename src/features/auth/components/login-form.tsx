@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAuth } from '@features/auth/components/unified-auth-provider';
+import { signIn } from 'next-auth/react';
 import { FormField } from './form-field';
 import { SocialLogin } from './social-login';
 import { Divider } from '@shared/ui/divider';
@@ -29,7 +29,6 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
   const [serverError, setServerError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { login: authLogin } = useAuth();
 
   const validateEmail = (email: string): string | undefined => {
     if (!email) return t('emailRequired');
@@ -79,17 +78,25 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
     setLoading(true);
 
     try {
-      // 使用认证提供者的登录方法，确保状态同步
-      await authLogin(formData.email, formData.password);
+      // 使用 NextAuth 登录
+      const result = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: false,
+      });
       
-      // 登录成功处理
-      if (onSuccess) {
-        onSuccess();
+      if (result?.error) {
+        setServerError(result.error);
+        logger.error('Login error:', result.error);
       } else {
-        router.push('/');
+        // 登录成功处理
+        if (onSuccess) {
+          onSuccess();
+        } else {
+          router.push('/console');
+        }
       }
     } catch (err: unknown) {
-      // 处理来自认证提供者的错误
       const errorMessage = err instanceof Error ? err.message : t('loginFailed');
       setServerError(errorMessage);
       logger.error('Login error:', err);
