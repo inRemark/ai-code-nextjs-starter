@@ -6,7 +6,6 @@ import {
   Mail,
   Send,
   Clock,
-  Inbox,
   LucideIcon
 } from "lucide-react";
 
