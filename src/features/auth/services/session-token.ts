@@ -1,4 +1,4 @@
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import prisma from '@/lib/database/prisma';
 import { User } from '@prisma/client';
 import { logger } from '@logger';

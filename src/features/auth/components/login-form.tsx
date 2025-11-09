@@ -86,9 +86,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
       if (onSuccess) {
         onSuccess();
       } else {
-        // 按照文档架构，登录成功后跳转到dashboard
-        // 注意：不要在这里直接跳转，而是让useEffect在UnifiedAuthProvider中处理
-        // 等待session更新完成后再跳转
+        router.push('/');
       }
     } catch (err: unknown) {
       // 处理来自认证提供者的错误
