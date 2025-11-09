@@ -198,4 +198,5 @@ export const authConfig: NextAuthOptions = {
 };
 
 // NextAuth v4 导出方式
-export default NextAuth(authConfig);
+const handler = NextAuth(authConfig);
+export default handler;

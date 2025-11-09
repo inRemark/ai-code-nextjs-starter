@@ -33,7 +33,7 @@ function extractUserRole(session: Session | null): UserRole {
  * 从请求中提取已验证用户（仅 NextAuth Session）
  * 返回AuthUser和可选的原始session对象
  */
-async function getUserFromRequest(_request: NextRequest): Promise<{ user: AuthUser | null; session?: Session | null }> {
+async function getUserFromRequest(): Promise<{ user: AuthUser | null; session?: Session | null }> {
   const session = await getServerSession();
   if (session?.user?.id) {
     const userRole = extractUserRole(session);
@@ -102,7 +102,7 @@ export async function requirePermission(permission: Permission) {
     return async (request: NextRequest) => {
       try {
         // 使用统一的用户获取函数
-        const { user, session } = await getUserFromRequest(request);
+        const { user, session } = await getUserFromRequest();
 
         if (!user) {
           return NextResponse.json(
@@ -152,7 +152,7 @@ export async function requireRole(roles: string[]) {
   ) => {
     return async (request: NextRequest) => {
       try {
-        const { user } = await getUserFromRequest(request);
+        const { user } = await getUserFromRequest();
 
         if (!user || !roles.includes(user.role)) {
           return NextResponse.json(
@@ -182,7 +182,7 @@ export function requireAdmin<T extends unknown[]>(
 ) {
   return async (request: NextRequest, ...args: T): Promise<NextResponse> => {
     try {
-      const { user } = await getUserFromRequest(request);
+      const { user } = await getUserFromRequest();
 
       if (user?.role !== 'ADMIN') {
         return NextResponse.json(
@@ -211,7 +211,7 @@ export function requireAuth<T extends unknown[]>(
 ) {
   return async (request: NextRequest, ...args: T): Promise<NextResponse> => {
     try {
-      const { user } = await getUserFromRequest(request);
+      const { user } = await getUserFromRequest();
 
       if (!user) {
         return NextResponse.json(
@@ -234,7 +234,7 @@ export function requireAuth<T extends unknown[]>(
 /**
  * 获取用户信息 - 仅支持 NextAuth Session
  */
-export async function getAuthUserFromRequest(_request: NextRequest): Promise<AuthUser> {
+export async function getAuthUserFromRequest(): Promise<AuthUser> {
   const session = await getServerSession();
   if (session?.user?.id) {
     const userRole = extractUserRole(session);

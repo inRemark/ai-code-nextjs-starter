@@ -30,9 +30,9 @@ export interface MeResponse {
   id: string;
   email: string;
   name: string | null;
-  avatar: string | null;
   role: UserRole;
   createdAt: Date;
+  updatedAt: Date;
 }
 
 // 更新用户信息请求

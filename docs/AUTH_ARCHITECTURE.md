@@ -57,10 +57,12 @@ export const DELETE = requireRole(['ADMIN'], async (user, request) => {
 ### 路由保护
 
 **页面级别**：`src/middleware.ts`
+
 - 自动重定向未登录用户到 `/auth/login`
 - 检查角色权限（admin/console 路由）
 
 **组件级别**：`src/features/auth/components/protected-route.tsx`
+
 ```tsx
 <ProtectedRoute requireAdmin>
   <AdminPanel />
@@ -141,6 +143,7 @@ model User {
 ### OAuth Account 自动关联
 
 通过 `signIn` callback 实现：
+
 - 相同邮箱自动关联到同一用户
 - 支持同一用户绑定多个 OAuth 提供商
 

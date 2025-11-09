@@ -16,13 +16,12 @@ export const GET = requireAuth(async (user) => {
         email: true,
         name: true,
         role: true,
-        isActive: true,
         createdAt: true,
         updatedAt: true,
       },
     });
 
-    if (!userData || !userData.isActive) {
+    if (!userData) {
       return NextResponse.json(
         { success: false, error: 'User not found' },
         { status: 404 }
@@ -35,7 +34,6 @@ export const GET = requireAuth(async (user) => {
       email: userData.email,
       name: userData.name,
       role: userData.role,
-      isActive: userData.isActive,
       createdAt: userData.createdAt,
       updatedAt: userData.updatedAt,
     };
@@ -68,7 +66,6 @@ export const PATCH = requireAuth(async (user, request: NextRequest) => {
         email: true,
         name: true,
         role: true,
-        isActive: true,
         createdAt: true,
         updatedAt: true,
       },
@@ -80,7 +77,6 @@ export const PATCH = requireAuth(async (user, request: NextRequest) => {
       email: updatedUser.email,
       name: updatedUser.name,
       role: updatedUser.role,
-      isActive: updatedUser.isActive,
       createdAt: updatedUser.createdAt,
       updatedAt: updatedUser.updatedAt,
     };
