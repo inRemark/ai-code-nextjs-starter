@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
 /**
- * 多语言翻译验证脚本
- * 检查所有features的翻译文件是否完整创建
+ * i18n check script
+ * checks if all translation files for each feature are present
+ * and valid JSON format for zh, en, ja locales.
  */
 
-import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,56 +31,50 @@ const FEATURES = [
 const srcDir = path.join(__dirname, '../src');
 const featuresDir = path.join(srcDir, 'features');
 
-console.log('🔍 检查多语言翻译文件完整性...\n');
+console.log('🔍 checking i18n translation files...\n');
 
 let allValid = true;
-const results = [];
 
-FEATURES.forEach((feature) => {
+for (const feature of FEATURES) {
   const featureLocaleDir = path.join(featuresDir, feature, 'locale');
 
   if (!fs.existsSync(featureLocaleDir)) {
-    console.log(`❌ ${feature}: locale 目录不存在`);
-    results.push({ feature, status: '❌', message: 'locale 目录不存在' });
-    allValid = false;
-    return;
+    console.log(`❌ ${feature}: locale directory does not exist`);
+    continue;
   }
 
   const missingFiles = [];
-  LOCALES.forEach((locale) => {
+  for (const locale of LOCALES) {
     const filePath = path.join(featureLocaleDir, `${locale}.json`);
-    if (!fs.existsSync(filePath)) {
-      missingFiles.push(locale);
-      allValid = false;
-    } else {
-      // 验证JSON格式
+    if (fs.existsSync(filePath)) {
+      // check if valid JSON
       try {
         const content = fs.readFileSync(filePath, 'utf-8');
         JSON.parse(content);
       } catch (e) {
-        console.log(`❌ ${feature}/${locale}.json: JSON格式错误 - ${e.message}`);
-        results.push({ feature, locale, status: '❌', message: 'JSON格式错误' });
-        allValid = false;
-        return;
+        console.log(`❌ ${feature}/${locale}.json: JSON format error - ${e.message}`);
+        continue;
       }
+    } else {
+      missingFiles.push(locale);
+      allValid = false;
     }
-  });
+  }
 
   if (missingFiles.length === 0) {
-    console.log(`✅ ${feature}: 所有语言文件齐全 (zh, en, ja)`);
-    results.push({ feature, status: '✅', message: '所有语言文件齐全' });
+    console.log(`✅ ${feature}: All language files are complete (zh, en, ja)`);
+    results.push({ feature, status: '✅', message: 'All language files are complete' });
   } else {
-    console.log(`❌ ${feature}: 缺少 ${missingFiles.join(', ')} 翻译文件`);
-    results.push({ feature, status: '❌', message: `缺少 ${missingFiles.join(', ')} 翻译文件` });
-    allValid = false;
+    console.log(`❌ ${feature}: Missing ${missingFiles.join(', ')} translation files`);
+    results.push({ feature, status: '❌', message: `Missing ${missingFiles.join(', ')} translation files` });
   }
-});
+}
 
 console.log('\n' + '='.repeat(50));
 if (allValid) {
-  console.log('✅ 所有翻译文件验证通过！');
+  console.log('✅ All translation files are valid!');
   process.exit(0);
 } else {
-  console.log('❌ 存在缺失的翻译文件，请检查！');
+  console.log('❌ Missing translation files found, please check!');
   process.exit(1);
 }

@@ -48,8 +48,8 @@ export function useKeyboardExpandableList<T>({
 
   useEffect(() => {
     if (enabled) {
-      window.addEventListener('keydown', handleGlobalKeyDown);
-      return () => window.removeEventListener('keydown', handleGlobalKeyDown);
+      globalThis.addEventListener('keydown', handleGlobalKeyDown);
+      return () => globalThis.removeEventListener('keydown', handleGlobalKeyDown);
     }
   }, [enabled, handleGlobalKeyDown]);
 

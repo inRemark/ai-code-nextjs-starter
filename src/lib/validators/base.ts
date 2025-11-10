@@ -1,121 +1,120 @@
 import { z } from 'zod';
 
 /**
- * 基础验证模式
- * 包含清理和验证功能，供各功能模块复用
+ * baseSchemas provides common validation schemas for reuse across different modules
  * 
  * @module validators/base
- * @description 提供统一的验证规则和辅助函数，确保前后端验证逻辑一致
+ * @description Provides unified validation rules and helper functions to ensure consistent validation logic between frontend and backend
  */
 
 /**
- * 验证正则表达式常量
- * 集中管理所有正则表达式，便于维护和复用
+ * Validate regular expression constants
+ * Centralize management of all regular expressions for easy maintenance and reuse
  */
 const REGEX_PATTERNS = {
-  /** 邮箱格式：xxx@xxx.xxx */
+  /** email format: xxx@xxx.xxx */
   email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  /** URL格式：http(s)://... */
+  /** URL format: http(s)://... */
   url: /^https?:\/\/.+/,
-  /** CUID2格式：24-32位小写字母+数字 */
+  /** CUID2 format: 24-32 lowercase letters + numbers */
   cuid: /^[a-z0-9]{24,32}$/,
-  /** 小写字母 */
+  /** lowercase letters */
   lowercase: /[a-z]/,
-  /** 大写字母 */
+  /** uppercase letters */
   uppercase: /[A-Z]/,
-  /** 数字 */
+  /** digits */
   digit: /\d/,
-  /** 特殊字符 */
+  /** special characters */
   specialChar: /[!@#$%^&*(),.?":{}|<>]/,
 } as const;
 
-// 基础验证模式
+// baseSchemas provides common validation schemas for reuse across different modules
 export const baseSchemas = {
-  // 验证文本
+  // Validate text
   text: z.string()
     .trim()
-    .min(1, '文本不能为空')
-    .max(1000, '文本长度不能超过1000字符'),
-  
-  // 验证长文本
+    .min(1, 'Text cannot be empty')
+    .max(1000, 'Text length cannot exceed 1000 characters'),
+
+  // Validate long text
   longText: z.string()
     .trim()
-    .min(1, '内容不能为空')
-    .max(10000, '内容长度不能超过10000字符'),
-  
-  // 验证可选文本
+    .min(1, 'Text cannot be empty')
+    .max(10000, 'Text length cannot exceed 10000 characters'),
+
+  // Validate optional text
   optionalText: z.string()
     .trim()
-    .max(1000, '文本长度不能超过1000字符')
+    .max(1000, 'Text length cannot exceed 1000 characters')
     .optional(),
-  
-  // 验证邮箱
+
+  // Validate email
   email: z.string()
     .trim()
     .toLowerCase()
-    .regex(REGEX_PATTERNS.email, '请输入有效的邮箱地址')
-    .max(255, '邮箱长度不能超过255字符'),
-  
-  // 验证URL
+    .regex(REGEX_PATTERNS.email, 'Please enter a valid email address')
+    .max(255, 'Email length cannot exceed 255 characters'),
+
+  // Validate URL
   url: z.string()
     .trim()
-    .regex(REGEX_PATTERNS.url, '请输入有效的URL')
-    .max(500, 'URL长度不能超过500字符')
+    .regex(REGEX_PATTERNS.url, 'Please enter a valid URL')
+    .max(500, 'URL length cannot exceed 500 characters')
     .optional()
     .or(z.literal('')),
-  
-  // 验证搜索查询
+
+  // Validate search query
   searchQuery: z.string()
     .trim()
-    .max(100, '搜索查询长度不能超过100字符')
+    .max(100, 'Search query length cannot exceed 100 characters')
     .optional(),
-  
-  // 验证密码 - 与 PasswordStrength 组件规则保持一致
+
+  // Validate password - consistent with PasswordStrength component rules
   password: z.string()
-    .min(8, '密码长度至少8位')
-    .max(128, '密码长度不能超过128位')
-    .regex(REGEX_PATTERNS.lowercase, '密码必须包含小写字母')
-    .regex(REGEX_PATTERNS.uppercase, '密码必须包含大写字母')
-    .regex(REGEX_PATTERNS.digit, '密码必须包含数字')
-    .regex(REGEX_PATTERNS.specialChar, '密码必须包含特殊字符'),
-  
-  // 验证确认密码
+    .min(8, 'Password must be at least 8 characters long')
+    .max(128, 'Password length cannot exceed 128 characters')
+    .regex(REGEX_PATTERNS.lowercase, 'Password must contain at least one lowercase letter')
+    .regex(REGEX_PATTERNS.uppercase, 'Password must contain at least one uppercase letter')
+    .regex(REGEX_PATTERNS.digit, 'Password must contain at least one digit')
+    .regex(REGEX_PATTERNS.specialChar, 'Password must contain at least one special character'),
+
+  // Validate confirm password
   confirmPassword: z.string(),
-  
-  // 验证标签数组
+
+  // Validate tags array
   tags: z.array(
     z.string()
       .trim()
-      .min(1, '标签不能为空')
-      .max(50, '标签长度不能超过50字符')
-  ).max(20, '标签数量不能超过20个').optional(),
-  
-  // 验证分页参数
+      .min(1, 'Tag cannot be empty')
+      .max(50, 'Tag length cannot exceed 50 characters')
+  ).max(20, 'Tag array cannot exceed 20 items').optional(),
+
+  // Validate pagination parameters
   pagination: z.object({
-    page: z.coerce.number().int().min(1, '页码必须大于0').default(1),
-    limit: z.coerce.number().int().min(1, '每页数量必须大于0').max(100, '每页数量不能超过100').default(20),
+    page: z.coerce.number().int().min(1, 'Page must be greater than 0').default(1),
+    limit: z.coerce.number().int().min(1, 'Items per page must be greater than 0').max(100, 'Items per page cannot exceed 100').default(20),
   }),
-  
-  // 验证排序参数
+
+  // Validate sorting parameters
   sorting: z.object({
-    sortBy: z.string().max(50, '排序字段名长度不能超过50字符').optional(),
-    sortOrder: z.enum(['asc', 'desc'], { message: '排序顺序必须是asc或desc' }).default('desc'),
+    sortBy: z.string().max(50, 'Sort field name length cannot exceed 50 characters').optional(),
+    sortOrder: z.enum(['asc', 'desc'], { message: 'Sort order must be asc or desc' }).default('desc'),
   }),
 };
 
-// 通用验证辅助函数
+// Validation helper functions
 export const validationHelpers = {
-  // 验证ID格式 (CUID2 格式: 24-32个字符，由a-z0-9组成)
+  // Validate ID format (CUID2 format: 24-32 characters, consisting of a-z0-9)
   validateId: (id: string): boolean => {
     return REGEX_PATTERNS.cuid.test(id);
   },
-  
-  // 验证邮箱格式
+
+  // Validate email format
   validateEmail: (email: string): boolean => {
     return REGEX_PATTERNS.email.test(email);
   },
-  
-  // 验证URL格式
+
+  // Validate URL format
   validateUrl: (url: string): boolean => {
     try {
       new URL(url);
@@ -124,8 +123,8 @@ export const validationHelpers = {
       return false;
     }
   },
-  
-  // 验证密码强度
+
+  // Validate password strength
   validatePasswordStrength: (password: string): {
     isValid: boolean;
     score: number;
@@ -135,11 +134,11 @@ export const validationHelpers = {
     let score = 0;
     
     const checks = [
-      { test: password.length >= 8, message: '密码长度至少8位' },
-      { test: REGEX_PATTERNS.lowercase.test(password), message: '密码应包含小写字母' },
-      { test: REGEX_PATTERNS.uppercase.test(password), message: '密码应包含大写字母' },
-      { test: REGEX_PATTERNS.digit.test(password), message: '密码应包含数字' },
-      { test: REGEX_PATTERNS.specialChar.test(password), message: '密码应包含特殊字符' },
+      { test: password.length >= 8, message: 'Password must be at least 8 characters long' },
+      { test: REGEX_PATTERNS.lowercase.test(password), message: 'Password must contain at least one lowercase letter' },
+      { test: REGEX_PATTERNS.uppercase.test(password), message: 'Password must contain at least one uppercase letter' },
+      { test: REGEX_PATTERNS.digit.test(password), message: 'Password must contain at least one digit' },
+      { test: REGEX_PATTERNS.specialChar.test(password), message: 'Password must contain at least one special character' },
     ];
     
     for (const check of checks) {
@@ -156,31 +155,31 @@ export const validationHelpers = {
       feedback,
     };
   },
-  
-  // 验证文件大小
+
+  // Validate file size
   validateFileSize: (file: File, maxSizeMB: number): boolean => {
     const maxSizeBytes = maxSizeMB * 1024 * 1024;
     return file.size <= maxSizeBytes;
   },
-  
-  // 验证文件类型
+
+  // Validate file type
   validateFileType: (file: File, allowedTypes: string[]): boolean => {
     return allowedTypes.includes(file.type);
   },
 };
 
-// 错误消息国际化
+// Validation messages
 export const validationMessages = {
-  required: '此字段为必填项',
-  invalid: '输入格式不正确',
-  tooShort: (min: number) => `长度至少需要${min}个字符`,
-  tooLong: (max: number) => `长度不能超过${max}个字符`,
-  invalidEmail: '请输入有效的邮箱地址',
-  invalidUrl: '请输入有效的URL',
-  passwordMismatch: '确认密码与密码不匹配',
-  invalidFileType: '不支持的文件类型',
-  fileTooLarge: '文件大小超过限制',
-  invalidRating: '评分必须在1-5之间',
-  tooManyItems: (max: number) => `最多只能选择${max}个项目`,
-  tooFewItems: (min: number) => `至少需要选择${min}个项目`,
+  required: 'This field is required',
+  invalid: 'Invalid input format',
+  tooShort: (min: number) => `Length must be at least ${min} characters`,
+  tooLong: (max: number) => `Length cannot exceed ${max} characters`,
+  invalidEmail: 'Please enter a valid email address',
+  invalidUrl: 'Please enter a valid URL',
+  passwordMismatch: 'Password confirmation does not match password',
+  invalidFileType: 'Unsupported file type',
+  fileTooLarge: 'File size exceeds limit',
+  invalidRating: 'Rating must be between 1 and 5',
+  tooManyItems: (max: number) => `Cannot select more than ${max} items`,
+  tooFewItems: (min: number) => `Cannot select fewer than ${min} items`,
 };

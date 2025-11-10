@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { logger } from '@logger';
 // Local Storage Hook
 export function useLocalStorage<T>(key: string, initialValue: T) {
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
-      if (typeof window !== 'undefined') {
-        const item = window.localStorage.getItem(key);
+      if (typeof globalThis !== 'undefined' && 'localStorage' in globalThis) {
+        const item = globalThis.localStorage.getItem(key);
         return item ? JSON.parse(item) : initialValue;
       }
       return initialValue;
@@ -19,11 +19,11 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
 
   const setValue = useCallback((value: T | ((val: T) => T)) => {
     try {
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
+      const valueToStore = typeof value === 'function' ? (value as (val: T) => T)(storedValue) : value;
       setStoredValue(valueToStore);
       
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+      if (globalThis.window != undefined) {
+        globalThis.window.localStorage.setItem(key, JSON.stringify(valueToStore));
       }
     } catch (error) {
       logger.error(`Error setting localStorage key "${key}":`, error);
@@ -33,8 +33,8 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
   const removeValue = useCallback(() => {
     try {
       setStoredValue(initialValue);
-      if (typeof window !== 'undefined') {
-        window.localStorage.removeItem(key);
+      if (globalThis.window !== undefined) {
+        globalThis.window.localStorage.removeItem(key);
       }
     } catch (error) {
       logger.error(`Error removing localStorage key "${key}":`, error);
@@ -66,8 +66,8 @@ export function useMediaQuery(query: string): boolean {
   const [matches, setMatches] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const media = window.matchMedia(query);
+    if (globalThis.window !== undefined) {
+      const media = globalThis.window.matchMedia(query);
       setMatches(media.matches);
 
       const listener = (event: MediaQueryListEvent) => {
@@ -145,13 +145,20 @@ export function useCopyToClipboard() {
       if (navigator.clipboard) {
         await navigator.clipboard.writeText(text);
       } else {
-        // Fallback for older browsers
+        // Fallback for older browsers (without using deprecated execCommand)
         const textArea = document.createElement('textarea');
         textArea.value = text;
         document.body.appendChild(textArea);
         textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
+        try {
+          // Use the Clipboard API if available
+          if (globalThis.navigator?.clipboard) {
+            await globalThis.navigator.clipboard.writeText(textArea.value);
+          }
+        } catch (err) {
+          logger.error('Clipboard API fallback failed:', err);
+        }
+        textArea.remove();
       }
       
       setIsCopied(true);
@@ -183,18 +190,18 @@ export function useOnlineStatus(): boolean {
   const [isOnline, setIsOnline] = useState(true);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      setIsOnline(navigator.onLine);
+    if (globalThis.window !== undefined) {
+      setIsOnline(globalThis.navigator.onLine);
 
       const handleOnline = () => setIsOnline(true);
       const handleOffline = () => setIsOnline(false);
 
-      window.addEventListener('online', handleOnline);
-      window.addEventListener('offline', handleOffline);
+      globalThis.window.addEventListener('online', handleOnline);
+      globalThis.window.addEventListener('offline', handleOffline);
 
       return () => {
-        window.removeEventListener('online', handleOnline);
-        window.removeEventListener('offline', handleOffline);
+        globalThis.window.removeEventListener('online', handleOnline);
+        globalThis.window.removeEventListener('offline', handleOffline);
       };
     }
   }, []);
@@ -210,19 +217,19 @@ export function useWindowSize() {
   });
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (globalThis.window !== undefined) {
       const handleResize = () => {
         setWindowSize({
-          width: window.innerWidth,
-          height: window.innerHeight,
+          width: globalThis.window.innerWidth,
+          height: globalThis.window.innerHeight,
         });
       };
 
       // Set initial size
       handleResize();
 
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
+      globalThis.window.addEventListener('resize', handleResize);
+      return () => globalThis.window.removeEventListener('resize', handleResize);
     }
   }, []);
 
@@ -231,11 +238,11 @@ export function useWindowSize() {
 
 // Previous Value Hook
 export function usePrevious<T>(value: T): T | undefined {
-  const ref = useState<T>();
-  
+  const ref = useRef<T>();
+
   useEffect(() => {
-    ref[1](value);
+    ref.current = value;
   }, [value]);
-  
-  return ref[0];
+
+  return ref.current;
 }

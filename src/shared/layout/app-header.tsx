@@ -21,7 +21,6 @@ import {
 interface TopHeaderProps {
   onMenuToggle: () => void;
   showMenuButton: boolean;
-  sidebarOpen: boolean;
   headerConfig?: HeaderConfig;
   className?: string;
 }
@@ -46,8 +45,8 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
   };
   return (
     <header className={cn(
-      "h-14 flex-shrink-0 flex items-center gap-4 px-4",
-      "border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80",
+      "h-14 shrink-0 flex items-center gap-4 px-4",
+      "border-b border-border bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80",
       className
     )}>
       {/* menu button (mobile) */}

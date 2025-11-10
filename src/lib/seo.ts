@@ -1,7 +1,3 @@
-/**
- * SEO 工具函数
- * 用于生成多语言的 metadata
- */
 
 import type { Metadata } from 'next';
 import type { Locale } from '@/i18n/config';
@@ -25,7 +21,7 @@ interface LocalizedMetadataOptions {
 }
 
 /**
- * 生成多语言 metadata
+ * Generate localized metadata
  */
 export function generateLocalizedMetadata({
   locale,
@@ -44,7 +40,7 @@ export function generateLocalizedMetadata({
   const baseUrl = seoConfig.siteUrl;
   const currentUrl = `${baseUrl}/${locale}${path}`;
 
-  // 生成 hreflang 链接
+  // Generate hreflang links
   const languages = seoConfig.locales.reduce(
     (acc, lang) => {
       acc[lang] = `${baseUrl}/${lang}${path}`;
@@ -91,7 +87,7 @@ export function generateLocalizedMetadata({
       images: seoConfig.openGraph.images.map((img) => `${baseUrl}${img.url}`),
     },
 
-    // 其他元标签
+    // other metadata
     robots: {
       index: true,
       follow: true,
@@ -107,7 +103,7 @@ export function generateLocalizedMetadata({
 }
 
 /**
- * 生成简化版 metadata（用于不需要完整 SEO 的页面）
+ * generate simple metadata without localization
  */
 export function generateSimpleMetadata(
   title: string,
@@ -127,8 +123,7 @@ export function generateSimpleMetadata(
 }
 
 /**
- * 页面路径配置映射
- * 用于自动推断页面路径
+ * Page path configuration mapping, used to automatically infer page paths
  */
 const PAGE_PATHS: Record<string, string> = {
   home: '',
@@ -140,19 +135,19 @@ const PAGE_PATHS: Record<string, string> = {
 };
 
 /**
- * 创建页面 metadata 生成器（工厂函数）
- * 用于减少重复代码，统一 SEO metadata 生成逻辑
- * 
- * @param pageName - 页面名称，需要与翻译文件中的 seo[pageName] 对应
- * @param customPath - 自定义路径（可选），如果不提供则自动从 PAGE_PATHS 推断
- * @returns generateMetadata 函数
+ * Create a page metadata generator (factory function)
+ * Used to reduce duplicate code and unify SEO metadata generation logic
+ *
+ * @param pageName - The name of the page, which needs to correspond to seo[pageName] in the translation file
+ * @param customPath - Custom path (optional), if not provided, it will be inferred from PAGE_PATHS
+ * @returns generateMetadata function
  * 
  * @example
- * // 使用自动推断路径
+ * // use default path
  * export const generateMetadata = createPageMetadataGenerator('articles');
  * 
  * @example
- * // 使用自定义路径
+ * // use custom path
  * export const generateMetadata = createPageMetadataGenerator('articles', '/articles');
  */
 export function createPageMetadataGenerator(
@@ -173,7 +168,6 @@ export function createPageMetadataGenerator(
     return generateLocalizedMetadata({
       locale: locale as Locale,
       page: pageName,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       messages: messages as any,
       path,
     });

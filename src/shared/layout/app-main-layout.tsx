@@ -9,7 +9,6 @@ interface MainLayoutProps {
   children: React.ReactNode;
   onMenuToggle: () => void;
   showMenuButton: boolean;
-  sidebarOpen: boolean;
   // theme?: 'console' | 'admin';
   headerConfig?: HeaderConfig;
   className?: string;
@@ -19,7 +18,6 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
   children,
   onMenuToggle,
   showMenuButton,
-  sidebarOpen,
   // theme = 'console',
   headerConfig,
   className
@@ -34,7 +32,6 @@ export const MainLayout: React.FC<MainLayoutProps> = ({
       <TopHeader 
         onMenuToggle={onMenuToggle}
         showMenuButton={showMenuButton}
-        sidebarOpen={sidebarOpen}
         headerConfig={headerConfig}
       />
       

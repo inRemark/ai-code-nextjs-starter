@@ -1,21 +1,21 @@
 import { Redis } from 'ioredis';
 import { logger } from '@logger';
 
-// Redis配置从环境变量读取
+// Redis configuration
 const redisConfig = {
   url: process.env.REDIS_URL || 'redis://localhost:6379',
   host: process.env.REDIS_HOST || 'localhost',
-  port: parseInt(process.env.REDIS_PORT || '6379'),
+  port: Number.parseInt(process.env.REDIS_PORT || '6379'),
   password: process.env.REDIS_PASSWORD,
-  db: parseInt(process.env.REDIS_DB || '0'),
+  db: Number.parseInt(process.env.REDIS_DB || '0'),
 };
 
 class RedisService {
-  private client: Redis;
+  private readonly client: Redis;
   private isConnected: boolean = false;
 
   constructor() {
-    // 优先使用REDIS_URL，如果没有则使用分离的配置
+    // use REDIS_URL first, if not present use separate configs
     if (redisConfig.url) {
       this.client = new Redis(redisConfig.url, {
         maxRetriesPerRequest: 3,
@@ -37,17 +37,17 @@ class RedisService {
 
   private setupEventHandlers() {
     this.client.on('connect', () => {
-      logger.success('Redis 连接成功');
+      logger.success('Redis connection successful');
       this.isConnected = true;
     });
 
     this.client.on('error', (error) => {
-      logger.error('Redis 连接错误', error);
+      logger.error('Redis connection error', error);
       this.isConnected = false;
     });
 
     this.client.on('close', () => {
-      logger.info('Redis 连接已关闭');
+      logger.info('Redis connection closed');
       this.isConnected = false;
     });
   }
@@ -60,7 +60,7 @@ class RedisService {
 
   async disconnect(): Promise<void> {
     if (this.isConnected) {
-      await this.client.disconnect();
+      this.client.disconnect();
     }
   }
 
@@ -76,7 +76,7 @@ class RedisService {
     return this.client.ping();
   }
 
-  // 缓存操作
+  // Cache operations
   async set(key: string, value: string, ttl?: number): Promise<'OK'> {
     if (ttl) {
       return this.client.setex(key, ttl, value);
@@ -100,7 +100,7 @@ class RedisService {
     return this.client.expire(key, seconds);
   }
 
-  // 队列操作
+  // Queue operations
   async lpush(key: string, value: string): Promise<number> {
     return this.client.lpush(key, value);
   }
@@ -114,7 +114,7 @@ class RedisService {
   }
 }
 
-// 单例模式
+// Singleton instance
 let redisService: RedisService;
 
 export function getRedisService(): RedisService {

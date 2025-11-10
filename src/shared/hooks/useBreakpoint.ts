@@ -32,10 +32,10 @@ export function useBreakpoint() {
       }
     };
 
-    // 初始化
+    // initialize
     handleResize();
 
-    // 使用 ResizeObserver 代替 resize 事件，性能更好
+    // use ResizeObserver instead of resize event for better performance
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(document.body);
 

@@ -1,4 +1,4 @@
-// API响应类型
+// API response type
 export interface ApiResponse<T = unknown> {
   success: boolean;
   data?: T;
@@ -12,9 +12,9 @@ export interface ApiResponse<T = unknown> {
   };
 }
 
-// 简化的 API 客户端（使用 fetch）
+// Simplified API client (using fetch)
 export const api = {
-  // GET请求
+  // GET request
   get: async <T = unknown>(url: string, params?: Record<string, string | number>): Promise<ApiResponse<T>> => {
     const queryString = params 
       ? '?' + new URLSearchParams(Object.entries(params).map(([k, v]) => [k, String(v)])).toString()
@@ -31,7 +31,7 @@ export const api = {
     return handleResponse(response);
   },
 
-  // POST请求
+  // POST request
   post: async <T = unknown>(url: string, data?: unknown): Promise<ApiResponse<T>> => {
     const response = await fetch(`/api${url}`, {
       method: 'POST',
@@ -45,7 +45,7 @@ export const api = {
     return handleResponse(response);
   },
 
-  // PUT请求
+  // PUT request
   put: async <T = unknown>(url: string, data?: unknown): Promise<ApiResponse<T>> => {
     const response = await fetch(`/api${url}`, {
       method: 'PUT',
@@ -59,7 +59,7 @@ export const api = {
     return handleResponse(response);
   },
 
-  // PATCH请求
+  // PATCH request
   patch: async <T = unknown>(url: string, data?: unknown): Promise<ApiResponse<T>> => {
     const response = await fetch(`/api${url}`, {
       method: 'PATCH',
@@ -73,7 +73,7 @@ export const api = {
     return handleResponse(response);
   },
 
-  // DELETE请求
+  // DELETE request
   delete: async <T = unknown>(url: string): Promise<ApiResponse<T>> => {
     const response = await fetch(`/api${url}`, {
       method: 'DELETE',
@@ -87,7 +87,7 @@ export const api = {
   },
 };
 
-// 通用响应处理函数
+// Common response handling function
 async function handleResponse(response: Response) {
   try {
     const data = await response.json();
@@ -105,7 +105,7 @@ async function handleResponse(response: Response) {
   }
 }
 
-// 认证相关API数据接口
+// Authentication-related API data interfaces
 interface RegisterData {
   email: string;
   password: string;
@@ -118,9 +118,9 @@ interface UpdateUserRoleData {
   role: string;
 }
 
-// 认证相关API - 现在主要用于移动端
+// Authentication-related API - currently mainly for mobile
 export const authAPI = {
-  // 注册（仍需要用于注册流程）
+  // Register (still needed for the registration process)
   register: async (email: string, password: string, name?: string, referralCode?: string) => {
     const data: RegisterData = { email, password, name, referralCode };
     const response = await fetch('/api/auth/register', {
@@ -135,18 +135,18 @@ export const authAPI = {
   },
 };
 
-// 用户管理API
+// User management API
 export const userAPI = {
-  // 获取用户列表
+  // Get user list
   getUsers: async (page: number = 1, limit: number = 10) => {
     const response = await fetch(`/api/admin/users?page=${page}&limit=${limit}`, {
-      credentials: 'include', // 自动携带NextAuth session cookie
+      credentials: 'include', // Automatically include NextAuth session cookie
     });
     
     return handleResponse(response);
   },
 
-  // 更新用户角色
+  // Update user role
   updateUserRole: async (userId: string, role: string) => {
     const data: UpdateUserRoleData = { userId, role };
     const response = await fetch('/api/admin/users', {
@@ -154,7 +154,7 @@ export const userAPI = {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include', // 自动携带NextAuth session cookie
+      credentials: 'include', // Automatically include NextAuth session cookie
       body: JSON.stringify(data),
     });
     
@@ -162,5 +162,5 @@ export const userAPI = {
   },
 };
 
-// 向后兼容：apiClient 是 api 的别名
+// Backward compatibility: apiClient is an alias for api
 export const apiClient = api;

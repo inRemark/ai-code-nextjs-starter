@@ -23,18 +23,18 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
   const tCommon = useTranslations('common');
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-muted/20 via-background to-muted/10 dark:from-muted/10 dark:via-background dark:to-muted/5">
-      {/* 顶部导航区域 */}
+    <div className="min-h-screen bg-linear-to-br from-muted/20 via-background to-muted/10 dark:from-muted/10 dark:via-background dark:to-muted/5">
+      {/* top navigation area */}
       <header className="w-full bg-background/80 backdrop-blur-sm border-b">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            {/* 品牌标识 */}
+            {/* brand logo */}
             <Link href="/" className="flex items-center gap-2">
               <Sparkles className="w-8 h-8 text-primary" />
               <span className="text-2xl font-bold text-foreground">{tCommon('appName')}</span>
             </Link>
 
-            {/* 返回首页按钮 */}
+            {/* back to home button */}
             {showBackToPortal && (
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/" className="flex items-center gap-2">
@@ -47,16 +47,16 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
         </div>
       </header>
 
-      {/* 主内容区域 */}
+      {/* main content area */}
       <main className="flex-1 flex items-center justify-center px-4 py-12">
         <div className="w-full max-w-md">
-          {/* 认证卡片容器 */}
+          {/* auth card container */}
           <div className="bg-background rounded-xl shadow-lg border p-8">
-            {/* 标题区域 */}
+            {/* title area */}
             <div className="text-center mb-8">
-              {/* 品牌Logo */}
+              {/* brand logo */}
               <div className="flex justify-center mb-4">
-                <div className="bg-gradient-to-r from-primary/10 to-chart-1/10 rounded-full p-3 border border-primary/20">
+                <div className="bg-linear-to-r from-primary/10 to-chart-1/10 rounded-full p-3 border border-primary/20">
                   <Sparkles className="w-8 h-8 text-primary" />
                 </div>
               </div>
@@ -67,13 +67,13 @@ export const AuthLayout: React.FC<AuthLayoutProps> = ({
               )}
             </div>
 
-            {/* 表单内容 */}
+            {/* form content */}
             {children}
           </div>
         </div>
       </main>
 
-      {/* 底部区域 */}
+      {/* footer area */}
       <footer className="w-full bg-background/50 border-t">
         <div className="container mx-auto px-4 py-6">
           <p className="text-center text-sm text-muted-foreground">

@@ -19,18 +19,14 @@ interface PortalHeaderAuthProps {
   isMobile?: boolean;
 }
 
-/**
- * 认证相关的Header组件 - 独立的Client Component
- * 用于显示用户菜单和登录/注册按钮
- */
 export const PortalHeaderAuth: React.FC<PortalHeaderAuthProps> = ({ 
   headerTranslations,
   navTranslations = {},
   isMobile = false 
 }) => {
-  const { user, loading, logout } = useAuth();
+  const { user, isLoading, logout } = useAuth();
 
-  if (loading) {
+  if (isLoading) {
     return isMobile ? (
       <div className="flex justify-center py-4">
         <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-300"></div>

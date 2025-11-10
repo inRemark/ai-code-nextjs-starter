@@ -1,7 +1,3 @@
-/**
- * 统一日志工具
- * 根据环境自动选择合适的输出方式
- */
 
 type LogLevel = 'info' | 'success' | 'warn' | 'error' | 'debug';
 
@@ -13,9 +9,6 @@ interface LogOptions {
 class Logger {
   private readonly isDevelopment = process.env.NODE_ENV === 'development';
   
-  /**
-   * 格式化日志消息
-   */
   private formatMessage(level: LogLevel, message: string, options?: LogOptions): string {
     const parts: string[] = [];
     
@@ -31,9 +24,6 @@ class Logger {
     return parts.join(' ');
   }
 
-  /**
-   * 信息日志
-   */
   info(message: string, data?: unknown, options?: LogOptions) {
     const formatted = this.formatMessage('info', message, {
       emoji: options?.emoji || 'ℹ️',
@@ -41,16 +31,13 @@ class Logger {
     });
     
     if (this.isDevelopment) {
-      console.warn(formatted); // 使用 warn 以符合 ESLint 规则
+      console.warn(formatted); // use warn to make it visible in devtools
       if (data !== undefined) {
         console.warn(data);
       }
     }
   }
 
-  /**
-   * 成功日志
-   */
   success(message: string, data?: unknown, options?: LogOptions) {
     const formatted = this.formatMessage('success', message, {
       emoji: options?.emoji || '✅',
@@ -65,9 +52,6 @@ class Logger {
     }
   }
 
-  /**
-   * 警告日志
-   */
   warn(message: string, data?: unknown, options?: LogOptions) {
     const formatted = this.formatMessage('warn', message, {
       emoji: options?.emoji || '⚠️',
@@ -80,9 +64,6 @@ class Logger {
     }
   }
 
-  /**
-   * 错误日志
-   */
   error(message: string, error?: unknown, options?: LogOptions) {
     const formatted = this.formatMessage('error', message, {
       emoji: options?.emoji || '❌',
@@ -95,9 +76,6 @@ class Logger {
     }
   }
 
-  /**
-   * 调试日志（仅开发环境）
-   */
   debug(message: string, data?: unknown, options?: LogOptions) {
     if (!this.isDevelopment) return;
     
@@ -113,17 +91,17 @@ class Logger {
   }
 
   /**
-   * 表格输出（仅开发环境）
+   * Table output (only in development)
    */
   table(data: unknown) {
     if (this.isDevelopment && Array.isArray(data)) {
-      console.warn('📊 数据表格:');
+      console.warn('📊 Data Table:');
       console.warn(data);
     }
   }
 
   /**
-   * 分组日志
+   * Group logs
    */
   group(label: string, callback: () => void) {
     if (this.isDevelopment) {
@@ -133,8 +111,8 @@ class Logger {
   }
 }
 
-// 导出单例
+// Export singleton
 export const logger = new Logger();
 
-// 默认导出
+// Default export
 export default logger;

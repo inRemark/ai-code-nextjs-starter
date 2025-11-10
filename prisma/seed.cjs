@@ -14,7 +14,7 @@ async function main() {
       update: {},
       create: {
         email: 'admin@test.com',
-        name: '管理员',
+        name: 'Administrator',
         role: 'ADMIN',
         password: hashedPassword,
         emailVerified: new Date(),
@@ -25,7 +25,7 @@ async function main() {
       update: {},
       create: {
         email: 'company@test.com',
-        name: '企业用户',
+        name: 'Company User',
         role: 'USER',
         password: hashedPassword,
         emailVerified: new Date(),
@@ -36,7 +36,7 @@ async function main() {
       update: {},
       create: {
         email: 'user@test.com',
-        name: '普通用户',
+        name: 'Regular User',
         role: 'USER',
         password: hashedPassword,
         emailVerified: new Date(),
@@ -45,24 +45,24 @@ async function main() {
   ]);
 
   console.log('✅ Created users:');
-  console.log('   - admin@test.com (password: password123) - 管理员');
-  console.log('   - company@test.com (password: password123) - 企业用户');
-  console.log('   - user@test.com (password: password123) - 普通用户');
+  console.log('   - admin@test.com (password: password123) - Administrator');
+  console.log('   - company@test.com (password: password123) - Company User');
+  console.log('   - user@test.com (password: password123) - Regular User');
 
   const articles = await Promise.all([
     prisma.article.upsert({
       where: { slug: 'welcome-to-nextjs-template' },
       update: {},
       create: {
-        title: '欢迎使用 Next.js 模板项目',
+        title: 'Welcome to the Next.js Template Project',
         slug: 'welcome-to-nextjs-template',
-        content: '<h1>欢迎使用 Next.js 模板项目</h1><p>这是一个功能完整的 Next.js 15 + React 19 开发模板，包含了认证、权限等核心功能模块。</p><h2>主要特性</h2><ul><li>基于 Next.js 15 App Router</li><li>TypeScript 严格类型检查</li><li>Prisma ORM + PostgreSQL</li><li>NextAuth.js v5 认证</li><li>Tailwind CSS + Radix UI</li></ul>',
-        excerpt: '这是一个功能完整的 Next.js 15 + React 19 开发模板，包含了认证、权限等核心功能模块。',
+        content: '<h1>Welcome to the Next.js Template Project</h1><p>This is a fully featured Next.js 15 + React 19 starter template, including core modules like authentication and authorization.</p><h2>Main Features</h2><ul><li>Based on Next.js 15 App Router</li><li>Strict TypeScript checking</li><li>Prisma ORM + PostgreSQL</li><li>NextAuth.js v5 authentication</li><li>Tailwind CSS + Radix UI</li></ul>',
+        excerpt: 'This is a fully featured Next.js 15 + React 19 starter template, including core modules like authentication and authorization.',
         coverImage: 'https://images.unsplash.com/photo-1633356122544-f134324a6cee',
         authorId: users[0].id,
         published: true,
         publishedAt: new Date('2025-10-26'),
-        tags: ['Next.js', 'React', 'TypeScript', '模板'],
+        tags: ['Next.js', 'React', 'TypeScript', 'Template'],
         viewCount: 156,
       },
     }),
@@ -70,15 +70,15 @@ async function main() {
       where: { slug: 'features-module-guide' },
       update: {},
       create: {
-        title: 'Features 模块开发指南',
+        title: 'Features Module Development Guide',
         slug: 'features-module-guide',
-        content: '<h1>Features 模块开发指南</h1><p>本模板采用 Features 模块化架构，每个业务功能都是独立的模块。</p><h2>标准目录结构</h2><pre>features/[module]/\n  ├── services/      # 业务逻辑服务\n  ├── types/         # 类型定义\n  ├── validators/    # 数据验证\n  ├── components/    # UI 组件\n  ├── hooks/         # React Hooks\n  ├── index.ts       # 统一导出\n  └── README.md      # 模块文档</pre>',
-        excerpt: '本模板采用 Features 模块化架构，每个业务功能都是独立的模块。了解如何创建标准化的业务模块。',
+        content: '<h1>Features Module Development Guide</h1><p>This template uses a Features modular architecture, where each business feature is an independent module.</p><h2>Standard Directory Structure</h2><pre>features/[module]/\n  ├── services/      # Business logic services\n  ├── types/         # Type definitions\n  ├── validators/    # Data validation\n  ├── components/    # UI components\n  ├── hooks/         # React Hooks\n  ├── index.ts       # Unified exports\n  └── README.md      # Module documentation</pre>',
+        excerpt: 'This template uses a Features modular architecture, where each business feature is an independent module. Learn how to create standardized business modules.',
         coverImage: 'https://images.unsplash.com/photo-1618477388954-7852f32655ec',
         authorId: users[0].id,
         published: true,
         publishedAt: new Date('2025-10-25'),
-        tags: ['开发指南', 'Features', '模块化'],
+        tags: ['Development Guide', 'Features', 'Modularization'],
         viewCount: 89,
       },
     }),
@@ -86,15 +86,15 @@ async function main() {
       where: { slug: 'authentication-setup' },
       update: {},
       create: {
-        title: '如何配置身份认证',
+        title: 'How to Configure Authentication',
         slug: 'authentication-setup',
-        content: '<h1>如何配置身份认证</h1><p>本模板使用 NextAuth.js v5 提供强大的身份认证功能。</p><h2>支持的认证方式</h2><ul><li>邮箱密码登录</li><li>Google OAuth</li><li>GitHub OAuth</li></ul><h2>配置步骤</h2><ol><li>设置环境变量</li><li>配置 OAuth 提供商</li><li>自定义登录页面</li><li>实现权限控制</li></ol>',
-        excerpt: '了解如何在模板项目中配置和使用 NextAuth.js v5 进行身份认证，支持多种 OAuth 登录方式。',
+        content: '<h1>How to Configure Authentication</h1><p>This template uses NextAuth.js v5 to provide powerful authentication features.</p><h2>Supported Authentication Methods</h2><ul><li>Email and password login</li><li>Google OAuth</li><li>GitHub OAuth</li></ul><h2>Configuration Steps</h2><ol><li>Set environment variables</li><li>Configure OAuth providers</li><li>Customize login page</li><li>Implement access control</li></ol>',
+        excerpt: 'Learn how to configure and use NextAuth.js v5 for authentication in the template project, supporting multiple OAuth login methods.',
         coverImage: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c',
         authorId: users[1].id,
         published: true,
         publishedAt: new Date('2025-10-24'),
-        tags: ['认证', 'NextAuth', 'OAuth'],
+        tags: ['Authentication', 'NextAuth', 'OAuth'],
         viewCount: 124,
       },
     }),
@@ -102,13 +102,13 @@ async function main() {
       where: { slug: 'my-first-blog-draft' },
       update: {},
       create: {
-        title: '我的第一篇博客（草稿）',
+        title: 'My First Blog (Draft)',
         slug: 'my-first-blog-draft',
-        content: '<p>这是我在这个平台上的第一篇博客文章，目前还在编辑中...</p>',
-        excerpt: '这是一篇草稿文章，展示文章的草稿状态。',
+        content: '<p>This is my first blog post on this platform, currently still being edited...</p>',
+        excerpt: 'This is a draft article, showcasing the draft status of the article.',
         authorId: users[2].id,
         published: false,
-        tags: ['测试', '草稿'],
+        tags: ['Test', 'Draft'],
         viewCount: 0,
       },
     }),
@@ -116,15 +116,15 @@ async function main() {
       where: { slug: 'prisma-best-practices' },
       update: {},
       create: {
-        title: 'Prisma ORM 最佳实践',
+        title: 'Prisma ORM Best Practices',
         slug: 'prisma-best-practices',
-        content: '<h1>Prisma ORM 最佳实践</h1><p>分享在生产环境中使用 Prisma ORM 的经验和技巧。</p><h2>Schema 设计</h2><ul><li>合理使用索引</li><li>设置级联删除</li><li>枚举类型的应用</li></ul><h2>查询优化</h2><ul><li>使用 include 和 select</li><li>避免 N+1 查询</li><li>批量操作优化</li></ul>',
-        excerpt: '分享在生产环境中使用 Prisma ORM 的经验和技巧，包括 Schema 设计和查询优化。',
+        content: '<h1>Prisma ORM Best Practices</h1><p>Sharing experiences and tips for using Prisma ORM in production environments.</p><h2>Schema Design</h2><ul><li>Proper use of indexes</li><li>Setting up cascade deletes</li><li>Application of enum types</li></ul><h2>Query Optimization</h2><ul><li>Using include and select</li><li>Avoiding N+1 queries</li><li>Batch operation optimization</li></ul>',
+        excerpt: 'Sharing experiences and tips for using Prisma ORM in production environments, including schema design and query optimization.',
         coverImage: 'https://images.unsplash.com/photo-1587620962725-abab7fe55159',
         authorId: users[0].id,
         published: true,
         publishedAt: new Date('2025-10-23'),
-        tags: ['Prisma', 'Database', '最佳实践'],
+        tags: ['Prisma', 'Database', 'Best Practices'],
         viewCount: 67,
       },
     }),
@@ -132,14 +132,14 @@ async function main() {
       where: { slug: 'company-user-article' },
       update: {},
       create: {
-        title: '企业用户的技术分享',
+        title: 'Technical Sharing by Enterprise Users',
         slug: 'company-user-article',
-        content: '<h1>技术分享</h1><p>分享一些企业级应用开发的经验。</p>',
-        excerpt: '企业级应用开发经验分享。',
+        content: '<h1>Technical Sharing</h1><p>Sharing some experiences in enterprise application development.</p>',
+        excerpt: 'Sharing experiences in enterprise application development.',
         authorId: users[1].id,
         published: true,
         publishedAt: new Date('2025-10-22'),
-        tags: ['企业', '技术'],
+        tags: ['Enterprise', 'Technology'],
         viewCount: 45,
       },
     }),
@@ -147,14 +147,14 @@ async function main() {
       where: { slug: 'user-article-1' },
       update: {},
       create: {
-        title: '普通用户的文章 1',
+        title: 'Regular User Article 1',
         slug: 'user-article-1',
-        content: '<p>这是普通用户的第一篇文章。</p>',
-        excerpt: '普通用户的第一篇文章。',
+        content: '<p>This is the first article by a regular user.</p>',
+        excerpt: 'The first article by a regular user.',
         authorId: users[2].id,
         published: true,
         publishedAt: new Date('2025-10-21'),
-        tags: ['用户', '分享'],
+        tags: ['User', 'Sharing'],
         viewCount: 23,
       },
     }),
@@ -162,14 +162,14 @@ async function main() {
       where: { slug: 'user-article-2' },
       update: {},
       create: {
-        title: '普通用户的文章 2',
+        title: 'Regular User Article 2',
         slug: 'user-article-2',
-        content: '<p>这是普通用户的第二篇文章。</p>',
-        excerpt: '普通用户的第二篇文章。',
+        content: '<p>This is the second article by a regular user.</p>',
+        excerpt: 'The second article by a regular user.',
         authorId: users[2].id,
         published: true,
         publishedAt: new Date('2025-10-20'),
-        tags: ['学习', '笔记'],
+        tags: ['Learning', 'Notes'],
         viewCount: 18,
       },
     }),
@@ -182,9 +182,9 @@ async function main() {
   console.log(`   - ${users.length} users (admin, company, user)`);
   console.log(`   - ${articles.length} articles`);
   console.log('\n💡 Test Accounts:');
-  console.log('   admin@test.com / password123 - 管理后台访问');
-  console.log('   company@test.com / password123 - Console 控制台');
-  console.log('   user@test.com / password123 - Profile 个人中心');
+  console.log('   admin@test.com / password123 - Admin Dashboard Access');
+  console.log('   company@test.com / password123 - Console Access');
+  console.log('   user@test.com / password123 - Profile Access');
 }
 
 main()

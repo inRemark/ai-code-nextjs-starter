@@ -14,7 +14,7 @@ interface DatePickerWithRangeProps {
 
 export function DatePickerWithRange({ 
   className, 
-  placeholder = "选择日期范围" 
+  placeholder = "Select range" 
 }: DatePickerWithRangeProps) {
   return (
     <div className={cn("grid gap-2", className)}>

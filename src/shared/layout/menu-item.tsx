@@ -43,7 +43,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
     >
       {/* Icon */}
       <Icon className={cn(
-        "h-4 w-4 flex-shrink-0",
+        "h-4 w-4 shrink-0",
         isActive 
           ? "text-primary-foreground" 
           : "text-muted-foreground group-hover:text-accent-foreground"

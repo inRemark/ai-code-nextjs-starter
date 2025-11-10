@@ -26,7 +26,7 @@ export const ConfigurableSidebarContent: React.FC<ConfigurableSidebarContentProp
   return (
     <div className={cn(
       "h-full flex flex-col",
-      "bg-gradient-to-b from-background to-muted/20",
+      "bg-linear-to-b from-background to-muted/20",
       className
     )}>
       {/* Logo区域 */}

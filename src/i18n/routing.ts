@@ -4,7 +4,7 @@ import { createNavigation } from 'next-intl/navigation';
 export const routing = defineRouting({
   locales: ['zh', 'en', 'ja'],
   defaultLocale: 'zh',
-  localePrefix: 'always', // URL 始终包含语言前缀
+  localePrefix: 'always', // URL always includes locale prefix
 });
 
 export const { Link, redirect, usePathname, useRouter } =

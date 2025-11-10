@@ -63,7 +63,6 @@ export const UnifiedLayout: React.FC<UnifiedLayoutProps> = ({
         <MainLayout 
           onMenuToggle={handleSidebarToggle}
           showMenuButton={isMobile}
-          sidebarOpen={sidebarOpen}
           headerConfig={config.headerConfig}
         >
           {children}

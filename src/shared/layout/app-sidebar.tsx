@@ -41,7 +41,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       
       {/* Sidebar */}
       <div className={cn(
-        "fixed lg:relative z-50 h-full flex-shrink-0",
+        "fixed lg:relative z-50 h-full shrink-0",
         "bg-background border-r border-border",
         "transition-all duration-300 ease-in-out",
         // Mobile responsive

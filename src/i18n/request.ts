@@ -1,23 +1,23 @@
 import { getRequestConfig } from 'next-intl/server';
 import { routing } from './routing';
 
-// Feature 目录列表 - 维护需要加载的 feature 翻译
+// Feature modules list
 const FEATURE_MODULES = ['shared-layout', 'auth', 'home', 'about', 
   'pricing', 'blog', 'help', 'articles', 
   'console', 'user', 'admin', 'mail'];
 
-// 动态加载 feature 级翻译并合并
+// Dynamically load feature-level translations and merge with base messages
 async function loadFeatureMessages(locale: string) {
   const baseMessages = (await import(`@/messages/${locale}.json`)).default;
   const mergedMessages = { ...baseMessages };
 
-  // 动态加载每个 feature 的翻译
+  // Dynamically load each feature's translations
   for (const feature of FEATURE_MODULES) {
     try {
       const featureMessages = (await import(`@/features/${feature}/locale/${locale}.json`)).default;
       mergedMessages[feature] = featureMessages;
     } catch {
-      // 如果 feature 翻译不存在，跳过（可能是可选 feature）
+      // If feature translations do not exist, skip (may be optional feature)
       console.warn(`Feature messages not found for ${feature}/${locale}`);
     }
   }
@@ -26,10 +26,10 @@ async function loadFeatureMessages(locale: string) {
 }
 
 export default getRequestConfig(async ({ requestLocale }) => {
-  // 获取请求的 locale
+  // Get the requested locale
   let locale = await requestLocale;
 
-  // 验证 locale 是否有效
+  // Validate the locale
   if (!locale || !routing.locales.includes(locale as 'zh' | 'en' | 'ja')) {
     locale = routing.defaultLocale;
   }

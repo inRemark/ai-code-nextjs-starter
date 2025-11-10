@@ -1,38 +1,38 @@
-// 错误类型定义
+// defined in: src/lib/error-handler.ts
 export enum ErrorCode {
-  // 通用错误
+  // Common errors
   UNKNOWN_ERROR = 'UNKNOWN_ERROR',
   VALIDATION_ERROR = 'VALIDATION_ERROR',
   NETWORK_ERROR = 'NETWORK_ERROR',
-  
-  // 认证和授权错误
+
+  // Authentication and authorization errors
   UNAUTHORIZED = 'UNAUTHORIZED',
   FORBIDDEN = 'FORBIDDEN',
   TOKEN_EXPIRED = 'TOKEN_EXPIRED',
-  
-  // 数据库错误
+
+  // Database errors
   DATABASE_ERROR = 'DATABASE_ERROR',
   RECORD_NOT_FOUND = 'RECORD_NOT_FOUND',
   DUPLICATE_RECORD = 'DUPLICATE_RECORD',
-  
-  // 业务逻辑错误
+
+  // Business logic errors
   INVALID_EMAIL_FORMAT = 'INVALID_EMAIL_FORMAT',
   EMAIL_ALREADY_EXISTS = 'EMAIL_ALREADY_EXISTS',
   TEMPLATE_NOT_FOUND = 'TEMPLATE_NOT_FOUND',
   CUSTOMER_NOT_FOUND = 'CUSTOMER_NOT_FOUND',
-  
-  // 邮件服务错误
+
+  // Email service errors
   SMTP_CONNECTION_ERROR = 'SMTP_CONNECTION_ERROR',
   EMAIL_SEND_FAILED = 'EMAIL_SEND_FAILED',
   QUEUE_ERROR = 'QUEUE_ERROR',
-  
-  // 文件处理错误
+
+  // File processing errors
   FILE_TOO_LARGE = 'FILE_TOO_LARGE',
   INVALID_FILE_FORMAT = 'INVALID_FILE_FORMAT',
   CSV_PARSE_ERROR = 'CSV_PARSE_ERROR',
 }
 
-// 应用错误基类
+// application-specific error class
 export class AppError extends Error {
   public readonly code: ErrorCode;
   public readonly statusCode: number;
@@ -58,81 +58,81 @@ export class AppError extends Error {
   }
 }
 
-// 验证错误
+// Validation error
 export class ValidationError extends AppError {
   constructor(message: string, details?: any) {
     super(message, ErrorCode.VALIDATION_ERROR, 400, true, details);
   }
 }
 
-// 认证错误
+// Authentication error
 export class AuthenticationError extends AppError {
   constructor(message: string = 'Authentication failed') {
     super(message, ErrorCode.UNAUTHORIZED, 401);
   }
 }
 
-// 授权错误
+// Authorization error
 export class AuthorizationError extends AppError {
   constructor(message: string = 'Access denied') {
     super(message, ErrorCode.FORBIDDEN, 403);
   }
 }
 
-// 资源未找到错误
+// Not found error
 export class NotFoundError extends AppError {
   constructor(message: string = 'Resource not found') {
     super(message, ErrorCode.RECORD_NOT_FOUND, 404);
   }
 }
 
-// 重复记录错误
+// Duplicate record error
 export class DuplicateError extends AppError {
   constructor(message: string = 'Record already exists') {
     super(message, ErrorCode.DUPLICATE_RECORD, 409);
   }
 }
 
-// 数据库错误
+// Database error
 export class DatabaseError extends AppError {
   constructor(message: string, details?: any) {
     super(message, ErrorCode.DATABASE_ERROR, 500, true, details);
   }
 }
 
-// 邮件服务错误
+// Email service errors
 export class EmailServiceError extends AppError {
   constructor(message: string, code: ErrorCode = ErrorCode.EMAIL_SEND_FAILED, details?: any) {
     super(message, code, 500, true, details);
   }
 }
 
-// 文件处理错误
+// File processing errors
 export class FileProcessingError extends AppError {
   constructor(message: string, code: ErrorCode = ErrorCode.INVALID_FILE_FORMAT, details?: any) {
     super(message, code, 400, true, details);
   }
 }
 
-// 错误处理工具函数
+// Error handling utility functions
 export class ErrorHandler {
   /**
-   * 处理Prisma错误
+   * Handle Prisma errors
    */
   static handlePrismaError(error: any): AppError {
     if (error.code === 'P2002') {
-      // 唯一约束违反
+      // Unique constraint violation
       const target = error.meta?.target || 'field';
       return new DuplicateError(`Duplicate ${target} value`);
     }
     
     if (error.code === 'P2025') {
-      // 记录未找到
+      // Not found
       return new NotFoundError('Record not found');
     }
     
     if (error.code === 'P2003') {
-      // 外键约束违反
+      // Foreign key constraint violation
       return new ValidationError('Invalid reference to related record');
     }
     
@@ -140,7 +140,7 @@ export class ErrorHandler {
   }
 
   /**
-   * 处理验证错误
+   * Handle validation errors
    */
   static handleValidationError(errors: Record<string, string[]>): ValidationError {
     const messages = Object.entries(errors)
@@ -151,7 +151,7 @@ export class ErrorHandler {
   }
 
   /**
-   * 处理邮件发送错误
+   * Handle email sending errors
    */
   static handleEmailError(error: any): EmailServiceError {
     if (error.code === 'ECONNECTION' || error.code === 'ENOTFOUND') {
@@ -174,7 +174,7 @@ export class ErrorHandler {
   }
 
   /**
-   * 处理文件错误
+   * Handle file errors
    */
   static handleFileError(error: any, maxSize?: number): FileProcessingError {
     if (error.code === 'LIMIT_FILE_SIZE' || (maxSize && error.size > maxSize)) {
@@ -195,7 +195,7 @@ export class ErrorHandler {
   }
 
   /**
-   * 格式化错误响应
+   * Format error response
    */
   static formatErrorResponse(error: AppError | Error) {
     if (error instanceof AppError) {
@@ -208,8 +208,8 @@ export class ErrorHandler {
         },
       };
     }
-    
-    // 对于非应用错误，不暴露详细信息
+
+    // For non-App errors, do not expose details
     return {
       success: false,
       error: {
@@ -220,7 +220,7 @@ export class ErrorHandler {
   }
 
   /**
-   * 记录错误
+   * Log errors for monitoring
    */
   static logError(error: Error, context?: Record<string, any>) {
     const errorInfo = {
@@ -239,16 +239,16 @@ export class ErrorHandler {
     }
 
     console.error('Application Error:', errorInfo);
-    
-    // 在生产环境中，这里应该发送到日志服务
+
+    // In production, this should be sent to a logging service
     if (process.env.NODE_ENV === 'production') {
-      // 发送到监控服务，如 Sentry、DataDog 等
+      // Send to monitoring service, e.g., Sentry, DataDog, etc.
       // sendToMonitoringService(errorInfo);
     }
   }
 }
 
-// 异步错误处理装饰器
+// Async error handling decorator
 export function handleAsync<T extends any[], R>(
   fn: (...args: T) => Promise<R>
 ): (...args: T) => Promise<R> {
@@ -262,13 +262,13 @@ export function handleAsync<T extends any[], R>(
   };
 }
 
-// 重试机制
+// Retry mechanism
 export async function withRetry<T>(
   fn: () => Promise<T>,
   maxAttempts: number = 3,
   delay: number = 1000
 ): Promise<T> {
-  let lastError: Error;
+  let lastError: Error | undefined;
   
   for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
@@ -277,19 +277,19 @@ export async function withRetry<T>(
       lastError = error as Error;
       
       if (attempt === maxAttempts) {
-        throw lastError;
+        throw lastError ?? new Error('Unknown error');
       }
-      
-      // 指数退避延迟
+
+      // Exponential backoff delay
       const backoffDelay = delay * Math.pow(2, attempt - 1);
       await new Promise(resolve => setTimeout(resolve, backoffDelay));
     }
   }
   
-  throw lastError!;
+  throw new Error('Unknown error');
 }
 
-// 超时处理
+// Timeout handling
 export function withTimeout<T>(
   promise: Promise<T>,
   timeoutMs: number,

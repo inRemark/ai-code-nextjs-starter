@@ -15,10 +15,10 @@ export function usePersistedState<T>(
   defaultValue: T | (() => T),
   options: PersistOptions<T>
 ) {
-  // 确保 key 的唯一性
+  // Ensure the uniqueness of the key
   const storageKey = `persisted_state:${options.key}:v${options.version || 1}`;
-  
-  // 初始化函数 - 尝试从存储中读取,如果没有则使用默认值
+
+  // initialize function - try to read from storage, if not present use default value
   const getInitialValue = (): T => {
     try {
       const serializedValue = localStorage.getItem(storageKey);
@@ -28,7 +28,7 @@ export function usePersistedState<T>(
           : defaultValue;
       }
 
-      // 如果有版本迁移函数,则进行迁移
+      // if there is a version migration function, perform the migration
       if (options.migrate) {
         const oldVersion = Number(localStorage.getItem(`${storageKey}:version`)) || 1;
         if (oldVersion < (options.version || 1)) {
@@ -50,7 +50,7 @@ export function usePersistedState<T>(
 
   const [state, setState] = useState<T>(getInitialValue);
 
-  // 持久化到 localStorage
+  // persist to localStorage
   const persistState = useCallback((value: T) => {
     try {
       const serialize = options.serialize || defaultSerialize;
@@ -63,7 +63,7 @@ export function usePersistedState<T>(
     }
   }, [storageKey, options]);
 
-  // 更新状态的包装函数
+  // update state wrapper function
   const setPersistedState = useCallback((value: T | ((prev: T) => T)) => {
     setState(prev => {
       const nextValue = typeof value === 'function' 
@@ -74,7 +74,7 @@ export function usePersistedState<T>(
     });
   }, [persistState]);
 
-  // 订阅 storage 事件,实现跨标签页同步
+  // subscribe to storage events for cross-tab synchronization
   useEffect(() => {
     const handleStorage = (event: StorageEvent) => {
       if (event.key === storageKey && event.newValue !== null) {
@@ -88,8 +88,8 @@ export function usePersistedState<T>(
       }
     };
 
-    window.addEventListener('storage', handleStorage);
-    return () => window.removeEventListener('storage', handleStorage);
+    globalThis.addEventListener('storage', handleStorage);
+    return () => globalThis.removeEventListener('storage', handleStorage);
   }, [storageKey, options]);
 
   return [state, setPersistedState] as const;

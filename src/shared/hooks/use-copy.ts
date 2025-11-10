@@ -10,18 +10,17 @@ export function useCopy(options: UseCopyOptions = {}) {
   const { onSuccess, onError, onFinish } = options;
 
   const copy = useCallback(async (text: string) => {
-    // 在服务端渲染时直接返回 false
-    if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+    // in case of server-side rendering
+    if (globalThis.window === undefined || navigator === undefined) {
       onError?.(new Error("Clipboard API not available in server environment"));
       return false;
     }
     
     try {
-      // 首先尝试使用现代 API
-      if (navigator.clipboard && window.isSecureContext) {
+      if (navigator.clipboard && globalThis.window.isSecureContext) {
         await navigator.clipboard.writeText(text);
       } else {
-        // 降级方案：使用传统的 execCommand
+        // downgrade solution: use the traditional execCommand
         const textArea = document.createElement("textarea");
         textArea.value = text;
 
@@ -33,13 +32,24 @@ export function useCopy(options: UseCopyOptions = {}) {
         textArea.focus();
         textArea.select();
 
+        let successful = false;
         try {
-          document.execCommand("copy");
+          // Try using the Clipboard API as a fallback if execCommand is deprecated
+          if (navigator.clipboard) {
+            await navigator.clipboard.writeText(textArea.value);
+            successful = true;
+          } else {
+            // If Clipboard API is not available, inform the user
+            throw new Error("Clipboard API not available and execCommand is deprecated");
+          }
         } catch (err) {
           console.error("Fallback copy failed:", err);
           throw new Error("Copy failed");
         } finally {
           textArea.remove();
+        }
+        if (!successful) {
+          throw new Error("Copy failed");
         }
       }
 

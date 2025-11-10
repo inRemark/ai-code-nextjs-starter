@@ -4,7 +4,7 @@ import { routing } from '@/i18n/routing';
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3001';
 
-  // 定义所有主要页面路由
+  // Define all routes that need to be included in the sitemap
   const routes = [
     '',
     '/about',
@@ -19,11 +19,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/auth/register',
   ];
 
-  // 为每个语言生成所有路由的sitemap条目
+  // generate sitemap entries
   const sitemapEntries: MetadataRoute.Sitemap = [];
 
-  routing.locales.forEach((locale) => {
-    routes.forEach((route) => {
+  for (const locale of routing.locales) {
+    for (const route of routes) {
       const url = `${baseUrl}/${locale}${route}`;
       sitemapEntries.push({
         url,
@@ -33,15 +33,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
         alternates: {
           languages: routing.locales.reduce(
             (acc, lang) => {
-              acc[lang as 'zh' | 'en' | 'ja'] = `${baseUrl}/${lang}${route}`;
+              acc[lang] = `${baseUrl}/${lang}${route}`;
               return acc;
             },
             {} as Record<'zh' | 'en' | 'ja', string>
           ),
         },
       });
-    });
-  });
+    }
+  }
 
   return sitemapEntries;
 }

@@ -1,14 +1,14 @@
 import { RefObject, useCallback, useEffect, useRef } from "react";
 
 interface ScrollState {
-  isPinned: boolean; // 是否处于贴底模式
-  lastScrollTop: number; // 上一次的滚动位置，用于判断滚动方向
-  lastScrollHeight: number; // 上一次的内容高度，用于判断内容是否变化
+  isPinned: boolean;
+  lastScrollTop: number;
+  lastScrollHeight: number;
 }
 
 interface UseAutoScrollOptions {
-  pinThreshold?: number; // 进入贴底模式的阈值
-  unpinThreshold?: number; // 退出贴底模式的阈值（向上滚动的最小距离）
+  pinThreshold?: number; 
+  unpinThreshold?: number;
 }
 
 export function useAutoScroll(
@@ -17,27 +17,27 @@ export function useAutoScroll(
   options: UseAutoScrollOptions = {}
 ) {
   const {
-    pinThreshold = 30, // 默认 30px
-    unpinThreshold = 10, // 默认 10px
+    pinThreshold = 30, // 30px
+    unpinThreshold = 10, // 10px
   } = options;
 
-  // 使用 ref 存储滚动状态，避免重渲染
+  // use ref to store scroll state to avoid re-renders
   const stateRef = useRef<ScrollState>({
-    isPinned: true, // 默认贴底
+    isPinned: true,
     lastScrollTop: 0,
     lastScrollHeight: 0,
   });
 
-  // 检查是否接近底部
-  const isNearBottom = () => {
+  // check if near bottom
+  const isNearBottom = useCallback(() => {
     const container = containerRef.current;
     if (!container) return false;
 
     const { scrollTop, scrollHeight, clientHeight } = container;
     return scrollHeight - scrollTop - clientHeight <= pinThreshold;
-  };
+  }, [containerRef, pinThreshold]);
 
-  // 滚动到底部
+  // scroll to bottom
   const scrollToBottom = useCallback((instant?: boolean) => {
     const container = containerRef.current;
     if (!container) return;
@@ -46,9 +46,9 @@ export function useAutoScroll(
       top: container.scrollHeight,
       behavior: instant ? "instant" : "smooth",
     });
-  }, []);
+  }, [containerRef]);
 
-  // 处理滚动事件
+  // process scroll events
   const handleScroll = useCallback(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -56,11 +56,11 @@ export function useAutoScroll(
     const { scrollTop, scrollHeight } = container;
     const state = stateRef.current;
 
-    // 判断滚动方向
+    // check scroll direction
     const scrollingUp = scrollTop < state.lastScrollTop;
     const scrollingDown = scrollTop > state.lastScrollTop;
 
-    // 更新贴底状态
+    // update pinned state
     if (scrollingDown && isNearBottom()) {
       state.isPinned = true;
     } else if (
@@ -70,12 +70,12 @@ export function useAutoScroll(
       state.isPinned = false;
     }
 
-    // 更新状态
+    // update state
     state.lastScrollTop = scrollTop;
     state.lastScrollHeight = scrollHeight;
-  }, []);
+  }, [containerRef, isNearBottom, unpinThreshold]);
 
-  // 监听滚动事件
+  // listen for scroll events
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -84,7 +84,7 @@ export function useAutoScroll(
     return () => container.removeEventListener("scroll", handleScroll);
   }, [containerRef, handleScroll]);
 
-  // 监听内容变化
+  // listen for content changes
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -92,7 +92,7 @@ export function useAutoScroll(
     const state = stateRef.current;
     const contentChanged = container.scrollHeight !== state.lastScrollHeight;
 
-    // 只在贴底模式下自动滚动
+    // only auto-scroll in pinned mode
     if (state.isPinned && contentChanged) {
       scrollToBottom();
     }

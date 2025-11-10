@@ -1,7 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 
 declare global {
-  const prisma: PrismaClient | undefined;
+  // Extend globalThis to include prisma
+  var prisma: PrismaClient | undefined;
 }
 
 const prisma = globalThis.prisma || new PrismaClient();

@@ -75,9 +75,9 @@ export const PageContainer: React.FC<PageContainerProps> = ({
   const { isMobile } = useBreakpoint();
 
   return (
-    <div className={cn("h-full flex flex-col flex-grow-1", className)}>
+    <div className={cn("h-full flex flex-col grow", className)}>
       {/* Page head */}
-      <div className="flex-none border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      <div className="flex-none border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/80">
         <div className="p-4 lg:p-6">
           {/* Title area */}
           <div className="flex items-start justify-between gap-4 mb-4">
@@ -91,7 +91,7 @@ export const PageContainer: React.FC<PageContainerProps> = ({
             </div>
             
             {/* Action button area */}
-            <div className="flex items-center gap-2 flex-shrink-0">
+            <div className="flex items-center gap-2 shrink-0">
               {actions}
               {primaryAction && (
                 <Button

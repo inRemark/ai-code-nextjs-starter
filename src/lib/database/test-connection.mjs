@@ -4,11 +4,11 @@ const prisma = new PrismaClient();
 
 async function testConnection() {
   try {
-    // 测试数据库连接
+    // test connection
     await prisma.$connect();
-    console.log('✅ 成功连接到数据库');
+    logger.success('✅ successfully connected to the database.');
 
-    // 获取所有表名
+    // Get all table names
     const tables = await prisma.$queryRaw`
       SELECT table_name 
       FROM information_schema.tables 
@@ -16,12 +16,12 @@ async function testConnection() {
       ORDER BY table_name;
     `;
 
-    console.log('📋 数据库中的表:');
-    tables.forEach((table) => {
-      console.log(`  - ${table.table_name}`);
-    });
+    logger.info('📋 Tables in the database:');
+    for (const table of tables) {
+      logger.info(`  - ${table.table_name}`);
+    }
 
-    // 检查特定表是否存在
+    // Check if specific tables exist
     const requiredTables = [
       'users',
       'customers',
@@ -38,42 +38,42 @@ async function testConnection() {
       'unsubscribe_records'
     ];
 
-    console.log('\n🔍 验证必需的表:');
+    logger.info('\n🔍 Check if specific tables exist:');
     for (const table of requiredTables) {
       const exists = tables.some((t) => t.table_name === table);
-      console.log(`  ${exists ? '✅' : '❌'} ${table}`);
+      logger.info(`  ${exists ? '✅' : '❌'} ${table}`);
     }
 
-    // 测试创建一个用户
-    console.log('\n📝 测试创建用户...');
+    // Test creating a user
+    logger.info('\n📝 Test creating user...');
     const user = await prisma.user.create({
       data: {
         email: 'test@example.com',
-        name: '测试用户',
+        name: 'Test User',
         password: 'hashed_password_here',
       }
     });
-    console.log(`  ✅ 创建用户成功: ${user.id}`);
+    logger.info(`  ✅ User created successfully: ${user.id}`);
 
-    // 查询用户
+    // Query user
     const foundUser = await prisma.user.findUnique({
       where: { id: user.id }
     });
-    console.log(`  🔍 查询用户成功: ${foundUser?.name}`);
+    logger.info(`  🔍 Query user successfully: ${foundUser?.name}`);
 
-    // 清理测试数据
+    // Cleanup test data
     await prisma.user.delete({
       where: { id: user.id }
     });
-    console.log('  🧹 清理测试数据成功');
+    logger.info('  🧹 Cleanup test data successfully.');
 
     await prisma.$disconnect();
-    console.log('\n🎉 数据库连接和表结构验证完成!');
+    logger.info('\n🎉 Database connection and schema validation completed!');
   } catch (error) {
-    console.error('❌ 数据库测试失败:', error);
+    logger.error('❌ Database test failed:', error);
     await prisma.$disconnect();
     process.exit(1);
   }
 }
 
-testConnection();
+await testConnection();

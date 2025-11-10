@@ -1,30 +1,30 @@
 /**
- * SEO 配置
- * 定义网站的基础 SEO 设置和多语言支持
+ * SEO configuration
+ * Define the basic SEO settings and multilingual support for the website
  */
 
 import type { Locale } from '@/i18n/config';
 
 export const seoConfig = {
-  // 默认标题
+  // Default title
   defaultTitle: 'AiCoder',
   
-  // 标题模板
+  // Title template
   titleTemplate: '%s | AiCoder',
   
-  // 默认描述
+  // Default description
   defaultDescription: 'Professional AI-powered coding assistant platform',
   
-  // 网站 URL
+  // Site URL
   siteUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://aicoder.com',
   
-  // 支持的语言
+  // Supported locales
   locales: ['zh', 'en', 'ja'] as const,
   
-  // 默认语言
+  // Default locale
   defaultLocale: 'zh' as Locale,
   
-  // Open Graph 默认配置
+  // Open Graph default configuration
   openGraph: {
     type: 'website',
     siteName: 'AiCoder',
@@ -38,7 +38,7 @@ export const seoConfig = {
     ],
   },
   
-  // Twitter Card 默认配置
+  // Twitter Card default configuration
   twitter: {
     card: 'summary_large_image',
     site: '@aicoder',

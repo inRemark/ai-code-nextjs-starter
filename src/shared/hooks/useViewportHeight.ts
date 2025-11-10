@@ -8,42 +8,41 @@ interface ViewportState {
 
 export function useViewportHeight(): ViewportState {
   const [state, setState] = useState<ViewportState>(() => ({
-    height: typeof window !== 'undefined' ? window.innerHeight : 0,
+    height: typeof globalThis.window === 'object' ? globalThis.window.innerHeight : 0,
     isKeyboardVisible: false,
     keyboardHeight: 0
   }));
 
-  // 在服务端渲染时提供默认值
-  const isMobile = typeof navigator !== 'undefined' 
-    ? /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent) 
-    : false;
-  const isIOS = typeof navigator !== 'undefined' 
-    ? /iPad|iPhone|iPod/.test(navigator.userAgent) 
-    : false;
-  const isAndroid = typeof navigator !== 'undefined' 
-    ? /Android/i.test(navigator.userAgent) 
-    : false;
+  const isMobile = typeof navigator === 'undefined'
+    ? false
+    : /Android|webOS|iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const isIOS = typeof navigator === 'undefined'
+    ? false
+    : /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isAndroid = typeof navigator === 'undefined'
+    ? false
+    : /Android/i.test(navigator.userAgent);
   
   const getVisibleHeight = useCallback((): number => {
-    if (typeof window === 'undefined') {
+    if (globalThis.window === undefined) {
       return 0;
     }
     
-    if (window.visualViewport) {
-      return window.visualViewport.height;
+    if (globalThis.window.visualViewport) {
+      return globalThis.window.visualViewport.height;
     }
-    return window.innerHeight;
+    return globalThis.window.innerHeight;
   }, []);
 
   const updateViewportState = useCallback(() => {
-    // 如果 window 不存在，直接返回
-    if (typeof window === 'undefined') {
+    // if window not exist, return
+    if (globalThis.window === undefined) {
       return;
     }
     
     if (!isMobile) {
       setState({
-        height: window.innerHeight,
+        height: globalThis.window.innerHeight,
         isKeyboardVisible: false,
         keyboardHeight: 0
       });
@@ -51,20 +50,20 @@ export function useViewportHeight(): ViewportState {
     }
 
     const currentHeight = getVisibleHeight();
-    const maxHeight = Math.max(window.innerHeight, currentHeight);
+    const maxHeight = Math.max(globalThis.window.innerHeight, currentHeight);
     const heightDiff = maxHeight - currentHeight;
-    
-    // 调整键盘检测阈值
+
+    // Adjust keyboard detection threshold
     const keyboardThreshold = isAndroid ? maxHeight * 0.15 : maxHeight * 0.25;
     const isKeyboardVisible = heightDiff > keyboardThreshold;
 
-    // 防止 Android Chrome 软键盘收起时的抽屉问题
+    // Prevent Android Chrome soft keyboard from causing drawer issues
     if (isAndroid && !isKeyboardVisible) {
       document.documentElement.style.height = '100%';
       document.body.style.height = '100%';
       document.body.style.minHeight = '100%';
-      
-      // 强制重排
+
+      // Force reflow
       requestAnimationFrame(() => {
         document.documentElement.style.height = '';
         document.body.style.height = '';
@@ -80,53 +79,53 @@ export function useViewportHeight(): ViewportState {
   }, [getVisibleHeight, isAndroid, isMobile]);
 
   useEffect(() => {
-    // 如果 window 不存在，直接返回
-    if (typeof window === 'undefined') {
+    // if window not exist, return
+    if (globalThis.window === undefined) {
       return;
     }
     
     const handleResize = () => {
-      // 使用 requestAnimationFrame 来确保视口更新的平滑性
+      // use requestAnimationFrame to ensure smooth viewport updates
       requestAnimationFrame(() => {
         setState({
-          height: window.innerHeight,
+          height: globalThis.window.innerHeight,
           isKeyboardVisible: false,
           keyboardHeight: 0
         });
       });
     };
 
-    window.addEventListener("resize", handleResize);
+    globalThis.window.addEventListener("resize", handleResize);
     // 初始化时立即执行一次
     handleResize();
 
-    return () => window.removeEventListener("resize", handleResize);
+    return () => globalThis.window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
-    // 如果 window 不存在，直接返回
-    if (typeof window === 'undefined') {
+    // if window not exist, return
+    if (globalThis.window === undefined) {
       return;
     }
     
     if (!isMobile) {
-      window.addEventListener('resize', updateViewportState);
-      return () => window.removeEventListener('resize', updateViewportState);
+      globalThis.window.addEventListener('resize', updateViewportState);
+      return () => globalThis.window.removeEventListener('resize', updateViewportState);
     }
 
     const cleanup: (() => void)[] = [];
 
-    if (window.visualViewport) {
+    if (globalThis.window.visualViewport) {
       const handleViewportChange = () => {
         requestAnimationFrame(updateViewportState);
       };
 
-      window.visualViewport.addEventListener('resize', handleViewportChange);
-      window.visualViewport.addEventListener('scroll', handleViewportChange);
+      globalThis.window.visualViewport.addEventListener('resize', handleViewportChange);
+      globalThis.window.visualViewport.addEventListener('scroll', handleViewportChange);
 
       cleanup.push(() => {
-        window.visualViewport?.removeEventListener('resize', handleViewportChange);
-        window.visualViewport?.removeEventListener('scroll', handleViewportChange);
+        globalThis.window.visualViewport?.removeEventListener('resize', handleViewportChange);
+        globalThis.window.visualViewport?.removeEventListener('scroll', handleViewportChange);
       });
     }
 
@@ -139,12 +138,12 @@ export function useViewportHeight(): ViewportState {
         setTimeout(updateViewportState, 100);
       };
 
-      window.addEventListener('focusin', handleFocusIn);
-      window.addEventListener('focusout', handleFocusOut);
+      globalThis.window.addEventListener('focusin', handleFocusIn);
+      globalThis.window.addEventListener('focusout', handleFocusOut);
 
       cleanup.push(() => {
-        window.removeEventListener('focusin', handleFocusIn);
-        window.removeEventListener('focusout', handleFocusOut);
+        globalThis.window.removeEventListener('focusin', handleFocusIn);
+        globalThis.window.removeEventListener('focusout', handleFocusOut);
       });
     }
 
@@ -153,20 +152,24 @@ export function useViewportHeight(): ViewportState {
         requestAnimationFrame(updateViewportState);
       };
 
-      window.addEventListener('resize', handleResize);
-      cleanup.push(() => window.removeEventListener('resize', handleResize));
+      globalThis.window.addEventListener('resize', handleResize);
+      cleanup.push(() => globalThis.window.removeEventListener('resize', handleResize));
     }
 
     const handleOrientationChange = () => {
       setTimeout(updateViewportState, 150);
     };
 
-    window.addEventListener('orientationchange', handleOrientationChange);
-    cleanup.push(() => window.removeEventListener('orientationchange', handleOrientationChange));
+    globalThis.window.addEventListener('orientationchange', handleOrientationChange);
+    cleanup.push(() => globalThis.window.removeEventListener('orientationchange', handleOrientationChange));
 
     updateViewportState();
 
-    return () => cleanup.forEach(fn => fn());
+    return () => {
+      for (const fn of cleanup) {
+        fn();
+      }
+    };
   }, [isMobile, isIOS, updateViewportState]);
 
   return state;

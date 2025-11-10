@@ -17,10 +17,10 @@ interface BreadcrumbProps {
   className?: string;
 }
 
-// 路由到面包屑的映射配置
+// route to breadcrumb items mapping
 const routeMap: Record<string, BreadcrumbItem[]> = {
-  "/": [], // Portal页面不显示面包屑
-  "/pricing": [], // 独立页面不显示面包屑
+  "/": [],
+  "/pricing": [],
   "/about": [],
   "/help": [],
   "/blog": [],
@@ -41,7 +41,7 @@ const routeMap: Record<string, BreadcrumbItem[]> = {
     { label: "队列进度", href: "/admin/mail/queue" }
   ],
   
-  // 用户功能页面
+  // user profile routes
   "/profile": [
     { label: "控制台", href: "/console" },
     { label: "个人资料", href: "/profile" }
@@ -63,7 +63,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
 }) => {
   const pathname = usePathname();
   
-  // 使用传入的items或从路由映射获取
+  // use the passed items or get from route map
   const items = propItems || routeMap[pathname] || [
     { label: "首页", href: "/", icon: <Home className="w-4 h-4" /> }
   ];
@@ -76,7 +76,7 @@ export const Breadcrumb: React.FC<BreadcrumbProps> = ({
         const isLast = index === items.length - 1;
         
         return (
-          <React.Fragment key={index}>
+          <React.Fragment key={`${item.label}-${item.href ?? index}`}>
             {index > 0 && (
               <ChevronRight className="w-4 h-4 text-muted-foreground" />
             )}
