@@ -1,8 +1,6 @@
-"use client";
-
-import React, { useMemo } from "react";
+import React from "react";
 import Link from "next/link";
-import { useLocale, useMessages } from "next-intl";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Sparkles } from "lucide-react";
 import { FaGithub, FaTwitter, FaLinkedin } from "react-icons/fa";
 
@@ -12,30 +10,28 @@ const socialLinks = [
   { icon: FaLinkedin, href: "https://linkedin.com/company/sendmail", labelKey: "social.linkedin" }
 ];
 
-export const PortalFooter: React.FC = () => {
-  const locale = useLocale();
-  
-  const messages = useMessages();
-  const sharedLayoutMessages = messages['shared-layout'];
-  const footerTranslations = (sharedLayoutMessages['footer']);
+export const PortalFooter = async () => {
+  const locale = await getLocale();
+  const t = await getTranslations('shared-layout.footer');
   
   const formatLabel = (label: string): string => {
     return locale === 'en' ? label.toUpperCase() : label;
   };
   
-  const footerLinks = useMemo(() => ({
+  const footerLinks = {
     product: [
-      { label: footerTranslations["product"] || "Product", href: "/features" },
+      { label: t("product"), href: "/features" },
     ],
     company: [
-      { label: footerTranslations["company"] || "Company", href: "/about" },
+      { label: t("company"), href: "/about" },
     ],
     legal: [
-      { label: footerTranslations["privacyPolicy"] || "Privacy Policy", href: "/about/privacy" },
-      { label: footerTranslations["termsOfService"] || "Terms of Service", href: "/about/terms" },
-      { label: footerTranslations["cookiePolicy"] || "Cookie Policy", href: "/about/cookies" },
+      { label: t("privacyPolicy"), href: "/about/privacy" },
+      { label: t("termsOfService"), href: "/about/terms" },
+      { label: t("cookiePolicy"), href: "/about/cookies" },
     ]
-  }), [footerTranslations]);
+  };
+  
   return (
     <footer className="bg-muted/30 border-t">
       <div className="container mx-auto px-4 py-12">
@@ -47,7 +43,7 @@ export const PortalFooter: React.FC = () => {
               <span className="text-2xl font-bold text-foreground">VSeek</span>
             </Link>
             <p className="text-muted-foreground mb-4 max-w-md">
-            {footerTranslations["description"]}
+            {t("description")}
             </p>
             <div className="flex items-center gap-4">
               {socialLinks.map((social) => {
@@ -70,7 +66,7 @@ export const PortalFooter: React.FC = () => {
 
           {/* Product Links */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">{formatLabel(footerTranslations["product"] || "Product")}</h3>
+            <h3 className="font-semibold text-foreground mb-4">{formatLabel(t("product"))}</h3>
             <ul className="space-y-2">
               {footerLinks.product.map((link) => (
                 <li key={link.href}>
@@ -87,7 +83,7 @@ export const PortalFooter: React.FC = () => {
 
           {/* Company Links */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">{formatLabel(footerTranslations["company"] || "Company")}</h3>
+            <h3 className="font-semibold text-foreground mb-4">{formatLabel(t("company"))}</h3>
             <ul className="space-y-2">
               {footerLinks.company.map((link) => (
                 <li key={link.href}>
@@ -104,7 +100,7 @@ export const PortalFooter: React.FC = () => {
 
           {/* Legal Links */}
           <div>
-            <h3 className="font-semibold text-foreground mb-4">{formatLabel(footerTranslations["legal"] || "Legal")}</h3>
+            <h3 className="font-semibold text-foreground mb-4">{formatLabel(t("legal"))}</h3>
             <ul className="space-y-2">
               {footerLinks.legal.map((link) => (
                 <li key={link.href}>
@@ -123,10 +119,10 @@ export const PortalFooter: React.FC = () => {
         {/* Bottom Section */}
         <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-muted-foreground text-sm">
-            © 2025 AiCoder. {footerTranslations["allRightsReserved"] || "All Rights Reserved"}。
+            © 2025 AiCoder. {t("allRightsReserved")}。
           </p>
           <div className="flex items-center gap-6 mt-4 md:mt-0">
-            <span className="text-muted-foreground text-sm">{footerTranslations["icp"] || "ICP备案号：京ICP备12345678号"}</span>
+            <span className="text-muted-foreground text-sm">{t("icp")}</span>
           </div>
         </div>
       </div>

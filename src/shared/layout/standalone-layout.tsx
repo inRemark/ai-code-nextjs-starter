@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { SimpleHeader } from "./standalone-header";
 import { SimpleFooter } from "./standalone-footer";
