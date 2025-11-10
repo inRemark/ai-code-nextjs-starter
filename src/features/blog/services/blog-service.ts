@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { loadMarkdownFile, loadMarkdownFiles, fileExists } from '@/lib/markdown/loader';
+import { loadMarkdownFile, loadMarkdownFiles, fileExists } from '@/lib/file/markdown-loader';
 import type { BlogFrontmatter, BlogPost } from '../types/blog';
 
 /**
@@ -43,8 +43,8 @@ export async function getBlogPostWithFallback(
 ): Promise<BlogPost | null> {
   let post = await getBlogPost(locale, slug);
   
-  if (!post && locale !== 'zh') {
-    post = await getBlogPost('zh', slug);
+  if (!post && locale !== 'en') {
+    post = await getBlogPost('en', slug);
   }
   
   return post;

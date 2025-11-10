@@ -9,7 +9,7 @@ export interface MarkdownFile<T = Record<string, any>> {
 }
 
 /**
- * 读取并解析单个 Markdown 文件
+ * reads and parses a single Markdown file
  */
 export async function loadMarkdownFile<T = Record<string, any>>(
   filePath: string
@@ -27,7 +27,7 @@ export async function loadMarkdownFile<T = Record<string, any>>(
 }
 
 /**
- * 获取目录下所有 Markdown 文件
+ * get all Markdown files in a directory
  */
 export async function loadMarkdownFiles<T = Record<string, any>>(
   dirPath: string,
@@ -51,13 +51,13 @@ export async function loadMarkdownFiles<T = Record<string, any>>(
 
     return markdownFiles;
   } catch {
-    // 如果目录不存在，返回空数组
+    // if directory does not exist or other error, return empty array
     return [];
   }
 }
 
 /**
- * 检查文件是否存在
+ * checks if a file exists at the given path
  */
 export async function fileExists(filePath: string): Promise<boolean> {
   try {
