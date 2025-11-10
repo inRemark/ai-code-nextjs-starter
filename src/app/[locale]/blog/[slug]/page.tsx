@@ -7,7 +7,7 @@ import { Card, CardContent } from '@shared/ui/card';
 import { PortalLayout } from '@shared/layout/portal-layout';
 import { PageContent } from '@/shared/layout/portal-page-content';
 import { MarkdownContent } from '@shared/ui/markdown-simple/markdown-content';
-import { getBlogPost, getBlogPosts, getFeaturedPosts } from '@/features/blog';
+import { getBlogPostWithFallback, getBlogPosts, getFeaturedPosts } from '@/features/blog';
 import { getTranslations } from 'next-intl/server';
 
 export const revalidate = 3600;
@@ -43,7 +43,7 @@ interface BlogPostPageProps {
 // generate metadata for the blog post page
 export async function generateMetadata({ params }: BlogPostPageProps) {
   const { locale, slug } = await params;
-  const post = await getBlogPost(locale, slug);
+  const post = await getBlogPostWithFallback(locale, slug);
   
   if (!post) {
     return {
@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { locale, slug } = await params;
-  const post = await getBlogPost(locale, slug);
+  const post = await getBlogPostWithFallback(locale, slug);
   const t = await getTranslations({ locale, namespace: 'blog' });
   
   if (!post) {
