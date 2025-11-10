@@ -1,29 +1,39 @@
-// 帮助中心相关的类型定义
+// help types
+
+/**
+ * Help Article Frontmatter (from Markdown)
+ */
+export interface HelpFrontmatter {
+  title: string;
+  date: string;
+  author: string;
+  category: string;
+  tags: string[];
+  excerpt: string;
+  featured?: boolean;
+  readTime?: number;
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
+  videoUrl?: string;
+}
+
+/**
+ * Help Article (from Markdown file)
+ */
+export interface HelpArticle {
+  slug: string;
+  frontmatter: HelpFrontmatter;
+  content: string;
+}
 
 export interface HelpCategory {
   id: string;
   name: string;
-  icon: string;
-  description: string;
-  articles: HelpArticle[];
-  subcategories?: HelpCategory[];
-  order: number;
-}
-
-export interface HelpArticle {
-  id: string;
-  title: string;
-  content: string;
-  categoryId: string;
-  tags: string[];
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  lastUpdated: Date;
-  views: number;
-  helpful: number;
-  videoUrl?: string;
-  relatedArticles?: string[];
-  author: string;
-  publishedAt: Date;
+  slug: string;
+  icon?: string;
+  description?: string;
+  articleCount: number;
+  order?: number;
+  color?: string;
 }
 
 export interface HelpSearchResult {
@@ -35,13 +45,14 @@ export interface HelpSearchResult {
 }
 
 export interface HelpFilters {
-  categoryId?: string;
-  difficulty?: HelpArticle['difficulty'];
+  category?: string;
+  difficulty?: 'beginner' | 'intermediate' | 'advanced';
   tags?: string[];
+  search?: string;
   hasVideo?: boolean;
-  lastUpdated?: {
-    start: Date;
-    end: Date;
+  dateRange?: {
+    start: string;
+    end: string;
   };
 }
 
@@ -84,11 +95,25 @@ export interface SupportChannel {
   icon: string;
 }
 
+export interface PaginationData {
+  currentPage: number;
+  totalPages: number;
+  totalArticles: number;
+  articlesPerPage: number;
+  hasNext: boolean;
+  hasPrevious: boolean;
+}
+
 export interface HelpPageData {
+  articles: HelpArticle[];
+  pagination: PaginationData;
+  filters: HelpFilters;
   categories: HelpCategory[];
-  popularArticles: PopularArticle[];
-  quickActions: QuickAction[];
-  recentArticles: HelpArticle[];
-  stats: HelpStats;
-  contactSupport: ContactSupport;
+  featuredArticles: HelpArticle[];
+}
+
+export interface HelpArticlePageData {
+  article: HelpArticle;
+  relatedArticles: HelpArticle[];
+  category?: HelpCategory;
 }

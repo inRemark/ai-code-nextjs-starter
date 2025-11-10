@@ -1,52 +1,50 @@
 {
   "title": "ヘルプセンター",
+  "list": {
+    "title": "ヘルプセンター",
+    "description": "回答を見つけ、チュートリアルを学び、サポートを受ける",
+    "search": "ヘルプ記事を検索...",
+    "noArticles": "関連記事が見つかりません",
+    "loading": "読み込み中...",
+    "readMore": "続きを読む",
+    "readTime": "分で読めます",
+    "categories": {
+      "all": "全て",
+      "getting-started": "はじめに",
+      "account": "アカウント",
+      "troubleshooting": "トラブルシューティング",
+      "features": "機能",
+      "billing": "請求",
+      "api": "API ドキュメント"
+    },
+    "difficulty": {
+      "beginner": "初心者向け",
+      "intermediate": "中級者向け",
+      "advanced": "上級者向け"
+    },
+    "pagination": {
+      "previous": "前へ",
+      "next": "次へ"
+    }
+  },
+  "detail": {
+    "backToList": "ヘルプセンターに戻る",
+    "relatedArticles": "関連記事",
+    "author": "著者",
+    "publishedOn": "公開日",
+    "updatedOn": "更新日",
+    "readTime": "読了時間",
+    "minRead": "分で読めます",
+    "helpful": "この記事は役に立ちましたか？",
+    "yes": "はい",
+    "no": "いいえ"
+  },
   "search": {
     "title": "どうお手伝いしましょうか?",
     "placeholder": "ヘルプ記事、チュートリアルまたは FAQ を検索...",
     "noResults": "関連コンテンツが見つかりません",
     "results": "検索結果",
     "searching": "検索中...",
-    "difficulty": {
-      "beginner": "初心者向け",
-      "intermediate": "中級者向け",
-      "advanced": "上級者向け"
-    },
     "lastUpdated": "最終更新"
-  },
-  "categories": {
-    "title": "ヘルプカテゴリ",
-    "viewAll": "全ての記事を閲覧 {count} 件",
-    "gettingStarted": "はじめに",
-    "accountManagement": "アカウント管理",
-    "features": "機能",
-    "troubleshooting": "トラブルシューティング",
-    "billing": "請求",
-    "other": "その他"
-  },
-  "quickActions": {
-    "title": "クイックアクション"
-  },
-  "articles": {
-    "title": "人気記事",
-    "views": "ビュー",
-    "helpful": "役に立った",
-    "notHelpful": "役に立たなかった",
-    "rank": "位麗",
-    "trend": {
-      "up": "上昇",
-      "down": "下気味",
-      "stable": "安定"
-    }
-  },
-  "faq": {
-    "title": "よくある質別",
-    "contactSupport": "サポートに連絡"
-  },
-  "contact": {
-    "title": "サポートチームに連絡",
-    "description": "ヘルプセンターで答えが見つからない場合は、お気軽にお問い合わせください",
-    "email": "メール送信",
-    "emailAddress": "support@vseek.com",
-    "responseTime": "通常 24 時間以内に詳語します"
   }
 }
