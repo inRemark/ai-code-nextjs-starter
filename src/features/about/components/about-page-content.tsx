@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { PortalLayout } from '@shared/layout/portal-layout';
@@ -26,7 +24,7 @@ export function AboutPageContent() {
     <PortalLayout >
       <PageContent maxWidth="xl">
         <div className="space-y-16">
-          {/* 公司介绍 */}
+          {/* Company section */}
           <section>
             <div className="text-center mb-12">
               <h1 className="text-4xl font-bold mb-4">{t('name')}</h1>
@@ -59,7 +57,7 @@ export function AboutPageContent() {
             </div>
           </section>
 
-          {/* 企业价值观 */}
+          {/* Company values */}
           <section>
             <h2 className="text-3xl font-bold text-center mb-12">{t('values_title')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -88,7 +86,7 @@ export function AboutPageContent() {
             </div>
           </section>
 
-          {/* 发展历程 */}
+          {/* History */}
           <section>
             <h2 className="text-3xl font-bold text-center mb-12">{t('timeline_title')}</h2>
             <div className="max-w-4xl mx-auto">
@@ -102,9 +100,9 @@ export function AboutPageContent() {
             </div>
           </section>
 
-          {/* 商业版推广 */}
+          {/* Commercial */}
           <section>
-            <Card className="bg-gradient-to-br from-primary/10 via-chart-1/5 to-primary/5 border-primary/30">
+            <Card className="bg-linear-to-br from-primary/10 via-chart-1/5 to-primary/5 border-primary/30">
               <CardContent className="p-12">
                 <div className="text-center max-w-3xl mx-auto">
                   <div className="mb-6">
@@ -118,8 +116,8 @@ export function AboutPageContent() {
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    {(t.raw('pro.features') as Record<string, unknown>[]).map((feature: Record<string, unknown>, index: number) => (
-                      <div key={index} className="text-center">
+                    {(t.raw('pro.features') as Record<string, unknown>[]).map((feature: Record<string, unknown>) => (
+                      <div key={feature.title as string} className="text-center">
                         <div className="text-2xl font-bold text-primary mb-2">{feature.icon as string}</div>
                         <div className="text-2xl font-bold text-primary mb-2">{feature.title as string}</div>
                         <p className="text-sm text-muted-foreground">{feature.description as string}</p>

@@ -3,13 +3,13 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 export default async function CookiePolicyPage() {
-  const markdownPath = path.join(process.cwd(), 'public/legal/cookie-policy.md');
-  const markdownContent = await fs.readFile(markdownPath, 'utf8');
+  const filePath = path.join(process.cwd(), 'docs/legal/cookie-policy.md');
+  const markdownContent = await fs.readFile(filePath, 'utf8');
 
   return (
     <MarkdownRenderer
-      title="Cookie政策"
-      description="了解AICoder如何使用cookies来改善您的体验"
+      title="Cookie Policy"
+      description="Understand how AICoder uses cookies to enhance your experience"
       content={markdownContent}
     />
   );

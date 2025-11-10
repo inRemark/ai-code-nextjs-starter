@@ -3,13 +3,13 @@ import { promises as fs } from 'node:fs';
 import path from 'node:path';
 
 export default async function TermsOfServicePage() {
-  const markdownPath = path.join(process.cwd(), 'public/legal/terms-of-service.md');
-  const markdownContent = await fs.readFile(markdownPath, 'utf8');
+  const filePath = path.join(process.cwd(), 'docs/legal/terms-of-service.md');
+  const markdownContent = await fs.readFile(filePath, 'utf8');
 
   return (
     <MarkdownRenderer
-      title="服务条款"
-      description="AICoder服务使用条款和条件"
+      title="Terms of Service"
+      description="Understand the terms and conditions for using AICoder's services"
       content={markdownContent}
     />
   );

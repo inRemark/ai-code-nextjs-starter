@@ -1,5 +1,3 @@
-"use client";
-
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Card, CardContent } from '@shared/ui/card';
