@@ -19,6 +19,8 @@
     "searchPlaceholder": "搜索 (Ctrl+K)",
     "favorites": "我的收藏",
     "settings": "账号设置",
+    "orders": "我的订单",
+    "profile": "个人中心",
     "logout": "退出登录"
   },
   "footer": {

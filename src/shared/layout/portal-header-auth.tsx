@@ -116,17 +116,10 @@ export const PortalHeaderAuth: React.FC<PortalHeaderAuthProps> = ({
       </Link>
     </Button>
   ) : (
-    <>
-      <Button variant="ghost" asChild>
-        <Link href="/auth/login">
-          {headerTranslations["login"] || "Login"}
-        </Link>
-      </Button>
-      <Button asChild>
-        <Link href="/auth/register">
-          {headerTranslations["getStarted"] || "Get Started"}
-        </Link>
-      </Button>
-    </>
+    <Button variant="ghost" asChild>
+      <Link href="/auth/login">
+        {headerTranslations["login"] || "Login"}
+      </Link>
+    </Button>
   );
 };

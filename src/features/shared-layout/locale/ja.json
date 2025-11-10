@@ -19,6 +19,8 @@
     "searchPlaceholder": "検索 (Ctrl+K)",
     "favorites": "お気に入り",
     "settings": "アカウント設定",
+    "orders": "注文履歴",
+    "profile": "プロフィール",
     "logout": "ログアウト"
   },
   "footer": {

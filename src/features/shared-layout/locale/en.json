@@ -19,6 +19,8 @@
     "searchPlaceholder": "Search (Ctrl+K)",
     "favorites": "Favorites",
     "settings": "Account Settings",
+    "orders": "Orders",
+    "profile": "Profile",
     "logout": "Logout"
   },
   "footer": {
