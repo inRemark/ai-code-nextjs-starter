@@ -28,11 +28,13 @@
   },
   "detail": {
     "backToList": "ブログに戻る",
+    "backToBlog": "ブログに戻る",
     "relatedArticles": "関連記事",
     "author": "著者",
     "publishedOn": "公開日",
     "updatedOn": "更新日",
     "readTime": "読了時間",
+    "minRead": "分読了",
     "shareArticle": "記事を共有"
   }
 }

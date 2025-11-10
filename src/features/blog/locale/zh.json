@@ -28,11 +28,13 @@
   },
   "detail": {
     "backToList": "返回博客列表",
+    "backToBlog": "返回博客",
     "relatedArticles": "相关文章",
     "author": "作者",
     "publishedOn": "发布时间",
     "updatedOn": "更新时间",
     "readTime": "阅读时间",
+    "minRead": "分钟阅读",
     "shareArticle": "分享文章"
   }
 }

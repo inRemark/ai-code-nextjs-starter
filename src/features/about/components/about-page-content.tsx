@@ -23,7 +23,7 @@ export function AboutPageContent() {
   return (
     <PortalLayout >
       <PageContent maxWidth="xl">
-        <div className="space-y-16">
+        <div className="py-12 space-y-16">
           {/* Company section */}
           <section>
             <div className="text-center mb-12">

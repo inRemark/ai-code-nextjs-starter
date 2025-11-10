@@ -10,8 +10,9 @@ COPY package*.json ./
 # 安装依赖（生产环境）
 RUN npm ci --production
 
-# 复制源码
+# 复制源码和文档
 COPY . .
+COPY docs ./docs
 
 # 构建 Next.js 应用
 RUN npm run build
@@ -26,6 +27,7 @@ RUN adduser -S nextjs -u 1001
 USER nextjs
 
 COPY --from=base --chown=nextjs:nodejs /app ./
+COPY --from=base --chown=nextjs:nodejs /app/docs ./docs
 
 # 暴露端口（Next.js 默认 3000）
 EXPOSE 3000

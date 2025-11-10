@@ -14,9 +14,8 @@ export default async function PricingPage() {
   const t = await getTranslations("pricing");
   return (
     <PortalLayout>
-      <div className="bg-gradient-to-b from-background to-muted/20 dark:from-background dark:to-muted/10">
         <PageContent maxWidth="xl">
-          <section className="container mx-auto px-4 py-20">
+          <section className="container mx-auto px-4 py-12">
             <div className="text-center mb-16">
               <Badge variant="secondary" className="mb-4">{t("title")}</Badge>
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
@@ -119,7 +118,6 @@ export default async function PricingPage() {
             </div>
           </section>
         </PageContent>
-      </div>
     </PortalLayout>
   );
 }

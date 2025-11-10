@@ -1,16 +1,22 @@
-'use client'
-import { useState, useEffect } from 'react'
-import { logger } from '@logger';
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
-import { Search, Calendar, User, Tag, ChevronRight } from 'lucide-react'
-import { Input } from '@shared/ui/input'
+import { Calendar, User, Tag, ChevronRight } from 'lucide-react'
 import { Button } from '@shared/ui/button'
 import { Badge } from '@shared/ui/badge'
 import { Card, CardContent, CardHeader } from '@shared/ui/card'
-// import { StandaloneLayout } from '@/common/components/layout/standalone-layout'
 import { PortalLayout } from '@shared/layout/portal-layout'
 import { PageContent } from '@/shared/layout/portal-page-content'
+import { getBlogPosts, searchPosts, getPostsByCategory } from '@/lib/markdown/blog'
+import { BlogSearchForm } from '@/features/blog'
+
+// ISR 缓存配置：每小时重新验证
+export const revalidate = 3600
+
+interface SearchParams {
+  page?: string
+  category?: string
+  search?: string
+}
 
 interface BlogPost {
   id: string
@@ -25,29 +31,65 @@ interface BlogPost {
   readTime: number
 }
 
-interface BlogResponse {
-  posts: BlogPost[]
-  pagination: {
-    currentPage: number
-    totalPages: number
-    totalPosts: number
-    postsPerPage: number
-    hasNext: boolean
-    hasPrevious: boolean
+// 生成静态元数据
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string }>
+}) {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: 'blog' })
+  
+  return {
+    title: t('title'),
+    description: t('list.description')
   }
-  categories: unknown[]
-  tags: unknown[]
-  featuredPosts: unknown[]
 }
 
-export default function BlogPage() {
-  const t = useTranslations('blog');
-  const [posts, setPosts] = useState<BlogPost[]>([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('all')
-  const [currentPage, setCurrentPage] = useState(1)
-  const [totalPages, setTotalPages] = useState(1)
+export default async function BlogPage({
+  params,
+  searchParams
+}: {
+  params: Promise<{ locale: string }>
+  searchParams: Promise<SearchParams>
+}) {
+  const { locale } = await params
+  const { page = '1', category, search } = await searchParams
+  const t = await getTranslations({ locale, namespace: 'blog' })
+  
+  const currentPage = Number.parseInt(page, 10)
+  const postsPerPage = 9
+  
+  // 服务端直接读取 Markdown 文件
+  let allPosts
+  if (search) {
+    allPosts = await searchPosts(locale, search)
+  } else if (category && category !== 'all') {
+    allPosts = await getPostsByCategory(locale, category)
+  } else {
+    allPosts = await getBlogPosts(locale)
+  }
+  
+  // 分页逻辑
+  const totalPosts = allPosts.length
+  const totalPages = Math.ceil(totalPosts / postsPerPage)
+  const startIndex = (currentPage - 1) * postsPerPage
+  const endIndex = startIndex + postsPerPage
+  const paginatedPosts = allPosts.slice(startIndex, endIndex)
+  
+  // 转换为 BlogPost 格式
+  const posts: BlogPost[] = paginatedPosts.map((post) => ({
+    id: post.slug,
+    title: post.frontmatter.title,
+    slug: post.slug,
+    excerpt: post.frontmatter.excerpt,
+    content: post.content,
+    author: post.frontmatter.author,
+    publishedAt: post.frontmatter.date,
+    category: post.frontmatter.category,
+    tags: post.frontmatter.tags,
+    readTime: post.frontmatter.readTime
+  }))
 
   const categories = [
     { id: 'all', name: t('list.categories.all') },
@@ -58,79 +100,38 @@ export default function BlogPage() {
     { id: 'case-studies', name: t('list.categories.case-studies') }
   ]
 
-  useEffect(() => {
-    fetchPosts()
-  }, [currentPage, selectedCategory, searchTerm])
-
-  const fetchPosts = async () => {
-    setLoading(true)
-    try {
-      const params = new URLSearchParams({
-        page: currentPage.toString(),
-        limit: '9',
-        ...(selectedCategory !== 'all' && { category: selectedCategory }),
-        ...(searchTerm && { search: searchTerm })
-      })
-
-      const response = await fetch(`/api/blog?${params}`)
-      const data: BlogResponse = await response.json()
-      
-      const transformedPosts = data.posts?.map((post: unknown) => {
-        const typedPost = post as {
-          slug: string
-          frontmatter?: {
-            title?: string
-            excerpt?: string
-            author?: string
-            date?: string
-            category?: string
-            tags?: string[]
-            readTime?: number
-          }
-          content?: string
-        }
-        return {
-          id: typedPost.slug,
-          title: typedPost.frontmatter?.title || '',
-          slug: typedPost.slug,
-          excerpt: typedPost.frontmatter?.excerpt || '',
-          content: typedPost.content || '',
-          author: typedPost.frontmatter?.author || '',
-          publishedAt: typedPost.frontmatter?.date || '',
-          category: typedPost.frontmatter?.category || '',
-          tags: typedPost.frontmatter?.tags || [],
-          readTime: typedPost.frontmatter?.readTime || 5
-        }
-      }) || []
-      
-      setPosts(transformedPosts)
-      setTotalPages(data.pagination?.totalPages || 1)
-    } catch (error) {
-      logger.error(t('list.error'), error)
-      setPosts([])
-      setTotalPages(1)
-    } finally {
-      setLoading(false)
-    }
+  // 格式化日期
+  const getLocaleString = () => {
+    if (locale === 'zh') return 'zh-CN'
+    if (locale === 'ja') return 'ja-JP'
+    return 'en-US'
   }
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    setCurrentPage(1)
-    fetchPosts()
-  }
-
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category)
-    setCurrentPage(1)
-  }
-
+  
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('zh-CN', {
+    return new Date(dateString).toLocaleDateString(getLocaleString(), {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
     })
+  }
+  
+  // 构建 URL 辅助函数
+  const buildQueryString = (params: { page?: number; includeCategory?: boolean; includeSearch?: boolean }) => {
+    const query = new URLSearchParams()
+    
+    if (params.page && params.page > 1) {
+      query.set('page', params.page.toString())
+    }
+    if (params.includeCategory && category && category !== 'all') {
+      query.set('category', category)
+    }
+    if (params.includeSearch && search) {
+      query.set('search', search)
+    }
+    
+    const queryString = query.toString()
+    const basePath = `/${locale}/blog`
+    return queryString ? `${basePath}?${queryString}` : basePath
   }
 
   return (
@@ -143,57 +144,44 @@ export default function BlogPage() {
         {/* Search and Filter */}
         <div className="mb-8">
           <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between">
-            {/* Search */}
-            <form onSubmit={handleSearch} className="flex-1 max-w-md">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="text"
-                  placeholder={t('list.search')}
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </form>
+            {/* Search Form */}
+            <BlogSearchForm 
+              locale={locale}
+              initialSearch={search || ''}
+              currentCategory={category}
+              placeholder={t('list.search')}
+            />
 
             {/* Category Filter */}
             <div className="flex flex-wrap gap-2">
-              {categories.map((category) => (
-                <Button
-                  key={category.id}
-                  variant={selectedCategory === category.id ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => handleCategoryChange(category.id)}
-                  className="text-sm"
-                >
-                  {category.name}
-                </Button>
-              ))}
+              {categories.map((cat) => {
+                const isActive = (category || 'all') === cat.id
+                
+                // 构建分类链接
+                let href = `/${locale}/blog`
+                const params: string[] = []
+                if (cat.id !== 'all') params.push(`category=${cat.id}`)
+                if (search) params.push(`search=${search}`)
+                if (params.length > 0) href += `?${params.join('&')}`
+                
+                return (
+                  <Link key={cat.id} href={href}>
+                    <Button
+                      variant={isActive ? 'default' : 'outline'}
+                      size="sm"
+                      className="text-sm"
+                    >
+                      {cat.name}
+                    </Button>
+                  </Link>
+                )
+              })}
             </div>
           </div>
         </div>
 
         {/* Blog Posts Grid */}
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[...Array(9)].map((_, i) => (
-              <Card key={i} className="animate-pulse">
-                <CardHeader>
-                  <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-muted rounded w-1/2"></div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    <div className="h-3 bg-muted rounded"></div>
-                    <div className="h-3 bg-muted rounded w-5/6"></div>
-                    <div className="h-3 bg-muted rounded w-4/6"></div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : posts.length === 0 ? (
+        {posts.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-muted-foreground text-lg">{t('list.noArticles')}</p>
           </div>
@@ -212,7 +200,7 @@ export default function BlogPage() {
                     </span>
                   </div>
                   <h3 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                    <Link href={`/blog/${post.slug}`}>
+                    <Link href={`/${locale}/blog/${post.slug}`}>
                       {post.title}
                     </Link>
                   </h3>
@@ -248,7 +236,7 @@ export default function BlogPage() {
                   )}
 
                   <Link 
-                    href={`/blog/${post.slug}`}
+                    href={`/${locale}/blog/${post.slug}`}
                     className="inline-flex items-center text-primary hover:text-primary/80 text-sm font-medium mt-4 group"
                   >
                     {t('list.readMore')}
@@ -264,39 +252,53 @@ export default function BlogPage() {
         {totalPages > 1 && (
           <div className="flex justify-center mt-8">
             <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-                disabled={currentPage === 1}
+              {/* 上一页 */}
+              <Link 
+                href={buildQueryString({ page: Math.max(1, currentPage - 1), includeCategory: true, includeSearch: true })}
+                className={currentPage === 1 ? 'pointer-events-none' : ''}
               >
-                {t('list.pagination.previous')}
-              </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage === 1}
+                >
+                  {t('list.pagination.previous')}
+                </Button>
+              </Link>
               
-              {[...Array(Math.min(5, totalPages))].map((_, i) => {
-                const page = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i
-                if (page > totalPages) return null
+              {/* 页码按钮 */}
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                const pageNum = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i
+                if (pageNum > totalPages) return null
                 
                 return (
-                  <Button
-                    key={page}
-                    variant={currentPage === page ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => setCurrentPage(page)}
+                  <Link 
+                    key={pageNum} 
+                    href={buildQueryString({ page: pageNum, includeCategory: true, includeSearch: true })}
                   >
-                    {page}
-                  </Button>
+                    <Button
+                      variant={currentPage === pageNum ? 'default' : 'outline'}
+                      size="sm"
+                    >
+                      {pageNum}
+                    </Button>
+                  </Link>
                 )
               })}
               
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
-                disabled={currentPage === totalPages}
+              {/* 下一页 */}
+              <Link 
+                href={buildQueryString({ page: Math.min(totalPages, currentPage + 1), includeCategory: true, includeSearch: true })}
+                className={currentPage === totalPages ? 'pointer-events-none' : ''}
               >
-                {t('list.pagination.next')}
-              </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage === totalPages}
+                >
+                  {t('list.pagination.next')}
+                </Button>
+              </Link>
             </div>
           </div>
         )}

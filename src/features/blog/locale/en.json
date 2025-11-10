@@ -28,11 +28,13 @@
   },
   "detail": {
     "backToList": "Back to Blog",
+    "backToBlog": "Back to Blog",
     "relatedArticles": "Related Articles",
     "author": "Author",
     "publishedOn": "Published",
     "updatedOn": "Updated",
     "readTime": "Read time",
+    "minRead": "min read",
     "shareArticle": "Share Article"
   }
 }

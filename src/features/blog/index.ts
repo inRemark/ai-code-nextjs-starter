@@ -1,7 +1,7 @@
 /**
  * Blog Feature - Public API
  * 
- * 博客功能统一导出
+ * This module exports types, hooks, and components related to the blog feature.
  */
 
 // Types
@@ -16,3 +16,4 @@ export { BlogPostList } from './components/blog-post-list';
 export { BlogCategoryFilter } from './components/blog-category-filter';
 export { BlogSearchBox } from './components/blog-search-box';
 export { BlogPagination } from './components/blog-pagination';
+export { BlogSearchForm } from './components/blog-search-form';

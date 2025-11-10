@@ -28,7 +28,7 @@ export const PageContent: React.FC<PageContentProps> = ({
 }) => {
   return (
     <div className={`bg-background min-h-full ${className}`}>
-      <div className={`${maxWidthClasses[maxWidth]} mx-auto px-4 py-12`}>
+      <div className={`${maxWidthClasses[maxWidth]} mx-auto px-4 py-6`}>
         {(title || description) && (
           <div className="mb-8">
             {title && (

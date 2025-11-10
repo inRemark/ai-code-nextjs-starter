@@ -1,261 +1,186 @@
-'use client'
-import { logger } from '@logger';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import { Calendar, User, Tag, Clock } from 'lucide-react';
+import { Badge } from '@shared/ui/badge';
+import { Separator } from '@shared/ui/separator';
+import { Card, CardContent } from '@shared/ui/card';
+import { PortalLayout } from '@shared/layout/portal-layout';
+import { PageContent } from '@/shared/layout/portal-page-content';
+import { MarkdownContent } from '@shared/ui/markdown-simple/markdown-content';
+import { getBlogPost, getBlogPosts, getFeaturedPosts } from '@/lib/markdown/blog';
+import { getTranslations } from 'next-intl/server';
 
-import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { ArrowLeft, Calendar, User, Tag, Clock, Share2 } from 'lucide-react'
-import { Button } from '@shared/ui/button'
-import { Badge } from '@shared/ui/badge'
-import { Separator } from '@shared/ui/separator'
-import { Card, CardContent } from '@shared/ui/card'
+export const revalidate = 3600;
+export const dynamicParams = true;
 
-interface BlogPost {
-  id: string
-  title: string
-  slug: string
-  excerpt: string
-  content: string
-  author: string
-  publishedAt: string
-  category: string
-  tags: string[]
-  readTime: number
-}
-
-export default function BlogPostPage() {
-  const params = useParams()
-  const router = useRouter()
-  const [post, setPost] = useState<BlogPost | null>(null)
-  const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([])
-  const [loading, setLoading] = useState(true)
-  const [notFound, setNotFound] = useState(false)
-
-  const slug = params.slug as string
-
-  useEffect(() => {
-    if (slug) {
-      fetchPost()
-    }
-  }, [slug])
-
-  const fetchPost = async () => {
-    setLoading(true)
+export async function generateStaticParams() {
+  const locales = ['zh', 'en', 'ja'];
+  const params: Array<{ locale: string; slug: string }> = [];
+  
+  for (const locale of locales) {
     try {
-      // 获取文章详情
-      const response = await fetch(`/api/blog?slug=${slug}`)
-      const data = await response.json()
-      
-      if (data.posts && data.posts.length > 0) {
-        const currentPost = data.posts[0]
-        setPost(currentPost)
-        
-        // 获取相关文章（同分类的其他文章）
-        const relatedResponse = await fetch(`/api/blog?category=${currentPost.category}&limit=3`)
-        const relatedData = await response.json()
-        setRelatedPosts(relatedData.posts.filter((p: BlogPost) => p.id !== currentPost.id).slice(0, 3))
-      } else {
-        setNotFound(true)
-      }
-    } catch (error) {
-      logger.error('获取文章失败:', error)
-      setNotFound(true)
-    } finally {
-      setLoading(false)
+      const featuredPosts = await getFeaturedPosts(locale);
+      const slugs = featuredPosts.slice(0, 20).map(post => ({
+        locale,
+        slug: post.slug,
+      }));
+      params.push(...slugs);
+    } catch {
+      continue;
     }
   }
+  
+  return params;
+}
 
+interface BlogPostPageProps {
+  params: Promise<{
+    locale: string;
+    slug: string;
+  }>;
+}
+
+// 生成动态元数据
+export async function generateMetadata({ params }: BlogPostPageProps) {
+  const { locale, slug } = await params;
+  const post = await getBlogPost(locale, slug);
+  
+  if (!post) {
+    return {
+      title: 'Post Not Found',
+      description: 'The requested blog post could not be found.'
+    };
+  }
+  
+  return {
+    title: post.frontmatter.title,
+    description: post.frontmatter.excerpt,
+  };
+}
+
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { locale, slug } = await params;
+  const post = await getBlogPost(locale, slug);
+  const t = await getTranslations({ locale, namespace: 'blog' });
+  
+  if (!post) {
+    notFound();
+  }
+  
+  const allPosts = await getBlogPosts(locale);
+  const relatedPosts = allPosts
+    .filter(p => 
+      p.frontmatter.category === post.frontmatter.category && 
+      p.slug !== slug
+    )
+    .slice(0, 3);
+  
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('zh-CN', {
+    let localeStr = 'en-US';
+    if (locale === 'zh') localeStr = 'zh-CN';
+    else if (locale === 'ja') localeStr = 'ja-JP';
+    
+    return new Date(dateString).toLocaleDateString(localeStr, {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
-    })
-  }
+    });
+  };
 
-  const handleShare = async () => {
-    if (navigator.share && post) {
-      try {
-        await navigator.share({
-          title: post.title,
-          text: post.excerpt,
-          url: window.location.href,
-        })
-      } catch (error) {
-        // Fallback to copying URL
-        navigator.clipboard.writeText(window.location.href)
-      }
-    } else {
-      // Fallback to copying URL
-      navigator.clipboard.writeText(window.location.href)
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/4 mb-6"></div>
-            <div className="h-12 bg-gray-200 rounded w-3/4 mb-4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2 mb-8"></div>
-            <div className="space-y-4">
-              {[...Array(10)].map((_, i) => (
-                <div key={i} className="h-4 bg-gray-200 rounded"></div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (notFound || !post) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">404</h1>
-          <p className="text-xl text-gray-600 mb-8">文章未找到</p>
-          <Button onClick={() => router.push('/blog')}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            返回博客列表
-          </Button>
-        </div>
-      </div>
-    )
-  }
+  // 构建面包屑
+  const breadcrumbItems = [
+    { label: t('title'), href: `/${locale}/blog` },
+    { label: post.frontmatter.title }
+  ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Back Button */}
-        <Button
-          variant="ghost"
-          onClick={() => router.push('/blog')}
-          className="mb-6"
-        >
-          <ArrowLeft className="h-4 w-4 mr-2" />
-          返回博客列表
-        </Button>
+    <PortalLayout breadcrumb={breadcrumbItems} breadcrumbMaxWidth="4xl">
+      <PageContent maxWidth="2xl">
+        <div className="max-w-4xl mx-auto px-4">
 
-        {/* Article Header */}
-        <article className="bg-white rounded-lg shadow-sm p-8 mb-8">
-          <header className="mb-8">
-            <div className="flex items-center gap-4 mb-4">
-              <Badge variant="secondary">
-                {post.category}
+          <article>
+            <header className="mb-8">
+              <Badge variant="secondary" className="mb-3 text-xs">
+                {post.frontmatter.category}
               </Badge>
-              <div className="flex items-center text-sm text-gray-500 gap-4">
-                <span className="flex items-center">
-                  <Calendar className="h-4 w-4 mr-1" />
-                  {formatDate(post.publishedAt)}
-                </span>
-                <span className="flex items-center">
-                  <User className="h-4 w-4 mr-1" />
-                  {post.author}
-                </span>
-                <span className="flex items-center">
-                  <Clock className="h-4 w-4 mr-1" />
-                  {post.readTime} 分钟阅读
-                </span>
+              
+              <h1 className="text-3xl md:text-3xl font-bold text-foreground mb-3 leading-tight">
+                {post.frontmatter.title}
+              </h1>
+              
+              <p className="text-lg text-muted-foreground mb-5 leading-relaxed">
+                {post.frontmatter.excerpt}
+              </p>
+              
+              <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+                <div className="flex items-center">
+                  <User className="h-3.5 w-3.5 mr-1.5" />
+                  <span>{post.frontmatter.author}</span>
+                </div>
+                
+                <div className="flex items-center">
+                  <Calendar className="h-3.5 w-3.5 mr-1.5" />
+                  <time>{formatDate(post.frontmatter.date)}</time>
+                </div>
+                
+                {post.frontmatter.readTime && (
+                  <div className="flex items-center">
+                    <Clock className="h-3.5 w-3.5 mr-1.5" />
+                    <span>{post.frontmatter.readTime} {t('detail.minRead')}</span>
+                  </div>
+                )}
               </div>
-            </div>
+              
+              {post.frontmatter.tags && post.frontmatter.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-3">
+                  {post.frontmatter.tags.map((tag) => (
+                    <Badge key={tag} variant="outline" className="text-xs">
+                      <Tag className="h-2.5 w-2.5 mr-1" />
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+            </header>
 
-            <h1 className="text-4xl font-bold text-gray-900 mb-4 leading-tight">
-              {post.title}
-            </h1>
+            <Separator className="my-6" />
 
-            <p className="text-xl text-gray-600 mb-6">
-              {post.excerpt}
-            </p>
+            <MarkdownContent content={post.content} className="markdown-content text-[15px]" />
+          </article>
 
-            <div className="flex items-center justify-between">
-              <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag) => (
-                  <Badge key={tag} variant="outline" className="text-sm">
-                    <Tag className="h-3 w-3 mr-1" />
-                    {tag}
-                  </Badge>
+          {relatedPosts.length > 0 && (
+            <section className="mt-12">
+              <Separator className="mb-6" />
+              <h2 className="text-xl font-bold text-foreground mb-5">
+                {t('detail.relatedArticles')}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {relatedPosts.map((relatedPost) => (
+                  <Card key={relatedPost.slug} className="hover:shadow-lg transition-shadow">
+                    <CardContent className="p-5">
+                      <Badge variant="secondary" className="mb-2 text-xs">
+                        {relatedPost.frontmatter.category}
+                      </Badge>
+                      <h3 className="font-semibold text-foreground mb-2 line-clamp-2 text-sm">
+                        <Link href={`/${locale}/blog/${relatedPost.slug}`}>
+                          {relatedPost.frontmatter.title}
+                        </Link>
+                      </h3>
+                      <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">
+                        {relatedPost.frontmatter.excerpt}
+                      </p>
+                      <div className="flex items-center text-xs text-muted-foreground mt-3">
+                        <Calendar className="h-3 w-3 mr-1" />
+                        <time>{formatDate(relatedPost.frontmatter.date)}</time>
+                      </div>
+                    </CardContent>
+                  </Card>
                 ))}
               </div>
-
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleShare}
-                className="flex items-center"
-              >
-                <Share2 className="h-4 w-4 mr-2" />
-                分享
-              </Button>
-            </div>
-          </header>
-
-          <Separator className="mb-8" />
-
-          {/* Article Content */}
-          <div className="prose prose-lg max-w-none">
-            <div 
-              className="text-gray-800 leading-relaxed"
-              dangerouslySetInnerHTML={{ 
-                __html: post.content.replace(/\n/g, '<br>') 
-              }}
-            />
-          </div>
-        </article>
-
-        {/* Related Posts */}
-        {relatedPosts.length > 0 && (
-          <section className="bg-white rounded-lg shadow-sm p-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">相关文章</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {relatedPosts.map((relatedPost) => (
-                <Card key={relatedPost.id} className="group hover:shadow-md transition-shadow">
-                  <CardContent className="p-6">
-                    <h3 className="font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 mb-3">
-                      <Link href={`/blog/${relatedPost.slug}`}>
-                        {relatedPost.title}
-                      </Link>
-                    </h3>
-                    
-                    <p className="text-sm text-gray-600 line-clamp-3 mb-4">
-                      {relatedPost.excerpt}
-                    </p>
-
-                    <div className="flex items-center justify-between text-xs text-gray-500">
-                      <span className="flex items-center">
-                        <Calendar className="h-3 w-3 mr-1" />
-                        {formatDate(relatedPost.publishedAt)}
-                      </span>
-                      <span>{relatedPost.readTime} 分钟</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Call to Action */}
-        <Card className="mt-8 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
-          <CardContent className="p-8 text-center">
-            <h3 className="text-2xl font-bold text-gray-900 mb-4">
-              准备开始你的邮件营销之旅？
-            </h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-              立即注册 AICoder，体验专业的邮件营销平台，让你的营销活动更加高效。
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg">
-                免费试用
-              </Button>
-              <Button variant="outline" size="lg">
-                了解更多
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  )
+            </section>
+          )}
+        </div>
+      </PageContent>
+    </PortalLayout>
+  );
 }
