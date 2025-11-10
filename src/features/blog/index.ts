@@ -1,14 +1,11 @@
 /**
  * Blog Feature - Public API
  * 
- * This module exports types, hooks, and components related to the blog feature.
+ * This module exports types, components, and services related to the blog feature.
  */
 
 // Types
 export * from './types/blog';
-
-// Hooks
-export * from './hooks/useBlog';
 
 // Components
 export { BlogPostCard } from './components/blog-post-card';
@@ -17,3 +14,15 @@ export { BlogCategoryFilter } from './components/blog-category-filter';
 export { BlogSearchBox } from './components/blog-search-box';
 export { BlogPagination } from './components/blog-pagination';
 export { BlogSearchForm } from './components/blog-search-form';
+
+// Services
+export {
+  getBlogPosts,
+  getBlogPost,
+  getBlogPostWithFallback,
+  getFeaturedPosts,
+  getPostsByCategory,
+  searchPosts,
+  getAllCategories,
+  getAllTags
+} from './services/blog-service';

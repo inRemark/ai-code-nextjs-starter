@@ -6,10 +6,9 @@ import { Badge } from '@shared/ui/badge'
 import { Card, CardContent, CardHeader } from '@shared/ui/card'
 import { PortalLayout } from '@shared/layout/portal-layout'
 import { PageContent } from '@/shared/layout/portal-page-content'
-import { getBlogPosts, searchPosts, getPostsByCategory } from '@/lib/markdown/blog'
-import { BlogSearchForm } from '@/features/blog'
+import { getBlogPosts, searchPosts, getPostsByCategory, BlogSearchForm } from '@/features/blog'
 
-// ISR 缓存配置：每小时重新验证
+// ISR cache config: revalidate every hour
 export const revalidate = 3600
 
 interface SearchParams {
@@ -31,7 +30,7 @@ interface BlogPost {
   readTime: number
 }
 
-// 生成静态元数据
+// generate static metadata
 export async function generateMetadata({
   params
 }: {
@@ -59,8 +58,8 @@ export default async function BlogPage({
   
   const currentPage = Number.parseInt(page, 10)
   const postsPerPage = 9
-  
-  // 服务端直接读取 Markdown 文件
+
+  // Server-side read Markdown files directly
   let allPosts
   if (search) {
     allPosts = await searchPosts(locale, search)
@@ -69,15 +68,15 @@ export default async function BlogPage({
   } else {
     allPosts = await getBlogPosts(locale)
   }
-  
-  // 分页逻辑
+
+  // Pagination logic
   const totalPosts = allPosts.length
   const totalPages = Math.ceil(totalPosts / postsPerPage)
   const startIndex = (currentPage - 1) * postsPerPage
   const endIndex = startIndex + postsPerPage
   const paginatedPosts = allPosts.slice(startIndex, endIndex)
-  
-  // 转换为 BlogPost 格式
+
+  // Convert to BlogPost format
   const posts: BlogPost[] = paginatedPosts.map((post) => ({
     id: post.slug,
     title: post.frontmatter.title,
@@ -100,7 +99,7 @@ export default async function BlogPage({
     { id: 'case-studies', name: t('list.categories.case-studies') }
   ]
 
-  // 格式化日期
+  // Format date helper
   const getLocaleString = () => {
     if (locale === 'zh') return 'zh-CN'
     if (locale === 'ja') return 'ja-JP'
@@ -114,8 +113,8 @@ export default async function BlogPage({
       day: 'numeric'
     })
   }
-  
-  // 构建 URL 辅助函数
+
+  // Build URL helper function
   const buildQueryString = (params: { page?: number; includeCategory?: boolean; includeSearch?: boolean }) => {
     const query = new URLSearchParams()
     
@@ -156,8 +155,8 @@ export default async function BlogPage({
             <div className="flex flex-wrap gap-2">
               {categories.map((cat) => {
                 const isActive = (category || 'all') === cat.id
-                
-                // 构建分类链接
+
+                // Build category link
                 let href = `/${locale}/blog`
                 const params: string[] = []
                 if (cat.id !== 'all') params.push(`category=${cat.id}`)
@@ -252,7 +251,7 @@ export default async function BlogPage({
         {totalPages > 1 && (
           <div className="flex justify-center mt-8">
             <div className="flex items-center space-x-2">
-              {/* 上一页 */}
+              {/* Previous Page */}
               <Link 
                 href={buildQueryString({ page: Math.max(1, currentPage - 1), includeCategory: true, includeSearch: true })}
                 className={currentPage === 1 ? 'pointer-events-none' : ''}
@@ -285,8 +284,8 @@ export default async function BlogPage({
                   </Link>
                 )
               })}
-              
-              {/* 下一页 */}
+
+              {/* Next Page */}
               <Link 
                 href={buildQueryString({ page: Math.min(totalPages, currentPage + 1), includeCategory: true, includeSearch: true })}
                 className={currentPage === totalPages ? 'pointer-events-none' : ''}

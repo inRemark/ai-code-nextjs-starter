@@ -7,7 +7,7 @@ import { Card, CardContent } from '@shared/ui/card';
 import { PortalLayout } from '@shared/layout/portal-layout';
 import { PageContent } from '@/shared/layout/portal-page-content';
 import { MarkdownContent } from '@shared/ui/markdown-simple/markdown-content';
-import { getBlogPost, getBlogPosts, getFeaturedPosts } from '@/lib/markdown/blog';
+import { getBlogPost, getBlogPosts, getFeaturedPosts } from '@/features/blog';
 import { getTranslations } from 'next-intl/server';
 
 export const revalidate = 3600;
@@ -40,7 +40,7 @@ interface BlogPostPageProps {
   }>;
 }
 
-// 生成动态元数据
+// generate metadata for the blog post page
 export async function generateMetadata({ params }: BlogPostPageProps) {
   const { locale, slug } = await params;
   const post = await getBlogPost(locale, slug);
@@ -87,7 +87,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     });
   };
 
-  // 构建面包屑
+  // Build breadcrumb
   const breadcrumbItems = [
     { label: t('title'), href: `/${locale}/blog` },
     { label: post.frontmatter.title }

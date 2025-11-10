@@ -1,46 +1,29 @@
-// 博客系统相关的类型定义
+/**
+ * blog types
+ */
 
-export interface StaticBlogPost {
-  slug: string;
-  frontmatter: {
-    title: string;
-    date: string;
-    author: string;
-    tags: string[];
-    category: string;
-    excerpt: string;
-    coverImage?: string;
-    featured?: boolean;
-    readTime?: number;
-  };
-  content: string; // Markdown content
-}
-
-export interface BlogMetadata {
-  posts: StaticBlogPost[];
-  categories: string[];
+export interface BlogFrontmatter {
+  title: string;
+  date: string;
+  author: string;
+  category: string;
   tags: string[];
-  authors: string[];
+  excerpt: string;
+  featured?: boolean;
+  readTime?: number;
+  coverImage?: string;
 }
 
-export interface BlogAuthor {
-  id: string;
-  name: string;
-  bio: string;
-  avatar?: string;
-  email?: string;
-  website?: string;
-  socialLinks?: {
-    twitter?: string;
-    github?: string;
-    linkedin?: string;
-  };
+export interface BlogPost {
+  slug: string;
+  frontmatter: BlogFrontmatter;
+  content: string;
 }
 
 export interface BlogCategory {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   slug: string;
   postCount: number;
   color?: string;
@@ -52,15 +35,29 @@ export interface BlogTag {
   postCount: number;
 }
 
+export interface BlogAuthor {
+  id: string;
+  name: string;
+  bio?: string;
+  avatar?: string;
+  email?: string;
+  website?: string;
+  socialLinks?: {
+    twitter?: string;
+    github?: string;
+    linkedin?: string;
+  };
+}
+
 export interface TOCItem {
   id: string;
   title: string;
-  level: number; // 1-6 for h1-h6
+  level: number;
   children?: TOCItem[];
 }
 
 export interface BlogSearchResult {
-  posts: StaticBlogPost[];
+  posts: BlogPost[];
   totalCount: number;
   hasMore: boolean;
   searchQuery: string;
@@ -70,6 +67,7 @@ export interface BlogFilters {
   category?: string;
   tag?: string;
   author?: string;
+  search?: string;
   dateRange?: {
     start: string;
     end: string;
@@ -85,37 +83,21 @@ export interface PaginationData {
   hasPrevious: boolean;
 }
 
-export interface MarkdownComponents {
-  h1: React.ComponentType<any>;
-  h2: React.ComponentType<any>;
-  h3: React.ComponentType<any>;
-  h4: React.ComponentType<any>;
-  h5: React.ComponentType<any>;
-  h6: React.ComponentType<any>;
-  code: React.ComponentType<any>;
-  pre: React.ComponentType<any>;
-  img: React.ComponentType<any>;
-  a: React.ComponentType<any>;
-  blockquote: React.ComponentType<any>;
-  table: React.ComponentType<any>;
-}
-
 export interface BlogPageData {
-  posts: StaticBlogPost[];
+  posts: BlogPost[];
   pagination: PaginationData;
   filters: BlogFilters;
   categories: BlogCategory[];
   tags: BlogTag[];
-  featuredPosts: StaticBlogPost[];
+  featuredPosts: BlogPost[];
 }
 
 export interface BlogPostPageData {
-  post: StaticBlogPost;
-  relatedPosts: StaticBlogPost[];
-  tableOfContents: TOCItem[];
-  author: BlogAuthor;
+  post: BlogPost;
+  relatedPosts: BlogPost[];
+  tableOfContents?: TOCItem[];
+  author?: BlogAuthor;
 }
 
 export type BlogLayout = 'grid' | 'list' | 'card';
-
 export type BlogSortBy = 'date' | 'title' | 'popularity' | 'readTime';

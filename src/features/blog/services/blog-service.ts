@@ -1,32 +1,15 @@
 import path from 'node:path';
-import { loadMarkdownFile, loadMarkdownFiles, fileExists } from './loader';
-
-export interface BlogFrontmatter {
-  title: string;
-  date: string;
-  author: string;
-  category: string;
-  tags: string[];
-  excerpt: string;
-  featured?: boolean;
-  readTime?: number;
-  coverImage?: string;
-}
-
-export interface BlogPost {
-  slug: string;
-  frontmatter: BlogFrontmatter;
-  content: string;
-}
+import { loadMarkdownFile, loadMarkdownFiles, fileExists } from '@/lib/markdown/loader';
+import type { BlogFrontmatter, BlogPost } from '../types/blog';
 
 /**
- * 获取所有博客文章
+ * get all blog posts
  */
 export async function getBlogPosts(locale: string): Promise<BlogPost[]> {
   const blogDir = path.join(process.cwd(), 'docs/blog', locale);
   const posts = await loadMarkdownFiles<BlogFrontmatter>(blogDir);
   
-  // 按日期降序排序
+  // Sort by date in descending order 
   return posts.sort((a, b) => {
     const dateA = new Date(a.frontmatter.date).getTime();
     const dateB = new Date(b.frontmatter.date).getTime();
@@ -35,7 +18,7 @@ export async function getBlogPosts(locale: string): Promise<BlogPost[]> {
 }
 
 /**
- * 获取单篇博客文章
+ * get single blog post by slug
  */
 export async function getBlogPost(
   locale: string, 
@@ -51,8 +34,8 @@ export async function getBlogPost(
 }
 
 /**
- * 获取博客文章（带回退机制）
- * 如果指定语言的文章不存在，回退到中文
+ * get blog post with fallback
+ * if the post does not exist in the specified locale, fallback to Chinese
  */
 export async function getBlogPostWithFallback(
   locale: string,
@@ -68,7 +51,7 @@ export async function getBlogPostWithFallback(
 }
 
 /**
- * 获取精选文章
+ * get featured posts
  */
 export async function getFeaturedPosts(locale: string): Promise<BlogPost[]> {
   const posts = await getBlogPosts(locale);
@@ -76,7 +59,7 @@ export async function getFeaturedPosts(locale: string): Promise<BlogPost[]> {
 }
 
 /**
- * 按分类获取文章
+ * get posts by category
  */
 export async function getPostsByCategory(
   locale: string,
@@ -87,7 +70,7 @@ export async function getPostsByCategory(
 }
 
 /**
- * 搜索文章
+ * search posts
  */
 export async function searchPosts(
   locale: string,
@@ -109,7 +92,7 @@ export async function searchPosts(
 }
 
 /**
- * 获取所有分类
+ * get all categories
  */
 export async function getAllCategories(locale: string): Promise<string[]> {
   const posts = await getBlogPosts(locale);
@@ -118,7 +101,7 @@ export async function getAllCategories(locale: string): Promise<string[]> {
 }
 
 /**
- * 获取所有标签
+ * get all tags
  */
 export async function getAllTags(locale: string): Promise<string[]> {
   const posts = await getBlogPosts(locale);

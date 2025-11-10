@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { PortalHeader } from "./portal-header";
 import { PortalFooter } from "./portal-footer";
