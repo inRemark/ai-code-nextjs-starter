@@ -1,6 +1,6 @@
 /**
  * Article Feature - Public API
- * 文章功能统一导出
+ * This module exports types, validators, services, and hooks related to the article feature.
  */
 
 // Types

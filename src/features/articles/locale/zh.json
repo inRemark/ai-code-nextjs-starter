@@ -2,7 +2,7 @@
   "title": "文章中心",
   "list": {
     "title": "文章中心",
-    "description": "探索技术文章、开发指南和最佳实践",
+    "description": "这是一个动态内容示例模块",
     "readMore": "阅读全文",
     "publishedOn": "发布于",
     "author": "作者",
@@ -15,19 +15,23 @@
       "current": "第 {page} / {totalPages} 页"
     },
     "cover": "封面图片",
-    "views": "浏览次数",
-    "anonymous": "匿名"
+    "views": "次浏览",
+    "anonymous": "匿名",
+    "unpublished": "未发布",
+    "moreTags": "更多标签"
   },
   "detail": {
-    "backToList": "返回列表",
+    "backToList": "返回文章列表",
     "relatedSolutions": "相关解决方案",
     "author": "作者",
     "publishedOn": "发布时间",
     "upvotes": "赞同数",
-    "views": "浏览次数",
+    "views": "次浏览",
     "helpful": "有帮助",
     "notHelpful": "没有帮助",
-    "shareArticle": "分享文章"
+    "shareArticle": "分享文章",
+    "viewMore": "查看更多",
+    "anonymous": "匿名"
   },
   "seoTags": {
     "title": "文章",

@@ -1,11 +1,7 @@
 /**
  * Article Feature - Type Definitions
- * 文章模块类型定义
  */
 
-// ============================================
-// 基础类型
-// ============================================
 
 export interface Article {
   id: string;
@@ -30,7 +26,7 @@ export interface Article {
 }
 
 // ============================================
-// API 请求类型
+// API request types
 // ============================================
 
 export interface CreateArticleRequest {
@@ -72,7 +68,7 @@ export interface ArticleListParams extends ArticleFilters {
 }
 
 // ============================================
-// API 响应类型
+// API response types
 // ============================================
 
 export interface ArticleResponse {
@@ -104,7 +100,7 @@ export interface DeleteArticleResponse {
 }
 
 // ============================================
-// 统计类型
+// Statistics Types
 // ============================================
 
 export interface ArticleStats {
@@ -128,7 +124,7 @@ export interface ArticleStatsResponse {
 }
 
 // ============================================
-// 组件 Props 类型
+// Props types for Components
 // ============================================
 
 export interface ArticleCardProps {
@@ -162,7 +158,7 @@ export interface ArticleFilterProps {
 }
 
 // ============================================
-// Hook 返回类型
+// Hook return types
 // ============================================
 
 export interface UseArticlesReturn {
@@ -196,7 +192,7 @@ export interface UseArticleStatsReturn {
 }
 
 // ============================================
-// 工具函数类型
+// Utility Functions Types
 // ============================================
 
 export type GenerateSlug = (title: string) => string;

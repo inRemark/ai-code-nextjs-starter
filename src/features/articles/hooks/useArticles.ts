@@ -1,6 +1,6 @@
 /**
  * Article Feature - React Hooks
- * 文章模块 React Hooks
+ * Article React Hooks
  */
 
 'use client';
@@ -16,7 +16,7 @@ import type {
 } from '../types/article.types';
 
 // ============================================
-// useArticles - 获取文章列表
+// useArticles - get article list
 // ============================================
 
 export function useArticles(params: ArticleListParams = {}): UseArticlesReturn {
@@ -31,7 +31,7 @@ export function useArticles(params: ArticleListParams = {}): UseArticlesReturn {
       setError(null);
 
       const queryParams = new URLSearchParams();
-      Object.entries(params).forEach(([key, value]) => {
+      for (const [key, value] of Object.entries(params)) {
         if (value !== undefined && value !== null) {
           if (Array.isArray(value)) {
             queryParams.append(key, value.join(','));
@@ -39,13 +39,13 @@ export function useArticles(params: ArticleListParams = {}): UseArticlesReturn {
             queryParams.append(key, String(value));
           }
         }
-      });
+      }
 
       const response = await fetch(`/api/articles?${queryParams.toString()}`);
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        throw new Error(data.message || '获取文章列表失败');
+        throw new Error(data.message || 'Failed to fetch article list');
       }
 
       setArticles(data.data.articles);
@@ -58,7 +58,7 @@ export function useArticles(params: ArticleListParams = {}): UseArticlesReturn {
         hasPrevious: data.data.hasPrevious,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : '未知错误');
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
@@ -78,7 +78,7 @@ export function useArticles(params: ArticleListParams = {}): UseArticlesReturn {
 }
 
 // ============================================
-// useArticle - 获取单篇文章
+// useArticle - get article
 // ============================================
 
 export function useArticle(id: string): UseArticleReturn {
@@ -97,12 +97,12 @@ export function useArticle(id: string): UseArticleReturn {
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        throw new Error(data.message || '获取文章失败');
+        throw new Error(data.message || 'Failed to fetch article');
       }
 
       setArticle(data.data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : '未知错误');
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
@@ -132,7 +132,7 @@ export function useArticle(id: string): UseArticleReturn {
 }
 
 // ============================================
-// useArticleStats - 获取文章统计
+// useArticleStats - get article stats
 // ============================================
 
 export function useArticleStats(authorId?: string): UseArticleStatsReturn {
@@ -153,12 +153,12 @@ export function useArticleStats(authorId?: string): UseArticleStatsReturn {
       const data = await response.json();
 
       if (!response.ok || !data.success) {
-        throw new Error(data.message || '获取统计数据失败');
+        throw new Error(data.message || 'Failed to fetch article stats');
       }
 
       setStats(data.data);
     } catch (err) {
-      setError(err instanceof Error ? err.message : '未知错误');
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }

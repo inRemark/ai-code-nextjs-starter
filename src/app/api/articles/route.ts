@@ -1,7 +1,7 @@
 /**
  * Articles API Route - List & Create
- * GET /api/articles - 获取文章列表
- * POST /api/articles - 创建文章
+ * GET /api/articles - get articles list
+ * POST /api/articles - create article
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -9,14 +9,14 @@ import { auth } from '@features/auth/services';
 import { getArticles, createArticle } from '@/features/articles/services/article.service';
 import { createArticleSchema } from '@/features/articles/validators/article.schema';
 
-// GET /api/articles - 获取文章列表
+// GET /api/articles - get articles list
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
 
     const params = {
-      page: searchParams.get('page') ? parseInt(searchParams.get('page')!) : 1,
-      limit: searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : 10,
+      page: searchParams.get('page') ? Number.parseInt(searchParams.get('page')!) : 1,
+      limit: searchParams.get('limit') ? Number.parseInt(searchParams.get('limit')!) : 10,
       sortBy: (searchParams.get('sortBy') || 'createdAt') as 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount' | 'title',
       sortOrder: (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc',
       authorId: searchParams.get('authorId') || undefined,
@@ -36,14 +36,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        message: error instanceof Error ? error.message : '获取文章列表失败',
+        message: error instanceof Error ? error.message : 'Failed to fetch articles',
       },
       { status: 500 }
     );
   }
 }
 
-// POST /api/articles - 创建文章
+// POST /api/articles - create article
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();
@@ -60,13 +60,13 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
-    // 验证数据
+    // Validate data
     const validationResult = createArticleSchema.safeParse(body);
     if (!validationResult.success) {
       return NextResponse.json(
         {
           success: false,
-          message: '数据验证失败',
+          message: 'Data validation failed',
           errors: validationResult.error.issues,
         },
         { status: 400 }
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
       {
         success: true,
         data: article,
-        message: '文章创建成功',
+        message: 'Article created successfully',
       },
       { status: 201 }
     );
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        message: error instanceof Error ? error.message : '创建文章失败',
+        message: error instanceof Error ? error.message : 'Failed to create article',
       },
       { status: 500 }
     );

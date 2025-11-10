@@ -1,6 +1,6 @@
 /**
  * Article Feature - Service Layer
- * 文章模块业务逻辑服务
+ * Article Service
  */
 
 import prisma from '@/lib/database/prisma';
@@ -13,11 +13,11 @@ import type {
 } from '../types/article.types';
 
 // ============================================
-// 查询服务
+// Query Service
 // ============================================
 
 /**
- * 获取文章列表
+ * Get article list
  */
 export async function getArticles(params: ArticleListParams = {}) {
   const {
@@ -35,7 +35,7 @@ export async function getArticles(params: ArticleListParams = {}) {
 
   const skip = (page - 1) * limit;
 
-  // 构建查询条件
+  // Build query conditions
   const where: Record<string, any> = {};
 
   if (authorId) {
@@ -70,7 +70,7 @@ export async function getArticles(params: ArticleListParams = {}) {
     }
   }
 
-  // 执行查询
+  // Execute query
   const [articles, total] = await Promise.all([
     prisma.article.findMany({
       where,
@@ -105,7 +105,7 @@ export async function getArticles(params: ArticleListParams = {}) {
 }
 
 /**
- * 根据 ID 获取文章
+ * Get article by ID
  */
 export async function getArticleById(id: string): Promise<Article | null> {
   return prisma.article.findUnique({
@@ -124,7 +124,7 @@ export async function getArticleById(id: string): Promise<Article | null> {
 }
 
 /**
- * 根据 Slug 获取文章
+ * Get article by slug
  */
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
   return prisma.article.findUnique({
@@ -143,7 +143,7 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
 }
 
 /**
- * 获取文章统计信息
+ * Get article stats
  */
 export async function getArticleStats(authorId?: string): Promise<ArticleStats> {
   const where = authorId ? { authorId } : {};
@@ -176,18 +176,18 @@ export async function getArticleStats(authorId?: string): Promise<ArticleStats> 
   const totalViews = totalViewsData._sum.viewCount || 0;
   const averageViews = totalArticles > 0 ? Math.round(totalViews / totalArticles) : 0;
 
-  // 获取热门标签
+  // Get top tags
   const articles = await prisma.article.findMany({
     where,
     select: { tags: true },
   });
 
   const tagCounts = new Map<string, number>();
-  articles.forEach((article: { tags: string[] }) => {
-    article.tags.forEach((tag) => {
+  for (const article of articles as { tags: string[] }[]) {
+    for (const tag of article.tags) {
       tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
-    });
-  });
+    }
+  }
 
   const topTags = Array.from(tagCounts.entries())
     .map(([tag, count]) => ({ tag, count }))
@@ -206,11 +206,11 @@ export async function getArticleStats(authorId?: string): Promise<ArticleStats> 
 }
 
 // ============================================
-// 修改服务
+// Modify Service
 // ============================================
 
 /**
- * 创建文章
+ * Create article
  */
 export async function createArticle(data: CreateArticleRequest, authorId: string): Promise<Article> {
   return prisma.article.create({
@@ -233,7 +233,7 @@ export async function createArticle(data: CreateArticleRequest, authorId: string
 }
 
 /**
- * 更新文章
+ * Update article
  */
 export async function updateArticle(id: string, data: UpdateArticleRequest): Promise<Article | null> {
   return prisma.article.update({
@@ -253,7 +253,7 @@ export async function updateArticle(id: string, data: UpdateArticleRequest): Pro
 }
 
 /**
- * 删除文章
+ * Delete article
  */
 export async function deleteArticle(id: string): Promise<void> {
   await prisma.article.delete({
@@ -262,7 +262,7 @@ export async function deleteArticle(id: string): Promise<void> {
 }
 
 /**
- * 增加文章浏览次数
+ * Increment article view count
  */
 export async function incrementArticleView(id: string): Promise<void> {
   await prisma.article.update({
@@ -276,23 +276,23 @@ export async function incrementArticleView(id: string): Promise<void> {
 }
 
 // ============================================
-// 工具函数
+// Utility Functions
 // ============================================
 
 /**
- * 生成 Slug
+ * Generate Slug
  */
 export function generateSlug(title: string): string {
   return title
     .toLowerCase()
     .trim()
-    .replace(/[^\w\s-]/g, '')
-    .replace(/[\s_-]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+    .replaceAll(/[^\w\s-]/g, '')
+    .replaceAll(/[\s_-]+/g, '-')
+    .replaceAll(/(^-+)|(-+$)/g, '');
 }
 
 /**
- * 验证 Slug 唯一性
+ * Validate Slug uniqueness
  */
 export async function isSlugUnique(slug: string, excludeId?: string): Promise<boolean> {
   const article = await prisma.article.findUnique({
@@ -306,16 +306,19 @@ export async function isSlugUnique(slug: string, excludeId?: string): Promise<bo
 }
 
 /**
- * 提取摘要
+ * Extract excerpt
  */
 export function extractExcerpt(content: string, length: number = 200): string {
-  const plainText = content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+  const plainText = content
+    .replaceAll(/<[^>]*>/g, '')
+    .replaceAll(/\s+/g, ' ')
+    .trim();
   if (plainText.length <= length) return plainText;
   return plainText.substring(0, length) + '...';
 }
 
 /**
- * 获取所有标签
+ * Get all tags
  */
 export async function getAllTags(): Promise<string[]> {
   const articles = await prisma.article.findMany({
@@ -324,9 +327,11 @@ export async function getAllTags(): Promise<string[]> {
   });
 
   const tagsSet = new Set<string>();
-  articles.forEach((article: { tags: string[] }) => {
-    article.tags.forEach((tag) => tagsSet.add(tag));
-  });
+  for (const article of articles as { tags: string[] }[]) {
+    for (const tag of article.tags) {
+      tagsSet.add(tag);
+    }
+  }
 
-  return Array.from(tagsSet).sort();
+  return Array.from(tagsSet).sort((a, b) => a.localeCompare(b));
 }

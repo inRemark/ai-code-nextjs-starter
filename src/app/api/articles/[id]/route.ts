@@ -1,8 +1,8 @@
 /**
  * Articles API Route - Single Article Operations
- * GET /api/articles/[id] - 获取单篇文章
- * PATCH /api/articles/[id] - 更新文章
- * DELETE /api/articles/[id] - 删除文章
+ * GET /api/articles/[id] - get single article
+ * PATCH /api/articles/[id] - update article
+ * DELETE /api/articles/[id] - delete article
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -20,7 +20,7 @@ type Params = {
   }>;
 };
 
-// GET /api/articles/[id] - 获取单篇文章
+// GET /api/articles/[id] - get single article
 export async function GET(request: NextRequest, { params }: Params) {
   try {
     const { id } = await params;
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest, { params }: Params) {
       return NextResponse.json(
         {
           success: false,
-          message: '文章不存在',
+          message: 'Article not found',
         },
         { status: 404 }
       );
@@ -45,14 +45,14 @@ export async function GET(request: NextRequest, { params }: Params) {
     return NextResponse.json(
       {
         success: false,
-        message: error instanceof Error ? error.message : '获取文章失败',
+        message: error instanceof Error ? error.message : 'Failed to fetch article',
       },
       { status: 500 }
     );
   }
 }
 
-// PATCH /api/articles/[id] - 更新文章
+// PATCH /api/articles/[id] - update article
 export async function PATCH(request: NextRequest, { params }: Params) {
   try {
     const session = await auth();
@@ -61,7 +61,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       return NextResponse.json(
         {
           success: false,
-          message: '未授权',
+          message: 'Unauthorized',
         },
         { status: 401 }
       );
@@ -70,26 +70,26 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     const { id } = await params;
     const body = await request.json();
 
-    // 验证数据
+    // Validate data
     const validationResult = updateArticleSchema.safeParse(body);
     if (!validationResult.success) {
       return NextResponse.json(
         {
           success: false,
-          message: '数据验证失败',
+          message: 'Data validation failed',
           errors: validationResult.error.issues,
         },
         { status: 400 }
       );
     }
 
-    // 检查文章是否存在
+    // Check if article exists
     const existingArticle = await getArticleById(id);
     if (!existingArticle) {
       return NextResponse.json(
         {
           success: false,
-          message: '文章不存在',
+          message: 'Article not found',
         },
         { status: 404 }
       );
@@ -100,7 +100,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
       return NextResponse.json(
         {
           success: false,
-          message: '无权限修改此文章',
+          message: 'You do not have permission to modify this article',
         },
         { status: 403 }
       );
@@ -111,21 +111,21 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     return NextResponse.json({
       success: true,
       data: article,
-      message: '文章更新成功',
+      message: 'Article updated successfully',
     });
   } catch (error) {
     console.error('Failed to update article:', error);
     return NextResponse.json(
       {
         success: false,
-        message: error instanceof Error ? error.message : '更新文章失败',
+        message: error instanceof Error ? error.message : 'Failed to update article',
       },
       { status: 500 }
     );
   }
 }
 
-// DELETE /api/articles/[id] - 删除文章
+// DELETE /api/articles/[id] - delete article
 export async function DELETE(request: NextRequest, { params }: Params) {
   try {
     const session = await auth();
@@ -134,7 +134,7 @@ export async function DELETE(request: NextRequest, { params }: Params) {
       return NextResponse.json(
         {
           success: false,
-          message: '未授权',
+          message: 'Unauthorized',
         },
         { status: 401 }
       );
@@ -142,13 +142,13 @@ export async function DELETE(request: NextRequest, { params }: Params) {
 
     const { id } = await params;
 
-    // 检查文章是否存在
+    // Check if article exists
     const existingArticle = await getArticleById(id);
     if (!existingArticle) {
       return NextResponse.json(
         {
           success: false,
-          message: '文章不存在',
+          message: 'Article not found',
         },
         { status: 404 }
       );
@@ -159,7 +159,7 @@ export async function DELETE(request: NextRequest, { params }: Params) {
       return NextResponse.json(
         {
           success: false,
-          message: '无权限删除此文章',
+          message: 'You do not have permission to delete this article',
         },
         { status: 403 }
       );
@@ -169,14 +169,14 @@ export async function DELETE(request: NextRequest, { params }: Params) {
 
     return NextResponse.json({
       success: true,
-      message: '文章删除成功',
+      message: 'Article deleted successfully',
     });
   } catch (error) {
     console.error('Failed to delete article:', error);
     return NextResponse.json(
       {
         success: false,
-        message: error instanceof Error ? error.message : '删除文章失败',
+        message: error instanceof Error ? error.message : 'Failed to delete article',
       },
       { status: 500 }
     );

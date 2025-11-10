@@ -1,37 +1,47 @@
 /**
  * Article Feature - Validators
- * 文章模块数据验证
+ * article.schema.ts
  */
 
 import { z } from 'zod';
 
 // ============================================
-// 基础验证规则
+// Basic validation rules
 // ============================================
 
 export const articleSchema = z.object({
   title: z.string()
-    .min(1, '标题不能为空')
-    .max(200, '标题不能超过200个字符'),
+    .min(1, 'Title is required')
+    .max(200, 'Title cannot exceed 200 characters'),
   
   slug: z.string()
-    .min(1, 'Slug不能为空')
-    .max(200, 'Slug不能超过200个字符')
-    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug只能包含小写字母、数字和连字符'),
+    .min(1, 'Slug is required')
+    .max(200, 'Slug cannot exceed 200 characters')
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, 'Slug can only contain lowercase letters, numbers, and hyphens'),
   
   content: z.string()
-    .min(1, '内容不能为空'),
-  
+    .min(1, 'Content is required'),
+
   excerpt: z.string()
-    .max(500, '摘要不能超过500个字符')
+    .max(500, 'Excerpt cannot exceed 500 characters')
     .optional(),
   
   coverImage: z.string()
-    .url('封面图片必须是有效的URL')
+    .refine(
+      (val) => {
+        try {
+          new URL(val);
+          return true;
+        } catch {
+          return false;
+        }
+      },
+      { message: 'Cover image must be a valid URL' }
+    )
     .optional(),
   
   tags: z.array(z.string())
-    .max(10, '标签不能超过10个')
+    .max(10, 'Tags cannot exceed 10')
     .optional(),
   
   published: z.boolean()
@@ -46,7 +56,7 @@ export const createArticleSchema = articleSchema;
 export const updateArticleSchema = articleSchema.partial();
 
 // ============================================
-// 查询参数验证
+// Query Parameters Validation
 // ============================================
 
 export const articleListParamsSchema = z.object({
@@ -63,19 +73,19 @@ export const articleListParamsSchema = z.object({
 });
 
 // ============================================
-// ID 验证
+// ID Validation
 // ============================================
 
 export const articleIdSchema = z.object({
-  id: z.string().min(1, 'ID不能为空'),
+  id: z.string().min(1, 'ID is required'),
 });
 
 export const articleSlugSchema = z.object({
-  slug: z.string().min(1, 'Slug不能为空'),
+  slug: z.string().min(1, 'Slug is required'),
 });
 
 // ============================================
-// 导出类型
+// Export Types
 // ============================================
 
 export type ArticleSchema = z.infer<typeof articleSchema>;

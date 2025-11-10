@@ -1,6 +1,6 @@
 /**
  * Articles API Route - Increment View Count
- * POST /api/articles/[id]/view - 增加浏览次数
+ * POST /api/articles/[id]/view - Increment the view count of an article by ID
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -19,14 +19,14 @@ export async function POST(request: NextRequest, { params }: Params) {
 
     return NextResponse.json({
       success: true,
-      message: '浏览次数已更新',
+      message: 'View count updated successfully',
     });
   } catch (error) {
     console.error('Failed to increment view:', error);
     return NextResponse.json(
       {
         success: false,
-        message: error instanceof Error ? error.message : '更新浏览次数失败',
+        message: error instanceof Error ? error.message : 'Failed to update view count',
       },
       { status: 500 }
     );

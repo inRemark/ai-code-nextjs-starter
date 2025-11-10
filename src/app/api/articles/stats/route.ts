@@ -1,6 +1,6 @@
 /**
  * Articles API Route - Statistics
- * GET /api/articles/stats - 获取文章统计信息
+ * GET /api/articles/stats - get article statistics
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         success: false,
-        message: error instanceof Error ? error.message : '获取统计信息失败',
+        message: error instanceof Error ? error.message : 'Failed to fetch article statistics',
       },
       { status: 500 }
     );

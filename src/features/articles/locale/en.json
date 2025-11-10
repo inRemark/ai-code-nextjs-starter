@@ -1,13 +1,13 @@
 {
-  "title": "Articles Center",
+  "title": "Article Center",
   "list": {
-    "title": "Articles Center",
-    "description": "Explore technical articles, development guides and best practices",
+    "title": "Article Center",
+    "description": "This is a dynamic content example module",
     "readMore": "Read More",
     "publishedOn": "Published on",
     "author": "Author",
     "upvotes": "Upvotes",
-    "noArticles": "No articles yet",
+    "noArticles": "No articles found",
     "loading": "Loading...",
     "pagination": {
       "previous": "Previous",
@@ -15,19 +15,23 @@
       "current": "Page {page} / {totalPages}"
     },
     "cover": "Cover Image",
-    "views": "Views",
-    "anonymous": "Anonymous"
+    "views": "views",
+    "anonymous": "Anonymous",
+    "unpublished": "Unpublished",
+    "moreTags": "More Tags"
   },
   "detail": {
-    "backToList": "Back to List",
+    "backToList": "Back to Article List",
     "relatedSolutions": "Related Solutions",
     "author": "Author",
     "publishedOn": "Published",
     "upvotes": "Upvotes",
-    "views": "Views",
+    "views": "views",
     "helpful": "Helpful",
     "notHelpful": "Not Helpful",
-    "shareArticle": "Share Article"
+    "shareArticle": "Share Article",
+    "viewMore": "View more",
+    "anonymous": "Anonymous"
   },
   "seoTags": {
     "title": "Articles",

@@ -1,160 +1,144 @@
 /**
- * Article Detail Page - 文章详情页面
+ * Article Detail Page
  */
 
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import Link from 'next/link';
+import { getTranslations } from 'next-intl/server';
 import { getArticleBySlug, incrementArticleView } from '@/features/articles/services/article.service';
-import { Card, CardContent, CardHeader } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
-import { Button } from '@/shared/ui/button';
+import { Separator } from '@/shared/ui/separator';
 import { PortalLayout } from '@/shared/layout/portal-layout';
-import { ArrowLeft, Eye, Calendar, User } from 'lucide-react';
+import { PageContent } from '@/shared/layout/portal-page-content';
+import { Eye, Calendar, User } from 'lucide-react';
 import { format } from 'date-fns';
-import { zhCN } from 'date-fns/locale';
+import { zhCN, enUS, ja } from 'date-fns/locale';
+
+const localeMap = {
+  zh: zhCN,
+  en: enUS,
+  ja: ja,
+} as const;
 
 interface PageProps {
   params: Promise<{
+    locale: string;
     slug: string;
   }>;
 }
 
-async function ArticleContent({ slug }: { slug: string }) {
+async function ArticleContent({ slug, locale }: { slug: string; locale: string }) {
+  const t = await getTranslations('articles.detail');
   const article = await getArticleBySlug(slug);
 
   if (!article) {
     notFound();
   }
 
-  // 增加浏览次数（后台异步执行，不阻塞页面渲染）
+  // increment view count (asynchronous, non-blocking)
   incrementArticleView(article.id).catch((error) => {
     console.error('Failed to increment view:', error);
   });
 
+  const dateFnsLocale = localeMap[locale as keyof typeof localeMap] || zhCN;
+
   return (
     <article className="space-y-8">
-      {/* 返回按钮 */}
-      <Button variant="ghost" size="sm" asChild>
-        <Link href="/articles" className="gap-2">
-          <ArrowLeft className="h-4 w-4" />
-          返回文章列表
-        </Link>
-      </Button>
+      {/* Article Header */}
+      <header className="space-y-6">
+        <h1 className="text-3xl md:text-4xl font-bold leading-tight text-foreground">{article.title}</h1>
 
-      {/* 文章头部 */}
-      <div className="space-y-6">
-        <h1 className="text-4xl md:text-5xl font-bold leading-tight">{article.title}</h1>
-
-        {/* 元信息 */}
-        <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <User className="h-4 w-4" />
-            <span>{article.author?.name || '匿名'}</span>
+        {/* Metadata */}
+        <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+          <div className="flex items-center">
+            <User className="h-3.5 w-3.5 mr-1.5" />
+            <span>{article.author?.name || t('anonymous')}</span>
           </div>
           {article.publishedAt && (
-            <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
-              <span>{format(new Date(article.publishedAt), 'PPP', { locale: zhCN })}</span>
+            <div className="flex items-center">
+              <Calendar className="h-3.5 w-3.5 mr-1.5" />
+              <span>{format(new Date(article.publishedAt), 'PPP', { locale: dateFnsLocale })}</span>
             </div>
           )}
-          <div className="flex items-center gap-2">
-            <Eye className="h-4 w-4" />
-            <span>{article.viewCount} 次浏览</span>
+          <div className="flex items-center">
+            <Eye className="h-3.5 w-3.5 mr-1.5" />
+            <span>{article.viewCount} {t('views')}</span>
           </div>
         </div>
 
-        {/* 标签 */}
+        {/* Tags */}
         {article.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mt-3">
             {article.tags.map((tag) => (
-              <Badge key={tag} variant="secondary">
+              <Badge key={tag} variant="outline" className="text-xs">
                 {tag}
               </Badge>
             ))}
           </div>
         )}
+      </header>
 
-        {/* 封面图 */}
-        {article.coverImage && (
-          <div className="aspect-video overflow-hidden rounded-lg">
-            <img
-              src={article.coverImage}
-              alt={article.title}
-              className="w-full h-full object-cover"
-            />
-          </div>
-        )}
-      </div>
+      <Separator className="my-6" />
 
-      {/* 文章内容 */}
-      <Card>
-        <CardHeader>
-          {article.excerpt && (
-            <p className="text-lg text-muted-foreground italic">{article.excerpt}</p>
-          )}
-        </CardHeader>
-        <CardContent>
-          <div
-            className="prose prose-slate dark:prose-invert max-w-none"
-            dangerouslySetInnerHTML={{ __html: article.content }}
+      {/* Article Content */}
+      {article.excerpt && (
+        <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+          {article.excerpt}
+        </p>
+      )}
+
+      {article.coverImage && (
+        <div className="aspect-video overflow-hidden rounded-lg mb-8">
+          <img
+            src={article.coverImage}
+            alt={article.title}
+            className="w-full h-full object-cover"
           />
-        </CardContent>
-      </Card>
+        </div>
+      )}
 
-      {/* 底部导航 */}
-      <div className="flex justify-between items-center pt-8 border-t">
-        <Button variant="outline" asChild>
-          <Link href="/articles">← 返回文章列表</Link>
-        </Button>
-        {article.author && (
-          <Link
-            href={`/articles?authorId=${article.author.id}`}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            查看作者更多文章 →
-          </Link>
-        )}
-      </div>
+      <div
+        className="prose prose-slate dark:prose-invert max-w-none text-[15px] leading-loose prose-p:leading-loose prose-p:my-6 prose-li:leading-loose prose-headings:mt-8"
+        dangerouslySetInnerHTML={{ __html: article.content }}
+      />
     </article>
   );
 }
 
 export default async function ArticleDetailPage({ params }: PageProps) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
+  const t = await getTranslations({ locale, namespace: 'articles' });
+
+  // Build breadcrumb
+  const breadcrumbItems = [
+    { label: t('title'), href: `/${locale}/articles` },
+    { label: slug }
+  ];
 
   return (
-    <PortalLayout>
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <Suspense
-          fallback={
-            <div className="space-y-8 animate-pulse">
-              <div className="h-12 bg-muted rounded w-3/4" />
-              <div className="space-y-4">
-                <div className="h-4 bg-muted rounded w-1/2" />
-                <div className="aspect-video bg-muted rounded" />
+    <PortalLayout breadcrumb={breadcrumbItems} breadcrumbMaxWidth="4xl">
+      <PageContent maxWidth="2xl">
+        <div className="max-w-4xl mx-auto px-4">
+          <Suspense
+            fallback={
+              <div className="space-y-8 animate-pulse">
+                <div className="h-12 bg-muted rounded w-3/4" />
+                <div className="space-y-4">
+                  <div className="h-4 bg-muted rounded w-1/2" />
+                  <div className="aspect-video bg-muted rounded" />
+                </div>
+                <div className="space-y-2">
+                  <div className="h-4 bg-muted rounded" />
+                  <div className="h-4 bg-muted rounded w-5/6" />
+                  <div className="h-4 bg-muted rounded w-4/6" />
+                </div>
               </div>
-              <div className="space-y-2">
-                <div className="h-4 bg-muted rounded" />
-                <div className="h-4 bg-muted rounded w-5/6" />
-                <div className="h-4 bg-muted rounded w-4/6" />
-              </div>
-            </div>
-          }
-        >
-          <ArticleContent slug={slug} />
-        </Suspense>
-      </div>
+            }
+          >
+            <ArticleContent slug={slug} locale={locale} />
+          </Suspense>
+        </div>
+      </PageContent>
     </PortalLayout>
   );
 }
-
-// 生成静态参数
-export async function generateStaticParams() {
-  // 在生产环境中，这里应该返回所有已发布文章的 slug
-  // 为了避免构建时间过长，这里返回空数组，使用 ISR
-  return [];
-}
-
-// 启用 ISR，每 60 秒重新验证
-export const revalidate = 60;
