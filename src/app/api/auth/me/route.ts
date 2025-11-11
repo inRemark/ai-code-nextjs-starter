@@ -4,11 +4,11 @@ import prisma from '@/lib/database/prisma';
 import { requireAuth } from '@features/auth/middleware/auth.middleware';
 import { MeResponse, UpdateMeRequest } from '@features/auth/types/auth.types';
 
-// 获取当前用户信息
+// get current user info
 export const GET = requireAuth(async (user) => {
 
   try {
-    // 查询用户信息
+    // get user info
     const userData = await prisma.user.findUnique({
       where: { id: user.id },
       select: {
@@ -28,7 +28,7 @@ export const GET = requireAuth(async (user) => {
       );
     }
 
-    // 设置响应
+    // set response
     const response: MeResponse = {
       id: userData.id,
       email: userData.email,
@@ -48,14 +48,14 @@ export const GET = requireAuth(async (user) => {
   }
 });
 
-// 更新当前用户信息
+// update current user info
 export const PATCH = requireAuth(async (user, request: NextRequest) => {
 
   try {
-    // 获取请求体
+    // get request body
     const body: UpdateMeRequest = await request.json();
 
-    // 更新用户信息
+    // update user info
     const updatedUser = await prisma.user.update({
       where: { id: user.id },
       data: {
@@ -71,7 +71,7 @@ export const PATCH = requireAuth(async (user, request: NextRequest) => {
       },
     });
 
-    // 设置响应
+    // set response
     const response: MeResponse = {
       id: updatedUser.id,
       email: updatedUser.email,

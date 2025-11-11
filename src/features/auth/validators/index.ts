@@ -1,5 +1,5 @@
 /**
- * 认证验证器统一导出
+ * Auth Validators Index
  */
 
 export * from './auth';

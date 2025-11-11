@@ -8,7 +8,7 @@ interface AuthProvidersProps {
 }
 
 /**
- * NextAuth SessionProvider 包装组件
+ * NextAuth SessionProvider wrapper
  */
 export function AuthProviders({ children }: AuthProvidersProps) {
   return <SessionProvider>{children}</SessionProvider>;

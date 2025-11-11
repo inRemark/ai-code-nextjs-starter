@@ -1,12 +1,11 @@
 /**
- * 认证系统统一导出
- * 提供 NextAuth 认证接口
+ * auth services index
  */
 
-// NextAuth相关
+// NextAuth config and main auth functions
 export { authConfig, auth, signIn, signOut } from './auth.config';
 
-// 统一认证中间件（推荐使用）
+// Unified authentication middleware (recommended)
 export {
   requireAuth,
   requireAdmin,
@@ -16,18 +15,18 @@ export {
   getAuthUserFromRequest,
 } from '../middleware/auth.middleware';
 
-// 密码工具函数
+// Password utility functions
 export {
   hashPassword,
   verifyPassword
 } from './auth.service';
 
-// RBAC权限系统
+// RBAC services
 export {
   hasPermission,
   hasRole
 } from './rbac.service';
 
-// 认证类型和错误
+// Auth types and errors
 export { AuthError } from '../types/auth.error';
 export type { MeResponse } from '../types/auth.types';

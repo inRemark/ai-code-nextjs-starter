@@ -54,17 +54,6 @@ export interface NotificationPreferences {
   weeklyReport: boolean;
 }
 
-export interface UserActivity {
-  id: string;
-  userId: string;
-  action: string;
-  description: string;
-  metadata?: Record<string, unknown>;
-  timestamp: Date;
-  ipAddress?: string;
-  userAgent?: string;
-}
-
 export interface UserSession {
   id: string;
   userId: string;

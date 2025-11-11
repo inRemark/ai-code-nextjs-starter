@@ -31,12 +31,12 @@ export default function ProtectedRoute({ children, requireAdmin = false }: Reado
     );
   }
 
-  // 如果需要管理员权限但用户不是管理员
+  // If admin rights are required but the user is not an admin
   if (user && requireAdmin && user.role !== 'ADMIN') {
     return null;
   }
 
-  // 如果用户已认证（且满足管理员要求，如果有的话）
+  // If the user is authenticated (and meets admin requirements, if any)
   if (user && (!requireAdmin || user.role === 'ADMIN')) {
     return children;
   }

@@ -46,7 +46,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
   const handleFieldChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     
-    // 实时验证
+    // check field error on change
     if (errors[field]) {
       const validator = field === 'email' ? validateEmail : validatePassword;
       const error = validator(value);
@@ -78,7 +78,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
     setLoading(true);
 
     try {
-      // 使用 NextAuth 登录
+      // Use NextAuth to sign in
       const result = await signIn('credentials', {
         email: formData.email,
         password: formData.password,
@@ -89,11 +89,11 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
         setServerError(result.error);
         logger.error('Login error:', result.error);
       } else {
-        // 登录成功处理
+        // Handle successful login
         if (onSuccess) {
           onSuccess();
         }
-        router.push('/console');
+        router.push('/');
       }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : t('loginFailed');
@@ -104,14 +104,14 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleSocialSuccess = (_provider: string, _userData: unknown) => {
+    
+  const handleSocialSuccess = () => {
     if (onSuccess) {
       onSuccess();
     } else {
-      // 添加延迟确保状态更新完成
+      // Add delay to ensure state update completes
       setTimeout(() => {
-        router.push('/console');
+        router.push('/');
       }, 100);
     }
   };
@@ -123,7 +123,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
   return (
     <>
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* 服务器错误提示 */}
+        {/* server error tips */}
         {serverError && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
@@ -131,7 +131,6 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
           </Alert>
         )}
 
-        {/* 邮箱字段 */}
         <FormField
           name="email"
           label={t('emailLabel')}
@@ -143,7 +142,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
           required
         />
 
-        {/* 密码字段 */}
+        {/* password field */}
         <FormField
           name="password"
           label={t('passwordLabel')}
@@ -156,7 +155,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
           required
         />
 
-        {/* 登录按钮 */}
+        {/* login button */}
         <Button
           type="submit"
           className="w-full h-12 text-base font-medium"
@@ -173,10 +172,10 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
         </Button>
       </form>
 
-      {/* 分割线 */}
-      <Divider text={tCommon('or') || '或'} />
+      {/* divider */}
+      <Divider text={tCommon('or') || 'OR'} />
 
-      {/* 第三方登录 */}
+      {/* social login */}
       <SocialLogin
         providers={['google', 'github']}
         onSuccess={handleSocialSuccess}
@@ -184,7 +183,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps = {}) {
         disabled={loading}
       />
 
-      {/* 注册链接 */}
+      {/* register link */}
       <div className="text-center mt-6">
         <p className="text-sm text-muted-foreground">
           {t('noAccount')}{' '}

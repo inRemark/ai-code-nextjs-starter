@@ -1,11 +1,11 @@
 import { User, UserRole } from '@prisma/client';
 
-// 认证响应（现在只返回用户信息，不包含token）
+// Auth response (now only returns user info, no token)
 export interface AuthResponse {
   user: Pick<User, 'id' | 'email' | 'name' | 'role'>;
 }
 
-// 当前用户信息响应
+// Current user info response
 export interface MeResponse {
   id: string;
   email: string;
@@ -15,14 +15,13 @@ export interface MeResponse {
   updatedAt: Date;
 }
 
-// 更新用户信息请求
+// Update user info request
 export interface UpdateMeRequest {
   name: string;
 }
 
 /**
- * 统一的认证用户类型
- * 用于中间件和API路由中的用户信息传递
+ * Unified Authenticated User Type
  */
 export interface AuthUser {
   id: string;

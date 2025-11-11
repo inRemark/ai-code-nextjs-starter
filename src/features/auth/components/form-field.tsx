@@ -77,7 +77,7 @@ export const FormField: React.FC<FormFieldProps> = ({
           required={required}
         />
         
-        {/* 右侧图标区域 */}
+        {/* right side icons */}
         <div className="absolute inset-y-0 right-0 flex items-center pr-3">
           {type === 'password' && showPasswordToggle && hasValue && (
             <button
@@ -94,7 +94,7 @@ export const FormField: React.FC<FormFieldProps> = ({
             </button>
           )}
           
-          {/* 验证状态图标 */}
+          {/* validation status icons */}
           {touched && hasValue && (
             <>
               {error ? (
@@ -107,7 +107,7 @@ export const FormField: React.FC<FormFieldProps> = ({
         </div>
       </div>
       
-      {/* 错误提示 */}
+      {/* error tips */}
       {hasError && (
         <div className="flex items-center gap-1 text-sm text-chart-3">
           <AlertCircle className="w-4 h-4" />

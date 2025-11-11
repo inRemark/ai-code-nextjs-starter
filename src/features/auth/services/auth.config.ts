@@ -13,7 +13,7 @@ export const authConfig: any = {
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: 'jwt' as const,
-    maxAge: 7 * 24 * 60 * 60, // 7天
+    maxAge: 7 * 24 * 60 * 60, // 7 days
   },
   pages: {
     signIn: '/auth/login',
@@ -26,32 +26,37 @@ export const authConfig: any = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
+        const isDev = process.env.NODE_ENV === 'development';
+
+        function logDev(message: string, ...args: any[]) {
+          if (isDev) logger.warn(message, ...args);
+        }
+
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
 
         try {
-          if (process.env.NODE_ENV === 'development') {
-            logger.warn('🔍 Credentials authorization attempt:', credentials.email);
-          }
+          logDev('🔍 Credentials authorization attempt:', credentials.email);
 
           const user = await prisma.user.findUnique({
             where: { email: credentials.email as string },
           });
 
-          if (process.env.NODE_ENV === 'development') {
-            logger.warn('👤 User found:', user ? {
-              id: user.id,
-              email: user.email,
-              hasPassword: !!user.password,
-              role: user.role,
-            } : null);
-          }
+          logDev('👤 User found:', user ? {
+            id: user.id,
+            email: user.email,
+            hasPassword: !!user.password,
+            role: user.role,
+          } : null);
 
           if (!user) {
-            if (process.env.NODE_ENV === 'development') {
-              logger.warn('❌ User not found');
-            }
+            logDev('❌ User not found');
+            return null;
+          }
+
+          if (!user.password) {
+            logDev('❌ User does not have a password set');
             return null;
           }
 
@@ -60,20 +65,14 @@ export const authConfig: any = {
             user.password
           );
 
-          if (process.env.NODE_ENV === 'development') {
-            logger.warn('🔐 Password valid:', isValidPassword);
-          }
+          logDev('🔐 Password valid:', isValidPassword);
 
           if (!isValidPassword) {
-            if (process.env.NODE_ENV === 'development') {
-              logger.warn('❌ Invalid password');
-            }
+            logDev('❌ Invalid password');
             return null;
           }
 
-          if (process.env.NODE_ENV === 'development') {
-            logger.warn('✅ Authorization successful for user:', user.email);
-          }
+          logDev('✅ Authorization successful for user:', user.email);
 
           return {
             id: user.id,
@@ -117,20 +116,20 @@ export const authConfig: any = {
         throw new Error('Email is required for OAuth login');
       }
 
-      // 查找现有用户
+      // check if user with this email already exists
       const existingUser = await prisma.user.findUnique({
         where: { email },
         include: { accounts: true },
       });
 
       if (existingUser) {
-        // 检查是否已关联此OAuth提供商
+        // check if this OAuth provider is already linked
         const existingAccount = existingUser.accounts.find(
           (acc: { provider: string }) => acc.provider === account.provider
         );
 
         if (!existingAccount) {
-          // 自动关联新的OAuth账户到现有用户
+          // automatically link new OAuth account to existing user
           await prisma.account.create({
             data: {
               userId: existingUser.id,

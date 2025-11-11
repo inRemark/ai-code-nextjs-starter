@@ -5,21 +5,39 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@features/auth/services';
+import { requireAuth } from '@features/auth/middleware/auth.middleware';
 import { getArticles, createArticle } from '@/features/articles/services/article.service';
 import { createArticleSchema } from '@/features/articles/validators/article.schema';
+import { auth } from '@features/auth/services';
 
-// GET /api/articles - get articles list
+// GET /api/articles - get articles list (public or user-specific)
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
+    
+    // Handle authorId=me for current user's articles
+    let authorId = searchParams.get('authorId') || undefined;
+    if (authorId === 'me') {
+      const session = await auth();
+      // For 'me' parameter, authentication is required
+      if (!session?.user?.id) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: '未授权',
+          },
+          { status: 401 }
+        );
+      }
+      authorId = session.user.id;
+    }
 
     const params = {
       page: searchParams.get('page') ? Number.parseInt(searchParams.get('page')!) : 1,
       limit: searchParams.get('limit') ? Number.parseInt(searchParams.get('limit')!) : 10,
       sortBy: (searchParams.get('sortBy') || 'createdAt') as 'createdAt' | 'updatedAt' | 'publishedAt' | 'viewCount' | 'title',
       sortOrder: (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc',
-      authorId: searchParams.get('authorId') || undefined,
+      authorId,
       published: searchParams.get('published') ? searchParams.get('published') === 'true' : undefined,
       tags: searchParams.get('tags')?.split(',') || undefined,
       search: searchParams.get('search') || undefined,
@@ -43,21 +61,9 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/articles - create article
-export async function POST(request: NextRequest) {
+// POST /api/articles - create article (requires authentication)
+export const POST = requireAuth(async (user, request: NextRequest) => {
   try {
-    const session = await auth();
-
-    if (!session?.user?.id) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: '未授权',
-        },
-        { status: 401 }
-      );
-    }
-
     const body = await request.json();
 
     // Validate data
@@ -73,7 +79,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const article = await createArticle(validationResult.data, session.user.id);
+    const article = await createArticle(validationResult.data, user.id);
 
     return NextResponse.json(
       {
@@ -93,4 +99,4 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+});

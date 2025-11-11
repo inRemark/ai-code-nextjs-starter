@@ -5,9 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
 
 /**
- * 统一的认证 Hook（仅支持 NextAuth）
- * 
- * 提供一致的 API 接口，封装 NextAuth 的 useSession
+ * Unified Authentication Hook (NextAuth only)
+ * Provides a consistent API interface, wrapping NextAuth's useSession
  */
 export function useAuth() {
   const { data: session, status } = useSession();
@@ -33,17 +32,17 @@ export function useAuth() {
   }, [router]);
 
   return {
-    // 用户信息
+    // User information
     user: session?.user || null,
     session,
     
-    // 加载状态
+    // Loading status
     isLoading: status === 'loading',
     isAuthenticated: status === 'authenticated',
     
-    // 认证方法
+    // Auth actions
     login,
     logout,
-    signIn, // 暴露 NextAuth 的 signIn 用于 OAuth
+    signIn, // Expose NextAuth's signIn for OAuth
   };
 }

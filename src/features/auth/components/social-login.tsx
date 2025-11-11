@@ -16,17 +16,17 @@ interface SocialLoginProps {
 
 const providerConfig = {
   google: {
-    label: "使用 Google 登录",
+    label: "Login with Google",
     icon: FaGoogle,
     className: "border-red-200 hover:bg-red-50 dark:border-red-800 dark:hover:bg-red-950"
   },
   github: {
-    label: "使用 GitHub 登录",
+    label: "Login with GitHub",
     icon: FaGithub,
     className: "border-gray-200 hover:bg-gray-50 dark:border-gray-800 dark:hover:bg-gray-950"
   },
   wechat: {
-    label: "使用微信登录",
+    label: "Login with WeChat",
     icon: FaWeixin,
     className: "border-green-200 hover:bg-green-50 dark:border-green-800 dark:hover:bg-green-950"
   }
@@ -45,11 +45,11 @@ export function SocialLogin({
         redirect: true 
       });
       
-      // 如果登录成功，调用onSuccess回调
+      // Note: Actual user data is not available here due to redirect
       onSuccess?.(provider, { success: true });
     } catch (error) {
       logger.error(`${provider} login error:`, error);
-      onError?.(provider, '登录失败，请重试');
+      onError?.(provider, 'Login failed, please try again later');
     }
   };
 

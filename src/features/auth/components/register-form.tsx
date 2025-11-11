@@ -18,8 +18,7 @@ interface RegisterFormProps {
   onSuccess?: () => void;
 }
 
-// 验证器放入组件内部以便使用翻译
-
+// Validators are placed inside the component to use translations
 export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
   const t = useTranslations('auth.register');
 
@@ -56,7 +55,7 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
   const handleFieldChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     
-    // 实时验证
+    // check field error on change
     if (errors[field]) {
       let error: string | undefined;
       
@@ -66,7 +65,7 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
           break;
         case 'password':
           error = validatePassword(value);
-          // 如果密码改变，也要重新验证确认密码
+          // If password changes, re-validate confirm password
           if (formData.confirmPassword) {
             const confirmError = validateConfirmPassword(value, formData.confirmPassword);
             setErrors(prev => ({ ...prev, confirmPassword: confirmError || '' }));
@@ -116,30 +115,30 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
     setLoading(true);
 
     try {
-      // 调用注册API
+      // Call registration API
       const response = await authAPI.register(formData.email, formData.password, '');
 
       if (!response.success) {
-        setServerError(response.error || '注册失败，请稍后再试');
+        setServerError(response.error || 'Registration failed');
         return;
       }
 
       const signInResult = await signInAfterRegister(formData.email, formData.password);
 
       if (!signInResult?.ok) {
-        setServerError(signInResult?.error || '注册后登录失败');
+        setServerError(signInResult?.error || 'Login after registration failed');
         return;
       }
 
-      // 调用成功回调或重定向
+      // Call success callback or redirect
       if (onSuccess) {
         onSuccess();
       } else {
-        router.push('/profile');
+        router.push('/');
         router.refresh();
       }
     } catch (err) {
-      setServerError('网络错误，请稍后再试');
+      setServerError('Network error, please try again later');
       logger.error('Registration error:', err);
     } finally {
       setLoading(false);
@@ -147,23 +146,23 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
   };
 
   const handleSocialSuccess = (provider: string, userData: unknown) => {
-    logger.debug(`${provider} 注册成功`, userData);
+    logger.debug(`${provider} registration successful`, userData);
     if (onSuccess) {
       onSuccess();
     } else {
-      router.push('/profile');
+      router.push('/');
       router.refresh();
     }
   };
 
   const handleSocialError = (provider: string, error: string) => {
-    setServerError(`${provider} 注册失败: ${error}`);
+    setServerError(`${provider} Registration failed: ${error}`);
   };
 
   return (
     <>
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* 服务器错误提示 */}
+        {/* Server error message */}
         {serverError && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
@@ -171,50 +170,50 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
           </Alert>
         )}
 
-        {/* 邮箱字段 */}
+        {/* Email field */}
         <FormField
           name="email"
-          label="邮箱地址"
+          label="Email Address"
           type="email"
           value={formData.email}
           onChange={(value) => handleFieldChange('email', value)}
           error={errors.email}
-          placeholder="请输入邮箱地址"
+          placeholder="Enter your email address"
           required
         />
 
-        {/* 密码字段 */}
+        {/* Password field */}
         <FormField
           name="password"
-          label="密码"
+          label="Password"
           type="password"
           value={formData.password}
           onChange={(value) => handleFieldChange('password', value)}
           error={errors.password}
-          placeholder="请输入密码"
+          placeholder="Enter your password"
           showPasswordToggle
           required
         />
 
-        {/* 密码强度指示器 */}
+        {/* Password strength indicator */}
         {formData.password && (
           <PasswordStrength password={formData.password} />
         )}
 
-        {/* 确认密码字段 */}
+        {/* Confirm Password field */}
         <FormField
           name="confirmPassword"
-          label="确认密码"
+          label="Confirm Password"
           type="password"
           value={formData.confirmPassword}
           onChange={(value) => handleFieldChange('confirmPassword', value)}
           error={errors.confirmPassword}
-          placeholder="请再次输入密码"
+          placeholder="Please re-enter your password"
           showPasswordToggle
           required
         />
 
-        {/* 注册按钮 */}
+        {/* Register button */}
         <Button
           type="submit"
           className="w-full h-12 text-base font-medium"
@@ -223,18 +222,18 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
           {loading ? (
             <>
               <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-              注册中...
+              Registering...
             </>
           ) : (
-            '创建账户'
+            'Create Account'
           )}
         </Button>
       </form>
 
-      {/* 分割线 */}
-      <Divider text="或" />
+      {/* Divider */}
+      <Divider text="OR" />
 
-      {/* 第三方登录 */}
+      {/* Social login */}
       <SocialLogin
         providers={['google', 'github']}
         onSuccess={handleSocialSuccess}
@@ -242,15 +241,15 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps = {}) {
         disabled={loading}
       />
 
-      {/* 登录链接 */}
+      {/* Login link */}
       <div className="text-center mt-6">
         <p className="text-sm text-muted-foreground">
-          已经有账户了？{' '}
+          Already have an account?{' '}
           <Link
             href="/auth/login"
             className="font-medium text-primary hover:text-primary/80 transition-colors"
           >
-            立即登录
+            Log in
           </Link>
         </p>
       </div>

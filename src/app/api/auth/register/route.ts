@@ -6,17 +6,17 @@ import { AuthResponse } from '@features/auth/types/auth.types';
 import { registerApiSchema } from '@/features/auth/validators/auth';
 import { ZodError } from 'zod';
 
-// 用户注册接口 - POST /api/auth/register
+// user registration - POST /api/auth/register
 export async function POST(request: NextRequest) {
   let body: unknown;
   
   try {
     body = await request.json();
-    
-    // 使用 Zod Schema 验证输入（不需要 confirmPassword）
+
+    // use Zod Schema to validate input (no need for confirmPassword)
     const { email, password, name } = registerApiSchema.parse(body);
 
-    // 检查用户是否已存在
+    // check if user already exists
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
@@ -28,23 +28,23 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 加密密码
+    // hash password
     const hashedPassword = await hashPassword(password);
 
-    // 从邮箱自动生成姓名（取@前的部分）
+    // generate name from email (take the part before @)
     const emailName = email.split('@')[0];
     
-    // 创建用户
+    // create new user
     const user = await prisma.user.create({
       data: {
         email,
         name: name || emailName,
         password: hashedPassword,
-        role: 'USER', // 默认角色为普通用户
+        role: 'USER', // default role is user
       },
     });
 
-    // 设置响应（不再生成JWT token）
+    // set response (no longer generate JWT token)
     const response: AuthResponse = {
       user: {
         id: user.id,
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, data: response });
   } catch (error) {
-    // Zod 验证错误
+    // Zod validation error
     if (error instanceof ZodError) {
       const firstError = error.issues[0];
       logger.error('Zod validation error:', {
@@ -70,8 +70,8 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-    
-    // 其他错误
+
+    // other errors
     logger.error('Registration error:', error);
     console.error('Full error details:', error);
     return NextResponse.json(

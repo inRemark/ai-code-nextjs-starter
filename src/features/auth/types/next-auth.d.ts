@@ -1,14 +1,15 @@
 /**
- * NextAuth 类型扩展
- * 扩展 NextAuth 的 Session 和 JWT 类型以支持自定义字段
+ * NextAuth types augmentation
+ * extend NextAuth Session and JWT types to include custom fields
+ * 
  */
 
 import { UserRole } from '@shared/types/user';
 
 declare module 'next-auth' {
   /**
-   * Session 类型扩展
-   * 添加用户的完整信息到 session.user
+   * Session type augmentation
+   * adding full user info to session.user
    */
   interface Session {
     user: {
@@ -20,8 +21,8 @@ declare module 'next-auth' {
   }
 
   /**
-   * User 类型扩展
-   * 定义 authorize 回调返回的用户对象
+   * User type augmentation
+   * typically used in callbacks and middleware
    */
   interface User {
     id: string;
@@ -33,8 +34,8 @@ declare module 'next-auth' {
 
 declare module 'next-auth/jwt' {
   /**
-   * JWT Token 类型扩展
-   * 定义 JWT 中存储的用户信息
+   * JWT Token type augmentation
+   * defines the user info stored in the JWT
    */
   interface JWT {
     sub: string;

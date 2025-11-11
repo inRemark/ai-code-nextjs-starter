@@ -27,7 +27,9 @@ const fetchUserArticles = async (): Promise<Article[]> => {
   if (!response.ok) {
     throw new Error('Failed to fetch articles');
   }
-  return response.json();
+  const result = await response.json();
+  // API returns { success: true, data: { articles, totalPages, ... } }
+  return result.data?.articles || [];
 };
 
 export const ProfileArticlesContent: React.FC = () => {

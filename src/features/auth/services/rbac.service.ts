@@ -2,7 +2,7 @@ import { User, UserRole } from '@prisma/client';
 import prisma from '@/lib/database/prisma';
 import { PermissionError } from '../types/auth.error';
 
-// 权限类型定义
+// Permission types definition
 export type Permission = 
   | 'read:customer'
   | 'write:customer'
@@ -21,7 +21,7 @@ export type Permission =
   | 'read:settings'
   | 'write:settings';
 
-// 检查用户是否有特定权限
+// check if user has specific permission
 export async function hasPermission(userId: string, permission: Permission): Promise<boolean> {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -31,11 +31,11 @@ export async function hasPermission(userId: string, permission: Permission): Pro
     return false;
   }
 
-  // 使用工具函数检查角色是否具有权限
+  // use utility function to check if role has permission
   return roleHasPermission(user.role, permission);
 }
 
-// 验证用户权限
+// Validate user permissions
 export async function checkPermission(userId: string, permission: Permission): Promise<void> {
   const hasPerm = await hasPermission(userId, permission);
   
@@ -47,41 +47,41 @@ export async function checkPermission(userId: string, permission: Permission): P
   }
 }
 
-// 检查用户是否具有角色
+// Check if user has specific role
 export function hasRole(user: User, role: UserRole): boolean {
   return user.role === role;
 }
 
-// 检查用户是否为管理员
+// Check if user is admin
 export function isAdmin(user: User): boolean {
   return user.role === UserRole.ADMIN;
 }
 
-// 检查用户是否为普通用户
+// Check if user is regular user
 export function isUser(user: User): boolean {
   return user.role === UserRole.USER;
 }
 
-// 检查用户是否为超级管理员（与管理员相同，在需要时可以扩展）
+// Super Admin check (same as Admin here, can be extended if needed)
 export function isSuperAdmin(user: User): boolean {
   return user.role === UserRole.ADMIN;
 }
 
-// 检查用户是否为编辑者
+// Check if user is editor
 export function isEditor(user: User): boolean {
   return user.role === UserRole.EDITOR;
 }
 
-// 检查用户是否可以管理内容（编辑者或管理员）
+// Check if user can manage content (editor or admin)
 export function canManageContent(user: User): boolean {
   return user.role === UserRole.EDITOR || user.role === UserRole.ADMIN;
 }
 
 // ============================================
-// 角色权限映射（从 auth.utils.ts 整合）
+// Role-based access control (RBAC) utilities
 // ============================================
 
-// 角色权限映射
+// Role permissions mapping
 export const rolePermissions: Record<UserRole, Permission[]> = {
   USER: [
     'read:customer',
@@ -123,23 +123,23 @@ export const rolePermissions: Record<UserRole, Permission[]> = {
   ],
 };
 
-// 检查角色是否具有特定权限
+// Check if role has specific permission
 export function roleHasPermission(role: UserRole, permission: Permission): boolean {
   const permissions = rolePermissions[role] || [];
   return permissions.includes(permission);
 }
 
-// 获取角色的所有权限
+// Fetch all permissions for a role
 export function getRolePermissions(role: UserRole): Permission[] {
   return rolePermissions[role] || [];
 }
 
-// 获取所有角色
+// Get all roles
 export function getAllRoles(): UserRole[] {
   return Object.values(UserRole);
 }
 
-// 获取角色描述
+// Get role description
 export function getRoleDescription(role: UserRole): string {
   switch (role) {
     case UserRole.ADMIN:
@@ -154,23 +154,23 @@ export function getRoleDescription(role: UserRole): string {
 }
 
 // ============================================
-// 统一的权限服务
+// Unified RBAC Service
 // ============================================
 
 export const rbac = {
-  // 权限检查
+  // Permission checks
   hasPermission,
   roleHasPermission,
   canManageContent,
   
-  // 角色管理
+  // role checks
   getRolePermissions,
   getAllRoles,
   getRoleDescription,
   isAdmin,
   isEditor,
   
-  // 权限验证
+  // permission enforcement
   requirePermission: async (userId: string, permission: Permission) => {
     const hasAccess = await hasPermission(userId, permission);
     if (!hasAccess) {

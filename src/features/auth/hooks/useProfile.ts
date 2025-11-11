@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { UserProfile, PersonalSettings, UserActivity } from '@shared/types/user';
+import { UserProfile, PersonalSettings } from '@shared/types/user';
 
-// 用户资料相关 Hooks
+// User profile related hooks
 export function useProfile() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
@@ -140,38 +140,5 @@ export function usePersonalSettings() {
     error,
     updateSettings,
     refetch: fetchSettings,
-  };
-}
-
-export function useUserActivity(limit: number = 10) {
-  const [activities, setActivities] = useState<UserActivity[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    fetchActivities();
-  }, [limit]);
-
-  const fetchActivities = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/user/activity?limit=${limit}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch activities');
-      }
-      const data = await response.json();
-      setActivities(data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return {
-    activities,
-    loading,
-    error,
-    refetch: fetchActivities,
   };
 }

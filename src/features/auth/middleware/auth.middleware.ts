@@ -16,7 +16,7 @@ async function getServerSession() {
 }
 
 /**
- * 安全地从session中提取用户角色
+ * get user role from session safely
  */
 function extractUserRole(session: Session | null): UserRole {
   if (session?.user?.role && typeof session.user.role === 'string') {
@@ -29,8 +29,8 @@ function extractUserRole(session: Session | null): UserRole {
 }
 
 /**
- * 从请求中提取已验证用户（仅 NextAuth Session）
- * 返回AuthUser和可选的原始session对象
+ * Extract authenticated user from request (NextAuth Session only)
+ * Returns AuthUser and optional original session object
  */
 async function getUserFromRequest(): Promise<{ user: AuthUser | null; session?: Session | null }> {
   const session = await getServerSession();
@@ -46,15 +46,15 @@ async function getUserFromRequest(): Promise<{ user: AuthUser | null; session?: 
 }
 
 /**
- * NextAuth认证中间件
- * 统一的认证验证逻辑，避免代码重复
+ * NextAuth authentication middleware
+ * Unified authentication logic to avoid code duplication
  */
 export async function withNextAuth(
   handler: (request: NextRequest, session: { user: { id: string; email: string; name: string; role: string } }) => Promise<NextResponse>
 ) {
   return async (request: NextRequest) => {
     try {
-      // 获取NextAuth session
+      // Get NextAuth session
       const session = await getServerSession();
       
       if (!session?.user?.id) {
@@ -64,7 +64,7 @@ export async function withNextAuth(
         );
       }
 
-      // 调用原始处理器，传入session
+      // call the handler with session
       return await handler(request, session);
     } catch (error) {
       logger.error('NextAuth middleware error:', error);
@@ -77,8 +77,8 @@ export async function withNextAuth(
 }
 
 /**
- * 获取当前用户的session
- * 用于在API路由中快速获取认证信息
+ * Get current user's session
+ * Used for quickly obtaining authentication info in API routes
  */
 export async function getCurrentSession() {
   try {
@@ -90,8 +90,8 @@ export async function getCurrentSession() {
 }
 
 /**
- * 验证用户是否有指定权限
- * 使用统一的getUserFromRequest，结合RBAC系统
+ * Check if user has specified permission
+ * Uses unified getUserFromRequest combined with RBAC system
  */
 export async function requirePermission(permission: Permission) {
   return async (
@@ -99,7 +99,7 @@ export async function requirePermission(permission: Permission) {
   ) => {
     return async (request: NextRequest) => {
       try {
-        // 使用统一的用户获取函数
+        // use unified method to get user
         const { user, session } = await getUserFromRequest();
 
         if (!user) {
@@ -109,7 +109,7 @@ export async function requirePermission(permission: Permission) {
           );
         }
 
-        // 检查权限
+        // check permission
         const ok = await hasPermission(user.id, permission);
         if (!ok) {
           return NextResponse.json(
@@ -118,7 +118,7 @@ export async function requirePermission(permission: Permission) {
           );
         }
 
-        // 如果有NextAuth session，直接传递；否则构造伪session对象
+        // If there is a NextAuth session, pass it directly; otherwise, construct a pseudo session object
         const sessionToPass = session || { 
           user: { 
             id: user.id, 
@@ -141,7 +141,7 @@ export async function requirePermission(permission: Permission) {
 }
 
 /**
- * 验证用户角色
+ * Check user roles - general middleware
  */
 export async function requireRole(roles: string[]) {
   return async (
@@ -171,7 +171,7 @@ export async function requireRole(roles: string[]) {
 }
 
 /**
- * 管理员权限验证 - 专用中间件
+ * Admin permission check - dedicated middleware
  */
 export function requireAdmin<T extends unknown[]>(
   handler: (request: NextRequest, user: AuthUser, ...args: T) => Promise<NextResponse>
@@ -199,7 +199,7 @@ export function requireAdmin<T extends unknown[]>(
 }
 
 /**
- * 基础认证验证 - 兼容现有API签名
+ * Basic authentication - compatible with existing API signatures
  */
 export function requireAuth<T extends unknown[]>(
   handler: (user: AuthUser, request: NextRequest, ...args: T) => Promise<NextResponse>
@@ -227,7 +227,7 @@ export function requireAuth<T extends unknown[]>(
 }
 
 /**
- * 获取用户信息 - 仅支持 NextAuth Session
+ * Get user information - only supports NextAuth Session
  */
 export async function getAuthUserFromRequest(): Promise<AuthUser> {
   const session = await getServerSession();
@@ -245,26 +245,26 @@ export async function getAuthUserFromRequest(): Promise<AuthUser> {
 }
 
 /**
- * 统一的认证中间件集合 - 完全兼容auth-request.ts的API
+ * Unified authentication middleware collection - fully compatible with auth-request.ts API
  */
 export const auth = {
   /**
-   * 基础认证 - 需要登录
+   * Basic authentication - requires login
    */
   require: requireAuth,
   
   /**
-   * 管理员认证 - 需要 ADMIN 角色
+   * Admin authentication - requires ADMIN role
    */
   requireAdmin: requireAdmin,
   
   /**
-   * 角色认证 - 需要指定角色
+   * Role authentication - requires specified roles
    */
   requireRole: requireRole,
   
   /**
-   * 获取用户信息
+   * Get user information - only supports NextAuth Session
    */
   getUser: getAuthUserFromRequest,
   
