@@ -11,6 +11,7 @@ export interface MeResponse {
   email: string;
   name: string | null;
   role: UserRole;
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

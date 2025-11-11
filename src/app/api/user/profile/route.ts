@@ -3,27 +3,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@features/auth/middleware/auth.middleware';
 import { PrismaClient } from '@prisma/client';
 
-/**
- * 用户资料管理 API - 统一接口
- * 
- * 用途：
- * - 整合 /api/profile 的基础资料管理功能
- * - 为 Console 和 Profile 页面提供统一的用户资料接口
- * 
- * 迁移说明：
- * - 基于 /api/profile/route.ts 实现（使用真实数据库）
- * - /api/profile 将作为代理指向此接口（向后兼容）
- * 
- * TODO:
- * - [ ] 实现资料完成度计算逻辑
- * - [ ] 添加字段验证和数据清洗
- * - [ ] 实现资料修改历史记录
- */
-
 const prisma = new PrismaClient();
 
 /**
- * GET /api/user/profile - 获取用户完整资料
+ * GET /api/user/profile - get user profile
  */
 export const GET = requireAuth(async (user) => {
   try {
@@ -33,18 +16,12 @@ export const GET = requireAuth(async (user) => {
         id: true,
         email: true,
         name: true,
-        avatar: true,
-        phone: true,
-        company: true,
-        department: true,
-        title: true,
-        bio: true,
-        timezone: true,
-        language: true,
-        theme: true,
+        image: true,
+        role: true,
+        isActive: true,
+        emailVerified: true,
         createdAt: true,
         updatedAt: true,
-        lastLoginAt: true,
       },
     });
 
@@ -55,8 +32,8 @@ export const GET = requireAuth(async (user) => {
       );
     }
 
-    // TODO: 计算资料完成度
-    const completionFields = ['name', 'phone', 'company', 'bio'];
+    // Calculate profile completeness based on available fields
+    const completionFields = ['name', 'image', 'emailVerified'];
     const completedFields = completionFields.filter(
       field => profile[field as keyof typeof profile]
     ).length;
@@ -84,21 +61,18 @@ export const GET = requireAuth(async (user) => {
 });
 
 /**
- * PATCH /api/user/profile - 更新用户资料
+ * PATCH /api/user/profile - update user profile
  */
 export const PATCH = requireAuth(async (user, request: NextRequest) => {
   try {
     const updates = await request.json();
     
-    // TODO: 添加数据验证
-    const allowedFields = [
-      'name', 'phone', 'company', 'department', 'title', 
-      'bio', 'timezone', 'language', 'theme'
-    ];
+    // Validate and filter allowed fields based on User schema
+    const allowedFields = new Set(['name', 'image']);
     
     const filteredUpdates: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(updates)) {
-      if (allowedFields.includes(key)) {
+      if (allowedFields.has(key)) {
         filteredUpdates[key] = value;
       }
     }
@@ -113,15 +87,10 @@ export const PATCH = requireAuth(async (user, request: NextRequest) => {
         id: true,
         email: true,
         name: true,
-        avatar: true,
-        phone: true,
-        company: true,
-        department: true,
-        title: true,
-        bio: true,
-        timezone: true,
-        language: true,
-        theme: true,
+        image: true,
+        role: true,
+        isActive: true,
+        emailVerified: true,
         createdAt: true,
         updatedAt: true,
       },

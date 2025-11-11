@@ -3,28 +3,10 @@ import { NextResponse } from 'next/server';
 import { requireAuth } from '@features/auth/middleware/auth.middleware';
 import { PrismaClient } from '@prisma/client';
 
-/**
- * 用户信息汇总 API
- * 
- * 用途：
- * - 提供用户完整信息的一站式查询接口
- * - 包含基本资料、通知设置、统计数据等
- * 
- * TODO:
- * - [ ] 实现用户统计数据聚合
- * - [ ] 添加缓存机制优化性能
- * - [ ] 支持可配置的返回字段
- */
-
 const prisma = new PrismaClient();
 
 /**
- * GET /api/user - 获取当前用户完整信息（包含统计数据）
- * 
- * 返回数据：
- * - 用户基本信息
- * - 通知设置
- * - 统计数据（评价数、对比数、收藏数等）
+ * GET /api/user - Get current user full info (with stats)
  */
 export const GET = requireAuth(async (user) => {
   try {
@@ -32,7 +14,6 @@ export const GET = requireAuth(async (user) => {
     const userInfo = await prisma.user.findUnique({
       where: { id: user.id },
       include: {
-        notificationSettings: true,
       },
     });
 
@@ -43,7 +24,7 @@ export const GET = requireAuth(async (user) => {
       );
     }
 
-    // TODO: 获取用户统计数据
+    // TODO: Get user stats from other tables
     // const [reviewCount, comparisonCount, favoriteCount] = await Promise.all([
     //   prisma.review.count({ where: { userId: user.id } }),
     //   prisma.comparison.count({ where: { userId: user.id } }),

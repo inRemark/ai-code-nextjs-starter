@@ -3,19 +3,8 @@ import prisma from '@/lib/database/prisma';
 import { requireAdmin } from '@features/auth/middleware/auth.middleware';
 import { UserRole } from '@prisma/client';
 import { logger } from '@logger';
-/**
- * 管理员用户管理 API
- * 
- * 迁移说明：
- * - 从 /api/users 迁移到 /api/admin/users
- * - 统一管理员接口到 /api/admin/ 路径下
- * 
- * 功能：
- * - GET: 获取用户列表（分页）
- * - PATCH: 更新用户角色
- */
 
-// GET /api/admin/users - 获取用户列表（仅管理员）
+// GET /api/admin/users - get users list (only admin)
 export const GET = requireAdmin(async (request: NextRequest) => {
 
   try {
@@ -24,7 +13,7 @@ export const GET = requireAdmin(async (request: NextRequest) => {
     const limit = Number.parseInt(searchParams.get('limit') || '10');
     const skip = (page - 1) * limit;
 
-    // 获取用户列表
+    // get users list
     const users = await prisma.user.findMany({
       skip,
       take: limit,
@@ -36,12 +25,12 @@ export const GET = requireAdmin(async (request: NextRequest) => {
         email: true,
         name: true,
         role: true,
-        emailVerified: true, // 用 emailVerified 代替 isActive
+        emailVerified: true,
         createdAt: true,
       },
     });
 
-    // 获取总数
+    // get total count
     const total = await prisma.user.count();
 
     return NextResponse.json({
@@ -65,14 +54,14 @@ export const GET = requireAdmin(async (request: NextRequest) => {
   }
 });
 
-// PATCH /api/admin/users - 更新用户角色（仅管理员）
+// PATCH /api/admin/users - update user role (only admin)
 export const PATCH = requireAdmin(async (request: NextRequest) => {
 
   try {
     const body = await request.json();
     const { userId, role } = body;
 
-    // 验证角色
+    // check valid role
     if (!Object.values(UserRole).includes(role)) {
       return NextResponse.json(
         { success: false, error: 'Invalid role' },
@@ -80,7 +69,7 @@ export const PATCH = requireAdmin(async (request: NextRequest) => {
       );
     }
 
-    // 更新用户角色
+    // update user role
     const updatedUser = await prisma.user.update({
       where: { id: userId },
       data: { role },
@@ -89,7 +78,7 @@ export const PATCH = requireAdmin(async (request: NextRequest) => {
         email: true,
         name: true,
         role: true,
-        emailVerified: true, // 用 emailVerified 代替 isActive
+        emailVerified: true,
       },
     });
 

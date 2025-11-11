@@ -24,12 +24,12 @@ export async function POST(request: NextRequest) {
 
     if (!to || !subject) {
       return NextResponse.json(
-        { success: false, error: '收件人邮箱和邮件主题是必需的' },
+        { success: false, error: 'Receiver and subject required' },
         { status: 400 }
       );
     }
 
-    // 队列模式
+    // queue mode
     if (sendMode === 'queue') {
       let content = '';
       let textContent = '';
@@ -58,11 +58,11 @@ export async function POST(request: NextRequest) {
         success: true,
         mode: 'queue',
         taskId,
-        message: '邮件已加入队列'
+        message: 'Email queued successfully'
       });
     }
 
-    // 立即发送模式
+    // immediate mode
     if (templateId) {
       const htmlContent = await templateService.renderTemplate(templateId, variables);
       const textContent = await templateService.renderTextTemplate(templateId, variables);
@@ -125,13 +125,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       mode: 'immediate',
-      message: '邮件发送成功'
+      message: 'Email sent successfully'
     });
 
   } catch (error) {
-    logger.error('邮件发送失败:', error);
+    logger.error('Email send error:', error);
     return NextResponse.json(
-      { success: false, error: '邮件发送失败' },
+      { success: false, error: 'Email send failed' },
       { status: 500 }
     );
   }
@@ -145,21 +145,19 @@ function generateSimpleContent(title: string, content: string): string {
         ${content}
       </div>
       <p style="color: #666; font-size: 14px;">
-        此邮件由 AICoder 系统自动发送，请勿回复。
+        This email was sent automatically by the AICoder system, please do not reply.
       </p>
     </div>
   `;
 }
 
-// 记录邮件发送历史
+// record email sent history
 async function logEmailSent(to: string, subject: string, type: string): Promise<void> {
   try {
-    // 这里可以保存到数据库
-    // 暂时仅在开发环境输出
     if (process.env.NODE_ENV === 'development') {
-      logger.info(`邮件已发送: ${type} -> ${to} - ${subject}`);
+      logger.info(`Email send: ${type} -> ${to} - ${subject}`);
     }
   } catch (error) {
-    logger.error('记录邮件历史失败', error);
+    logger.error('Record failed', error);
   }
 }

@@ -9,9 +9,22 @@ export const removeFavoriteSchema = z.object({
 });
 
 export const updateNotificationSettingsSchema = z.object({
-  emailNotifications: z.boolean().optional(),
-  reviewReminders: z.boolean().optional(),
-  comparisonUpdates: z.boolean().optional(),
+  emailNotifications: z.object({
+    enabled: z.boolean().optional(),
+    newsletter: z.boolean().optional(),
+    updates: z.boolean().optional(),
+    comments: z.boolean().optional(),
+    mentions: z.boolean().optional(),
+  }).optional(),
+  pushNotifications: z.object({
+    enabled: z.boolean().optional(),
+    articles: z.boolean().optional(),
+    comments: z.boolean().optional(),
+  }).optional(),
+  preferences: z.object({
+    frequency: z.enum(['immediate', 'daily', 'weekly']).optional(),
+    digest: z.boolean().optional(),
+  }).optional(),
 });
 
 export const paginationSchema = z.object({

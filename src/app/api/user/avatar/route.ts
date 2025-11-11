@@ -1,29 +1,11 @@
 import { logger } from '@logger';
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
+import { writeFile, mkdir } from 'node:fs/promises';
+import { join } from 'node:path';
 import { requireAuth } from '@features/auth/middleware/auth.middleware';
 
 /**
- * 用户头像管理 API - 统一接口
- * 
- * 用途：
- * - 整合 /api/profile/avatar 的头像上传功能
- * - 为所有需要头像上传的场景提供统一接口
- * 
- * 迁移说明：
- * - 直接从 /api/profile/avatar/route.ts 迁移
- * - /api/profile/avatar 将作为代理指向此接口（可选）
- * 
- * TODO:
- * - [ ] 集成云存储服务（AWS S3/阿里云OSS等）
- * - [ ] 实现图片自动压缩和缩略图生成
- * - [ ] 添加旧头像自动清理机制
- * - [ ] 支持更多图片格式验证
- */
-
-/**
- * POST /api/user/avatar - 上传用户头像
+ * POST /api/user/avatar - Upload user avatar
  */
 export const POST = requireAuth(async (user, request: NextRequest) => {
   try {
@@ -37,7 +19,7 @@ export const POST = requireAuth(async (user, request: NextRequest) => {
       );
     }
     
-    // 验证文件类型
+    // check file type
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
@@ -49,7 +31,7 @@ export const POST = requireAuth(async (user, request: NextRequest) => {
       );
     }
     
-    // 验证文件大小 (最大 2MB)
+    // check file size (max 2MB)
     const maxSize = 2 * 1024 * 1024;
     if (file.size > maxSize) {
       return NextResponse.json(
@@ -61,22 +43,17 @@ export const POST = requireAuth(async (user, request: NextRequest) => {
       );
     }
     
-    // 生成唯一文件名
+    // Use unique filename
     const timestamp = Date.now();
     const extension = file.name.split('.').pop();
     const fileName = `avatar_${user.id}_${timestamp}.${extension}`;
-    
-    // TODO: 
-    // - 上传到云存储服务
-    // - 生成优化的缩略图
-    // - 更新数据库中的头像URL
-    // - 删除旧的头像文件
+
     
     try {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
       
-      // 确保上传目录存在
+      // ensure upload directory exists
       const uploadDir = join(process.cwd(), 'public', 'uploads', 'avatars');
       await mkdir(uploadDir, { recursive: true });
       

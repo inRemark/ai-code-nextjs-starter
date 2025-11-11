@@ -15,7 +15,7 @@ datasource db {
 // Core Authentication Models (Required)
 // ============================================
 
-// user table
+// User table
 model User {
   id            String    @id @default(cuid())
   email         String    @unique
@@ -83,6 +83,45 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verification_tokens")
+}
+
+// ============================================
+// Email Queue System (Optional)
+// ============================================
+
+// 邮件发送任务队列
+model EmailSendTask {
+  id          String          @id @default(cuid())
+  to          String
+  subject     String
+  content     String
+  textContent String?
+  templateId  String?
+  variables   Json            @default("{}")
+  priority    EmailPriority   @default(NORMAL)
+  status      EmailTaskStatus @default(PENDING)
+  attempts    Int             @default(0)
+  maxAttempts Int             @default(3)
+  scheduledAt DateTime        @default(now())
+  sentAt      DateTime?
+  error       String?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@map("email_send_tasks")
+}
+
+enum EmailPriority {
+  HIGH
+  NORMAL
+  LOW
+}
+
+enum EmailTaskStatus {
+  PENDING
+  PROCESSING
+  SENT
+  FAILED
 }
 
 // ============================================

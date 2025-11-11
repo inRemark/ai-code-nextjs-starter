@@ -2,7 +2,8 @@
  * 邮件服务相关的 TypeScript 类型定义
  */
 
-import { TaskPriority } from '@prisma/client';
+// Note: These enums match Prisma schema definitions
+// They are defined here for type safety until Prisma Client exports them
 
 // 基础邮件接口
 export interface EmailData {
@@ -21,7 +22,7 @@ export interface TemplateEmailData {
 
 // 邮件发送选项
 export interface EmailSendOptions {
-  priority?: TaskPriority;
+  priority?: EmailPriority;
   scheduledAt?: Date;
   templateId?: string;
   variables?: Record<string, any>;
@@ -66,7 +67,7 @@ export interface EmailTaskItem {
   id: string;
   to: string;
   subject: string;
-  priority: TaskPriority;
+  priority: EmailPriority;
   status: 'PENDING' | 'PROCESSING' | 'SENT' | 'FAILED';
   createdAt: Date;
   processedAt?: Date;
@@ -184,14 +185,14 @@ export enum EmailType {
   SYSTEM = 'system'
 }
 
-// 邮件优先级枚举（与 Prisma 的 TaskPriority 对应）
+// 邮件优先级枚举（与 Prisma schema 一致）
 export enum EmailPriority {
   LOW = 'LOW',
   NORMAL = 'NORMAL',
   HIGH = 'HIGH'
 }
 
-// 邮件状态枚举（与 Prisma 的 EmailTaskStatus 对应）
+// 邮件状态枚举（与 Prisma schema 一致）
 export enum EmailTaskStatus {
   PENDING = 'PENDING',
   PROCESSING = 'PROCESSING',
