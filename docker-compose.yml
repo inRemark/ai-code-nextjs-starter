@@ -9,7 +9,7 @@ services:
     environment:
       - NODE_ENV=production
       # - NEXT_PUBLIC_API_URL=https://api.yoursite.com
-    # 如果需要挂载 .env 文件（谨慎！）
+    # If you have a .env.production file, uncomment the following lines
     # env_file:
     #   - .env.production
 
@@ -21,6 +21,6 @@ services:
       - "443:443"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./ssl:/etc/nginx/ssl:ro  # 可选：用于 HTTPS 证书
+      - ./ssl:/etc/nginx/ssl:ro  # Mount SSL certificates if using HTTPS
     depends_on:
       - nextjs-app

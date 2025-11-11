@@ -1,8 +1,8 @@
-// next-intl 类型定义
+// next-intl types
 type Messages = typeof import('./src/messages/zh.json');  
 type IntlMessages = Messages
 
-// 主题偏好类型
+// Theme preference types
 interface Window {
   __THEME_PREFERENCE__?: {
     theme: string;

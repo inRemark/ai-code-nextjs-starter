@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# 克隆项目
+# Clone the project
 git clone https://github.com/yourname/your-nextjs-app.git
 cd your-nextjs-app
 
-# 构建并启动
+# Build and start the containers
 docker-compose up -d --build
 
-# 查看日志
+# View logs
 docker-compose logs -f nextjs-app

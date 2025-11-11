@@ -23,7 +23,7 @@ export default tseslint.config(
         'warn',
         { 
           allowConstantExport: true,
-          // 允许在 app 目录下导出 generateMetadata 等 Next.js 特殊导出
+          // Allow exporting generateMetadata and other special Next.js exports in app directory
           allowExportNames: ['generateMetadata', 'generateStaticParams', 'generateViewport'],
         },
       ],

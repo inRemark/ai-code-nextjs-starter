@@ -1,27 +1,29 @@
-# 使用官方 Node.js LTS 镜像（也可替换为 oven/bun:1 for Bun）
+# Use official Node.js LTS image (or replace with oven/bun:1 for Bun)
 FROM node:20-alpine AS base
 
-# 设置工作目录
+# Set working directory
 WORKDIR /app
 
 # 复制 package 文件（利用 Docker 层缓存）
+# Copy package files (leverage Docker layer caching)
 COPY package*.json ./
 
-# 安装依赖（生产环境）
+# Install dependencies (production)
 RUN npm ci --production
 
 # 复制源码和文档
+# Copy source code and docs
 COPY . .
 COPY docs ./docs
 
-# 构建 Next.js 应用
+# Build Next.js application
 RUN npm run build
 
-# 使用更小的运行时镜像（可选：多阶段构建）
+# Use a smaller runtime image (optional: multi-stage build)
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# 创建非 root 用户（安全最佳实践）
+# Create non-root user (security best practice)
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
 USER nextjs
@@ -29,8 +31,8 @@ USER nextjs
 COPY --from=base --chown=nextjs:nodejs /app ./
 COPY --from=base --chown=nextjs:nodejs /app/docs ./docs
 
-# 暴露端口（Next.js 默认 3000）
+# Expose port (Next.js default is 3000)
 EXPOSE 3000
 
-# 启动命令
+# Start command
 CMD ["npm", "start"]

@@ -1,40 +1,41 @@
 #!/bin/bash
 
-# deploy.sh - Next.js 自动化部署脚本
-# 放在 /var/www/your-nextjs-app/deploy.sh
+# deploy.sh - Next.js Automated Deployment Script
+# /var/www/your-nextjs-app/deploy.sh
 
-set -e  # 遇错退出
+# Exit immediately if a command exits with a non-zero status
+set -e
 
 APP_NAME="my-next-app"
 PROJECT_PATH="/var/www/your-nextjs-app"
-BRANCH="main"  # 或 master
+BRANCH="main"
 
-echo "🚀 开始部署 $APP_NAME ..."
+echo "🚀 Start deploy $APP_NAME ..."
 
 cd "$PROJECT_PATH"
 
-# 1. 拉取最新代码
-echo "🔄 拉取最新代码..."
+# 1. Pull the latest code from the repository
+echo "🔄 Pull latest code..."
 git fetch origin
 git reset --hard "origin/$BRANCH"
 
-# 2. 安装生产依赖（跳过 devDependencies）
-echo "📦 安装生产依赖..."
+# 2. Install production dependencies
+echo "📦 Install dependencies..."
 npm install --production
 
-# 3. 构建项目
-echo "🔨 构建 Next.js 应用..."
+# 3. Build the Next.js application
+echo "🔨 Build Next.js app..."
 npm run build
 
-# 4. 重启 PM2 应用
-echo "♻️ 重启 PM2 应用..."
+# 4. Restart the PM2 application
+echo "♻️ Restart PM2 app..."
 if pm2 list | grep -q "$APP_NAME"; then
   pm2 reload "$APP_NAME"
 else
   pm2 start npm --name "$APP_NAME" -- start
 fi
 
-# 5. 清理旧日志（可选）
+# 5. Clear PM2 logs
 pm2 flush
 
-echo "✅ 部署完成！应用已更新。"
+echo "✅ Deployment of $APP_NAME completed successfully!"
